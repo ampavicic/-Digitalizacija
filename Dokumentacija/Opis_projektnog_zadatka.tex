@@ -1,18 +1,37 @@
 \chapter{Opis projektnog zadatka}
 		
-		\textbf{\textit{dio 1. revizije}}\\
+		Cilj ovog projekta je izraditi web aplikaciju koja će 
+		računovodstvenim tvrtkama ubrzati digitalizaciju. Glavna funkcionalnost aplikacije je detekcija dokumenta
+		s učitanih slika i izrada OCR-a (optical character recognition) detektiranog teksta. Učitana slika mora biti slikana iz dobrog kuta te mora imati približno pravokutan oblik. Moguće je istovremeno učitati do 50 uslikanih dokumenata.
 		
-		\textit{Na osnovi projektnog zadatka detaljno opisati korisničke zahtjeve. Što jasnije opisati cilj projektnog zadatka, razraditi problematiku zadatka, dodati nove aspekte problema i potencijalnih rješenja. Očekuje se minimalno 3, a poželjno 4-5 stranica opisa.	Teme koje treba dodatno razraditi u ovom poglavlju su:}
+		Pristupanjem na aplikaciju korisniku se prikazuju opcije prijave ili registracije ovisno o tome ima li profil. Za prijavu je potrebna email adresa i šifra, a za registraciju  potrebno je upisati:
 		\begin{packed_item}
-			\item \textit{potencijalna korist ovog projekta}
-			\item \textit{postojeća slična rješenja (istražiti i ukratko opisati razlike u odnosu na zadani zadatak). Dodajte slike koja predočavaju slična rješenja.}
-			\item \textit{skup korisnika koji bi mogao biti zainteresiran za ostvareno rješenje.}
-			\item \textit{mogućnost prilagodbe rješenja }
-			\item \textit{opseg projektnog zadatka}
-			\item \textit{moguće nadogradnje projektnog zadatka}
+			\item {ime}
+			\item {prezime}
+			\item {email adresa}
+			\item {identifikacijski broj (dobiva se pri zaposlenju u tvrtku)}
+			\item {željena šifra}
+			\item {ponovno napisana šifra}
 		\end{packed_item}
 		
-		\textit{Za pomoć pogledati reference navedene u poglavlju „Popis literature“, a po potrebi konzultirati sadržaj na internetu koji nudi dobre smjernice u tom pogledu.}
+		Nakon prijave ovisno o ulozi se korisniku dodjeljuju prava. Svaki korisnik ima mogućnost učitati dokument. Nakon što je napravljen OCR dokumenta, korisniku se prikazuje sažetak dokumenta. Korisnik može skenirani dokument označiti kao točno skenirani ili kao krivo skenirani. Što god korisnik odabrao, dokument i korisnikov odabir spremaju se u bazu.	Korisnici aplikacije su zaposlenik, revizor, računovođa, direktor i administrator.
+		
+		\textit {Zaposlenik} ulaskom u aplikaciju odabire jednu od dvije mogućnosti može aplikacijom skenirati dokumente i može vidjeti povijest svih svojih skeniranja (datum i skenirani dokument). Nakon skeniranja željenog broja dokumenata, zaposleniku je prikazan sažetak svakog od priloženih dokumenata, te on provjerava ispravnost svakog pojedinačnog dokumenta. Odobreni dokumenti šalju se revizoru. 
+		
+		\textit{Revizor} dobiva dokumente koje mu šalju zaposlenici te ih provjerava sve kako bi svaki dokument preusmjerio do ispravnog računovođe zaduženog za taj tip dokumenata. Ako revizor skenira dokumente aplikacija će automatski iz dobivenog teksta odrediti kojem računovođi se šalje dokument.
+		
+		\textit{Računovođa} dobivene dokumente arhivira. Aplikacija prilikom arhiviranja	dokumentu dodjeljuje jedinstveni broj arhiva. Također, računovođa ima opciju slanja dokumenata direktoru na potpis prije arhiviranja. Računovođa može arhivirati poslane dokumente tek kada dobije potvrdu da je direktor potpisao traženi dokument.
+		
+		\textit {Direktor} može vidjeti povijest svih dokumenata te povijest i	statistike svih zaposlenika. Direktor ima mogućnost promaknuti članove tvrtke nakon čega će administratoru poslati obavijest u kojem se traži da se zaposleniku daju veće ovlasti u aplikaciji. Također, potpisuje dokumente koje mu šalje računovođa te ih prosljeđuje natrag nakon potpisa.
+		
+		\textit{Administrator} ima apsolutne ovlasti. Ima pristup bazi podataka skeniranih dokumenata i podacima zaposlenika te može davati veće ovlasti zaposlenicima po zahtjevu direktora.
+		
+		Postoje tri tipa dokumenata – računi, ponude i interni dokumenti. Računi će u
+		svom tekstu nakon OCR-a imati oznaku računa koja je veliko slovo R te šest znamenaka, oznaka ponude će imat veliko slovo P i devet znamenaka, a oznaka internog dokumenta
+		„INT“ i četiri znamenke. Računi osim oznake sadrže ime klijenta, artikle s cijenama i
+		ukupnu cijenu. Ponude su kao računi, ali ne sadrže ime klijenta. Interni dokumenti
+		sadrže samo nestrukturirani tekst.\\
+		
 		\eject
 		
 		\section{Primjeri u \LaTeX u}
