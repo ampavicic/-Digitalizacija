@@ -121,6 +121,72 @@
 						\end{packed_item}
 					\end{packed_item}
 				
+					\noindent \underbar{\textbf{UC1 - Prilaganje dokumenta - poravljen?}}
+					\begin{packed_item}
+						
+						\item \textbf{Glavni sudionik:} Zaposlenik, Revizor, Računovođa, Direktor
+						\item  \textbf{Cilj:} Priložiti dokument
+						\item  \textbf{Sudionici:} Baza podataka
+						\item  \textbf{Preduvjet:} Ulogirani verificirani zaposlenik, funkcionalna kamera
+						\item  \textbf{Opis osnovnog tijeka:}
+						
+						\item[] \begin{packed_enum}
+							
+							\item Zaposlenik klikće na označeno mjesto za prilaganje slika
+							\item Zaposlenik označuje slike koje će se priložiti i prilaže ih
+							\item Zaposlenik inicira OCR test
+							\item Web aplikacija vraća dokumente u skeniranom obliku
+							\item Zaposlenik označava jeli dokument pogrešno ili točno skeniran
+							\item Dokumenti se spremaju u bazu podataka
+						
+						\item  \textbf{Opis mogućih odstupanja:}
+						
+						\item[] \begin{packed_item}
+							
+							\item[2.a] Korisnik je priložio više od 50 slika
+							\item[] \begin{packed_enum}
+								
+								\item Javiti korisniku grešku i onemogućiti slanje
+								
+							\end{packed_enum}
+							
+						\end{packed_item}
+					\end{packed_item}
+				
+				\noindent \underbar{\textbf{UC1 - Slanje dokumenta}}
+				\begin{packed_item}
+					
+					\item \textbf{Glavni sudionik:} Zaposlenik
+					\item  \textbf{Cilj:} Priložiti dokument
+					\item  \textbf{Sudionici:} Revizor, baza podataka
+					\item  \textbf{Preduvjet:} Ulogirani verificirani zaposlenik, funkcionalna kamera
+					\item  \textbf{Opis osnovnog tijeka:}
+					
+					\item[] \begin{packed_enum}
+						
+						\item Zaposlenik klikće na označeno mjesto za prilaganje slika
+						\item Zaposlenik označuje slike koje će se priložiti i prilaže ih
+						\item Zaposlenik inicira OCR test
+						\item Web aplikacija vraća dokumente u skeniranom obliku
+						\item Zaposlenik označava jeli dokument krivo ili točno poslan
+						\item Ako je dokumnet ispravno skeniran onda se šalje revizoru
+					\end{packed_enum}
+					
+					\item  \textbf{Opis mogućih odstupanja:}
+					
+					\item[] \begin{packed_item}
+						
+						\item[2.a] Korisnik je priložio više od 50 slika
+						\item[2.b] Dokument je pogrešno skreniran
+						\item[] \begin{packed_enum}
+							
+							\item Javiti korisniku grešku i onemogućiti slanje
+							
+						\end{packed_enum}
+						
+					\end{packed_item}
+				\end{packed_item}
+				
 					\noindent \underbar{\textbf{UC2 - Pregled povijesti skeniranih dokumenata}}
 					\begin{packed_item}
 						
@@ -146,7 +212,7 @@
 					\item \textbf{Glavni sudionik:} Revizor
 					\item  \textbf{Cilj:} Verificirati dokumente i poslati računovođi
 					\item  \textbf{Sudionici:} Računovođa
-					\item  \textbf{Preduvjet:} Zaposlenik mora nešto poslati
+					\item  \textbf{Preduvjet:} Zaposlenik je posalo točno skenirani dokument
 					\item  \textbf{Opis osnovnog tijeka:}
 					
 					\item[] \begin{packed_enum}
