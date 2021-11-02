@@ -88,38 +88,7 @@
 					\textit{Funkcionalne zahtjeve razraditi u obliku obrazaca uporabe. Svaki obrazac je potrebno razraditi prema donjem predlošku. Ukoliko u nekom koraku može doći do odstupanja, potrebno je to odstupanje opisati i po mogućnosti ponuditi rješenje kojim bi se tijek obrasca vratio na osnovni tijek.}\\
 					
 
-					\noindent \underbar{\textbf{UC1 - Prilaganje dokumenta}}
-					\begin{packed_item}
-	
-						\item \textbf{Glavni sudionik:} Zaposlenik
-						\item  \textbf{Cilj:} Priložiti dokument
-						\item  \textbf{Sudionici:} Revizor, baza podataka
-						\item  \textbf{Preduvjet:} Ulogirani verificirani zaposlenik, funkcionalna kamera
-						\item  \textbf{Opis osnovnog tijeka:}
-						
-						\item[] \begin{packed_enum}
-	
-							\item Zaposlenik klikće na označeno mjesto za prilaganje slika
-							\item Zaposlenik označuje slike koje će se priložiti i prilaže ih
-							\item Zaposlenik inicira OCR test
-							\item Web aplikacija vraća dokumente u skeniranom obliku
-							\item Zaposlenik označava jeli dokument krivo ili točno poslan
-							\item Dokumenti se spremaju u bazu podataka (bili krivi ili točni) i šalju se na obradu revizoru
-						\end{packed_enum}
-						
-						\item  \textbf{Opis mogućih odstupanja:}
-						
-						\item[] \begin{packed_item}
-	
-							\item[2.a] Korisnik je priložio više od 50 slika
-							\item[] \begin{packed_enum}
-								
-								\item Javiti korisniku grešku i onemogućiti slanje
-								
-							\end{packed_enum}
-							
-						\end{packed_item}
-					\end{packed_item}
+					
 				
 					\noindent \underbar{\textbf{UC1 - Prilaganje dokumenta - popravljen?}}
 					\begin{packed_item}
@@ -159,14 +128,14 @@
 					\item \textbf{Glavni sudionik:} Zaposlenik
 					\item  \textbf{Cilj:} Priložiti dokument
 					\item  \textbf{Sudionici:} Revizor, baza podataka
-					\item  \textbf{Preduvjet:} Ulogirani verificirani zaposlenik, funkcionalna kamera
+					\item  \textbf{Preduvjet:} Ispravno skeniran dokument
 					\item  \textbf{Opis osnovnog tijeka:}
 					
 					\item[] \begin{packed_enum}
 						
 						
-						\item Zaposlenik skenira dokument
-						\item Ako je dokumnet ispravno skeniran onda se šalje revizoru
+						\item Zaposlenik ispravno skeniran dokument šalje revizoru
+						\item 
 					\end{packed_enum}
 					
 					\item  \textbf{Opis mogućih odstupanja:}
@@ -207,7 +176,7 @@
 				\begin{packed_item}
 					
 					\item \textbf{Glavni sudionik:} Revizor
-					\item  \textbf{Cilj:} Verificirati dokumente i poslati računovođi
+					\item  \textbf{Cilj:} Verificirati dokumente
 					\item  \textbf{Sudionici:} Računovođa
 					\item  \textbf{Preduvjet:} Zaposlenik je posalo točno skenirani dokument
 					\item  \textbf{Opis osnovnog tijeka:}
@@ -215,11 +184,50 @@
 					\item[] \begin{packed_enum}
 						
 						\item Revizor dobiva obavijest u inboxu i poslani skenirani dokument
-						\item Revizor provjerava dokument i preusmijerava ga računovođi koji je zadužen za taj tip dokumenta
+						\item Revizor provjerava dokument 
 
 					\end{packed_enum}
 					
 				\end{packed_item}
+				
+				\noindent \underbar{\textbf{UC3 - Preusmijeravanje pristiglog dokumenata}}
+				\begin{packed_item}
+					
+					\item \textbf{Glavni sudionik:} Revizor
+					\item  \textbf{Cilj:} Verificirati dokumente
+					\item  \textbf{Sudionici:} Računovođa
+					\item  \textbf{Preduvjet:} Rađunovođa je provjerio dokument
+					\item  \textbf{Opis osnovnog tijeka:}
+					
+					\item[] \begin{packed_enum}
+						
+						\item Revizor preusmijerava provjeren dokument
+						 
+						
+					\end{packed_enum}
+					
+				\end{packed_item}
+			
+				\noindent \underbar{\textbf{UC3 - Skeniranje i salnje dokumenta}}
+				\begin{packed_item}
+					
+					\item \textbf{Glavni sudionik:} Revizor
+					\item  \textbf{Cilj:} Skenirati i arhivirati dokumnet
+					\item  \textbf{Sudionici:} Računovođa
+					\item  \textbf{Preduvjet:}-
+					\item  \textbf{Opis osnovnog tijeka:}
+					
+					\item[] \begin{packed_enum}
+						
+						\item Revizor je skenirao dokumnet
+						\item Aplikcaija određuje kojemu revizoru se šalje dokument
+						\item Dokument se šalje revizoru
+						
+						
+					\end{packed_enum}
+					
+				\end{packed_item}
+			
 			
 				
 					
@@ -234,12 +242,15 @@
 					
 					\item[] \begin{packed_enum}
 						
-					
-						\item Spremi dokumente u bazu
+						
+						\item Spremi dokumente u bazu s jedinstvenim brojem arhiva kojeg je generirala apliakcija
 						
 					\end{packed_enum}
 					
 				\end{packed_item}
+			
+				
+				
 			 	\noindent \underbar{\textbf{UC4 - Slanje dokumenata na potpis}}
 			 	\begin{packed_item}
 			 		
