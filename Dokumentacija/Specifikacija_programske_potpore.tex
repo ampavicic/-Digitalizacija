@@ -121,22 +121,22 @@
 						\end{packed_item}
 					\end{packed_item}
 				
-					\noindent \underbar{\textbf{UC1 - Prilaganje dokumenta - poravljen?}}
+					\noindent \underbar{\textbf{UC1 - Prilaganje dokumenta - popravljen?}}
 					\begin{packed_item}
 						
 						\item \textbf{Glavni sudionik:} Zaposlenik, Revizor, Računovođa, Direktor
 						\item  \textbf{Cilj:} Priložiti dokument
 						\item  \textbf{Sudionici:} Baza podataka
-						\item  \textbf{Preduvjet:} Ulogirani verificirani zaposlenik, funkcionalna kamera
+						\item  \textbf{Preduvjet:} Ulogirani verificirani korisnik, funkcionalna kamera
 						\item  \textbf{Opis osnovnog tijeka:}
 						
 						\item[] \begin{packed_enum}
 							
-							\item Zaposlenik klikće na označeno mjesto za prilaganje slika
-							\item Zaposlenik označuje slike koje će se priložiti i prilaže ih
-							\item Zaposlenik inicira OCR test
+							\item Korisnik klikće na označeno mjesto za prilaganje slika
+							\item Korisnik označuje slike koje će se priložiti i prilaže ih
+							\item Korisnik inicira OCR test
 							\item Web aplikacija vraća dokumente u skeniranom obliku
-							\item Zaposlenik označava jeli dokument pogrešno ili točno skeniran
+							\item Korisnik označava jeli dokument pogrešno ili točno skeniran
 							\item Dokumenti se spremaju u bazu podataka
 						
 						\item  \textbf{Opis mogućih odstupanja:}
@@ -164,11 +164,8 @@
 					
 					\item[] \begin{packed_enum}
 						
-						\item Zaposlenik klikće na označeno mjesto za prilaganje slika
-						\item Zaposlenik označuje slike koje će se priložiti i prilaže ih
-						\item Zaposlenik inicira OCR test
-						\item Web aplikacija vraća dokumente u skeniranom obliku
-						\item Zaposlenik označava jeli dokument krivo ili točno poslan
+						
+						\item Zaposlenik skenira dokument
 						\item Ako je dokumnet ispravno skeniran onda se šalje revizoru
 					\end{packed_enum}
 					
@@ -206,7 +203,7 @@
 						
 					\end{packed_item}
 				
-				\noindent \underbar{\textbf{UC3 - Verifikacija dokumenata}}
+				\noindent \underbar{\textbf{UC3 - Verifikacija pristiglog dokumenata}}
 				\begin{packed_item}
 					
 					\item \textbf{Glavni sudionik:} Revizor
@@ -218,29 +215,51 @@
 					\item[] \begin{packed_enum}
 						
 						\item Revizor dobiva obavijest u inboxu i poslani skenirani dokument
-						\item Revizor provjerava dokument i sam ga šalje računovođi ili obavlja sken koji automatski šalje određenom računovođi
+						\item Revizor provjerava dokument i preusmijerava ga računovođi koji je zadužen za taj tip dokumenta
 
 					\end{packed_enum}
 					
 				\end{packed_item}
+			
+				
 					
 				\noindent \underbar{\textbf{UC4 - Arhiviranje dokumenata}}
 				\begin{packed_item}
 					
 					\item \textbf{Glavni sudionik:} Računovođa
-					\item  \textbf{Cilj:} Dodjeliti jedinstveni broj arhiva i arhivirati dokument
+					\item  \textbf{Cilj:} (Dodjeliti jedinstveni broj arhiva)  Arhivirati dokument
 					\item  \textbf{Sudionici:} Baza podataka
-					\item  \textbf{Preduvjet:} Revizor mora nešto poslati
+					\item  \textbf{Preduvjet:} Pristigli su ispravani dokumneti
 					\item  \textbf{Opis osnovnog tijeka:}
 					
 					\item[] \begin{packed_enum}
 						
-						\item Dodjeli jedinstveni broj arhiva dokumentu
+					
 						\item Spremi dokumente u bazu
 						
 					\end{packed_enum}
 					
 				\end{packed_item}
+			 	\noindent \underbar{\textbf{UC4 - Slanje dokumenata na potpis}}
+			 	\begin{packed_item}
+			 		
+			 		\item \textbf{Glavni sudionik:} Računovođa
+			 		\item  \textbf{Cilj:} Poslati dokumnet direktoru na potpis
+			 		\item  \textbf{Sudionici:} Direktor
+			 		\item  \textbf{Preduvjet:} Postojanje ispravno skeniranog dokumenta
+			 		\item  \textbf{Opis osnovnog tijeka:}
+			 		
+			 		\item[] \begin{packed_enum}
+			 			
+			 			
+			 			\item Računovođa šalje dokument direktoru na potpis
+			 			
+			 			
+			 		\end{packed_enum}
+			 		
+			 	\end{packed_item}
+			
+			
 			
 				\noindent \underbar{\textbf{UC5 - Direktorski potpis}}
 				\begin{packed_item}
@@ -255,7 +274,9 @@
 						
 						\item Direktor dobiva obavijest u inboxu i poslani nearhivirani dokument
 						\item Direktor potpisuje dokument
-						\item Direktor šalje obavijest da je dokument potpisan i sprema ga u bazu
+						\item Direktor šalje obavijest da je dokument potpisan 
+						\item Računovođda arhivira dokument
+						
 						
 					\end{packed_enum}
 					
@@ -276,6 +297,21 @@
 						\item Baza vraća tablicu potpisanih dokumenata
 						
 					\end{packed_enum}
+				\end{packed_enum}
+			
+				\item  \textbf{Opis mogućih odstupanja:}
+						
+					\item[] \begin{packed_item}
+					
+					\item[2.b] U bazi nema spremljenih dokumenata
+					\item[] \begin{packed_enum}
+						
+						\item Javiti korisniku da mora prvo spremiti dokument
+						
+					\end{packed_enum}
+					
+					\end{packed_item}
+				
 					
 				\end{packed_item}
 					
