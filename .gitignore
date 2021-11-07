@@ -1,0 +1,8 @@
+# ignoriraj međukompajlirane datoteke
+
+/Dokumentacija/*.aux
+/Dokumentacija/*.lof
+/Dokumentacija/*.log
+/Dokumentacija/*.out
+/Dokumentacija/*.gz
+/Dokumentacija/*.toc
