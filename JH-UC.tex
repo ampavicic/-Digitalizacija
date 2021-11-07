@@ -1,0 +1,465 @@
+\chapter{Specifikacija programske potpore}
+		
+	\section{Funkcionalni zahtjevi}
+			
+			\textbf{\textit{dio 1. revizije}}\\
+			
+			\textit{Navesti \textbf{dionike} koji imaju \textbf{interes u ovom sustavu} ili  \textbf{su nositelji odgovornosti}. To su prije svega korisnici, ali i administratori sustava, naručitelji, razvojni tim.}\\
+				
+			\textit{Navesti \textbf{aktore} koji izravno \textbf{koriste} ili \textbf{komuniciraju sa sustavom}. Oni mogu imati inicijatorsku ulogu, tj. započinju određene procese u sustavu ili samo sudioničku ulogu, tj. obavljaju određeni posao. Za svakog aktora navesti funkcionalne zahtjeve koji se na njega odnose.}\\
+			
+			
+			\noindent \textbf{Dionici:}
+			
+			\begin{packed_enum}
+				
+				\item Korisnici
+				\item Admini sustava				
+				\item Razvojni tim
+				
+			\end{packed_enum}
+			
+			\noindent \textbf{Aktori i njihovi funkcionalni zahtjevi:}
+			
+			
+			\begin{packed_enum}
+				\item  \underbar{Zaposlenik (inicijator) može:}
+				
+				\begin{packed_enum}
+					
+					\item skenirati dokumente
+					\item pregledati povijest dokumenata
+					\item slati dokumente revizoru
+					
+				\end{packed_enum}
+			
+				\item  \underbar{Revizor (sudionik) može:}
+				
+				\begin{packed_enum}
+					
+					\item skenirati dokument
+					\item pregledati povijest dokumenata
+					\item verificirati dokument
+					\item poslati dokument računovođi
+					
+				\end{packed_enum}
+			
+				\item  \underbar{Računovođa (sudionik) može:}
+				
+				\begin{packed_enum}
+					
+					\item pregledati povijest dokumenata
+					\item dodjeljivati jedinstveni broj arhivu
+					\item arhivirati dokument
+					\item slati direktoru dokumente na potpis
+					
+					
+				\end{packed_enum}
+			
+				\item  \underbar{Direktor (sudionik) može:}
+				
+				\begin{packed_enum}
+					
+					\item potpisati dokument
+					\item pregledati povijest  dokumenata
+					\item pregledati statistiku svih zaposlenika
+					\item odobriti registraciju novog korisnika
+					
+					
+				\end{packed_enum}
+				
+				\item  \underbar{Baza podataka (sudionik) može:}
+				
+				\begin{packed_enum}
+					
+					\item dodati nove korisnike u sustav
+					\item dodati nove dokumente i arhive u bazu
+					\item vraćati povijest svih dokumenata
+					\item vraćati statistiku svih zaposlenika
+					
+				\end{packed_enum}	
+			
+			\end{packed_enum}
+			
+			
+			\eject 
+			
+			
+				
+			\subsection{Obrasci uporabe}
+				
+				\textbf{\textit{dio 1. revizije}}
+				
+				\subsubsection{Opis obrazaca uporabe}
+					\textit{Funkcionalne zahtjeve razraditi u obliku obrazaca uporabe. Svaki obrazac je potrebno razraditi prema donjem predlošku. Ukoliko u nekom koraku može doći do odstupanja, potrebno je to odstupanje opisati i po mogućnosti ponuditi rješenje kojim bi se tijek obrasca vratio na osnovni tijek.}\\
+					
+
+				\noindent \underbar{\textbf{UC1 - prijava korisnika  }}
+				\begin{packed_item}
+					
+					\item \textbf{Glavni sudionik:} Korisnik
+					\item  \textbf{Cilj:} Omogućiti prijavu postojećim korisnicima ili odabrati registraciju novih
+					\item  \textbf{Sudionici:} Baza podataka
+					\item  \textbf{Preduvjet:} U bazi podataka mora postojati račun korisnika, odnosno direktor mora odobriti registraciju
+					\item  \textbf{Opis osnovnog tijeka:}
+					
+					\item[] \begin{packed_enum}
+						
+						\item Korisnik unosi svoje korisničke detalje i nakon provjere ulazi u home page
+						\item Nepostojeći korisnici imaju opciju preusmjeravanja na registraciju
+
+					\end{packed_enum}
+						\item  \textbf{Opis mogućih odstupanja:}
+						
+						\item[] \begin{packed_item}
+	
+							\item[2.a] Korisnik je unio korisničke detalje su krivi ili nepostojani
+							\item[] \begin{packed_enum}
+								
+								\item Ako je korisničko ime poznato ali korisnička šifra kriva korisnik mora ponovno unijeti šifru dok ne bude ispravna
+								\item Ako je korisničko ime nepostojano unutar baze podataka korisnika se navodi na registraciju
+							\end{packed_enum}
+							
+						\end{packed_item}					
+				\end{packed_item}
+
+				\noindent \underbar{\textbf{UC2 - Registracija korisnika}}
+				\begin{packed_item}
+					
+					\item \textbf{Glavni sudionik:} Korisnik
+					\item  \textbf{Cilj:} Registrirati nove članove
+					\item  \textbf{Sudionici:} Baza podataka, Direktor
+					\item  \textbf{Preduvjet:} 
+					\item  \textbf{Opis osnovnog tijeka:}
+					
+					\item[] \begin{packed_enum}
+						
+						\item Korisnik odabire opciju registracije te unosi svoje osnovne podatke i poziciju
+
+					\end{packed_enum}
+					
+				\end{packed_item}
+			
+					\noindent \underbar{\textbf{UC3 - Prilaganje dokumenta}}
+					\begin{packed_item}
+	
+						\item \textbf{Glavni sudionik:} Korisnik
+						\item  \textbf{Cilj:} Priložiti dokument
+						\item  \textbf{Sudionici:} Baze podataka
+						\item  \textbf{Preduvjet:} Ulogirani verificirani korisnik, funkcionalna kamera, ispravno skenirani dokument
+						\item  \textbf{Opis osnovnog tijeka:}
+						
+						\item[] \begin{packed_enum}
+	
+							\item Korisnik odabire  označeno mjesto za prilaganje slika
+							\item Korisnik označuje slike koje će se priložiti i prilaže ih
+							\item Korisnik inicira OCR testiranje
+							\item Web aplikacija vraća dokumente u skeniranom obliku
+							\item Korisnik označava je li dokument krivo ili točno poslan
+							\item Dokumenti se spremaju u bazu podataka 						\end{packed_enum}
+						
+						\item  \textbf{Opis mogućih odstupanja:}
+						
+						\item[] \begin{packed_item}
+	
+							\item[2.a] Korisnik je priložio više od 50 slika
+							\item[] \begin{packed_enum}
+								
+								\item Javiti korisniku grešku i onemogućiti slanje
+								\item OCR je krivo parsirao dokument
+							\end{packed_enum}
+							
+						\end{packed_item}
+					\end{packed_item}
+					
+					
+				\noindent \underbar{\textbf{UC4 - Pregled priloženih dokumenata}}
+				\begin{packed_item}
+					
+					\item \textbf{Glavni sudionik:} Korisnik
+					\item  \textbf{Cilj:} Omogućiti pregled svih dokumenata koje je korisnik priložio
+					\item  \textbf{Sudionici:} Baze podataka
+					\item  \textbf{Preduvjet:} Korisnik mora imati priložene dokumente
+					\item  \textbf{Opis osnovnog tijeka:}
+					
+					\item[] \begin{packed_enum}
+						
+						\item Korisniku odabire pregled priloženih dokumenata
+						\item Korisiniku su prikazani svi dokumenti te može odabrati pojedinačno dokument 
+
+					\end{packed_enum}
+					
+				\end{packed_item}
+
+				\noindent \underbar{\textbf{UC5 - Dodavanje sažetka dokumentu}}
+				\begin{packed_item}
+					
+					\item \textbf{Glavni sudionik:} Zaposlenik
+					\item  \textbf{Cilj:} Dodavanje kratkog opisa svakom priloženom dokumentu
+					\item  \textbf{Sudionici:} Baza podataka
+					\item  \textbf{Preduvjet:} 
+					\item  \textbf{Opis osnovnog tijeka:}
+					
+					\item[] \begin{packed_enum}
+						
+						\item Korisnik odabire dokument te ima opciju nadodati kratak opis cijelog dokumenta
+
+					\end{packed_enum}
+					
+				\end{packed_item}
+
+				\noindent \underbar{\textbf{UC6 - Brisanje dokumenata}}
+				\begin{packed_item}
+					
+					\item \textbf{Glavni sudionik:} Korisnik
+					\item  \textbf{Cilj:} Omogućiti brisanje dokumenata iz baze
+					\item  \textbf{Sudionici:} Baza podataka
+					\item  \textbf{Preduvjet:} 
+					\item  \textbf{Opis osnovnog tijeka:}
+					
+					\item[] \begin{packed_enum}
+						
+						\item Korisnik odabire dokument
+						\item Korisnik odabire opciju obriši
+                        
+					\end{packed_enum}
+					
+				\end{packed_item}
+							
+		
+				\noindent \underbar{\textbf{UC7 - Slanje dokumenata}}
+				\begin{packed_item}
+					
+					\item \textbf{Glavni sudionik:} Revizor, računovođa, direktor
+					\item  \textbf{Cilj:} Slanje dokumenata na daljnju obradu
+					\item  \textbf{Sudionici:} 
+					\item  \textbf{Preduvjet:} Ako revizor šalje računovođi dokument mora biti verificiran
+					\item  \textbf{Opis osnovnog tijeka:}
+					
+					\item[] \begin{packed_enum}
+						
+						\item Korisnik odabire dokumente koje želi poslati te odabire jednog od 									ponuđenih korisnika
+
+					\end{packed_enum}
+					
+				\end{packed_item}
+
+
+				\noindent \underbar{\textbf{UC8 -	Pregled dobivenih dokumenata}}
+				\begin{packed_item}
+					
+					\item \textbf{Glavni sudionik:} Revizor, računovođa, direktor
+					\item  \textbf{Cilj:} Omogućiti pregled dobivenih dokumenata
+					\item  \textbf{Sudionici:} 
+					\item  \textbf{Preduvjet:} 
+					\item  \textbf{Opis osnovnog tijeka:}
+					
+					\item[] \begin{packed_enum}
+						
+						\item Korisnik odabire pregled dobivenih dokumenata te može pojedinačno pregledati dokumente te daljnje postupati prema svojoj funkciji
+
+					\end{packed_enum}
+					
+				\end{packed_item}
+
+
+				\noindent \underbar{\textbf{UC9 - Verifikacija dokumenata}}
+				\begin{packed_item}
+					
+					\item \textbf{Glavni sudionik:} Revizor
+					\item  \textbf{Cilj:} Verificirati dokumente i poslati računovođi
+					\item  \textbf{Sudionici:} 
+					\item  \textbf{Preduvjet:} Svi dokumenti moraju biti verificirani
+					\item  \textbf{Opis osnovnog tijeka:}
+					
+					\item[] \begin{packed_enum}
+						
+						\item Revizor dobiva obavijest u inboxu i poslani skenirani dokument
+						\item Revizor provjerava dokument i sam ga šalje računovođi ili obavlja sken koji automatski šalje određenom računovođi
+
+					\end{packed_enum}
+					
+				\end{packed_item}
+					
+					
+				\noindent \underbar{\textbf{UC10 - 	Arhiviranje dokumenata}}
+				\begin{packed_item}
+					
+					\item \textbf{Glavni sudionik:} Računovođa
+					\item  \textbf{Cilj:} Arhiviranje dokumenata
+					\item  \textbf{Sudionici:} Baza podataka, direktor
+					\item  \textbf{Preduvjet:} Ako je dokument poslan direktoru on mora biti odobren
+					\item  \textbf{Opis osnovnog tijeka:}
+					
+					\item[] \begin{packed_enum}
+						
+						\item Računovođa odabire dokumente te ih odmah arhivira ili ih šalje direktoru te čeka odgovor
+
+					\end{packed_enum}
+						\item[] \begin{packed_item}
+	
+							\item[2.a] Direktor nije odobrio dokument
+							\item[] \begin{packed_enum}
+								
+								\item Računovođa je obaviješten 
+								\item Računovođa ima opciju brisanja dokumenata
+							\end{packed_enum}
+							
+						\end{packed_item}					
+				\end{packed_item}
+				
+
+				\noindent \underbar{\textbf{UC11 - Pregled arhiviranih dokumenata}}
+				\begin{packed_item}
+					
+					\item \textbf{Glavni sudionik:} Računovođa
+					\item  \textbf{Cilj:} Omogućiti pregled svih arhiviranih dokumenata
+					\item  \textbf{Sudionici:} Baza podataka
+					\item  \textbf{Preduvjet:} Svi dokumenti moraju biti arhivirani
+					\item  \textbf{Opis osnovnog tijeka:}
+					
+					\item[] \begin{packed_enum}
+						
+						\item Računovođa bira pregled arhiviranih dokumenata
+						\item Prikazani su mu svi arhivirani dokumenti te može pojedinačno odabrati
+
+					\end{packed_enum}
+					
+				\end{packed_item}
+
+				\noindent \underbar{\textbf{UC12 -	Odobrenje dokumenata}}
+				\begin{packed_item}
+					
+					\item \textbf{Glavni sudionik:} Direktor
+					\item  \textbf{Cilj:} Odobriti dobivene dokumente
+					\item  \textbf{Sudionici:} Baza podataka, računovođa
+					\item  \textbf{Preduvjet:} 
+					\item  \textbf{Opis osnovnog tijeka:}
+					
+					\item[] \begin{packed_enum}
+						
+						\item Direktor odabire pregled dobivenih dokumenata te može pojedinačno odobriti ili ne odobriti dokument
+						\item Postupak se prosljeđuje računovođi
+
+					\end{packed_enum}
+					
+				\end{packed_item}
+							
+				\noindent \underbar{\textbf{UC13 -	Pregled potpisanih dokumenata}}
+				\begin{packed_item}
+					
+					\item \textbf{Glavni sudionik:} Direktor
+					\item  \textbf{Cilj:} Omogućiti pregled potpisanih dokumenata
+					\item  \textbf{Sudionici:} Baza podataka
+					\item  \textbf{Preduvjet:} 
+					\item  \textbf{Opis osnovnog tijeka:}
+					
+					\item[] \begin{packed_enum}
+						
+						\item Revizor dobiva obavijest  o  dokumentu
+						\item Revizor provjerava dokument  
+                        \item Revizor  ga šalje računovođi ili obavlja sken koji automatizirano šalje određenom računovođi
+					\end{packed_enum}
+					
+				\end{packed_item}
+					
+				\noindent \underbar{\textbf{UC14 -	Pregled arhiviranih dokumenata po 												                                                   računovođi}}
+				\begin{packed_item}
+					
+					\item \textbf{Glavni sudionik:} Direktor
+					\item  \textbf{Cilj:} Omogućiti pregled dokumenata po računovođi
+					\item  \textbf{Sudionici:} Baza podataka
+					\item  \textbf{Preduvjet:} 
+					\item  \textbf{Opis osnovnog tijeka:}
+					
+					\item[] \begin{packed_enum}
+						
+						\item Direktor odabire računovođu
+						\item Prikazani su svi arhivirani dokumenti tog računovođe
+
+					\end{packed_enum}
+						\item[] \begin{packed_item}
+	
+							\item[2.a] Računovođa nema arhiviranih dokumenata
+							\item[] \begin{packed_enum}
+								
+								\item Direktor je obaviješten 
+								\item Direktor ne može odabrati računovođu
+							\end{packed_enum}
+							
+						\end{packed_item}						
+				\end{packed_item}
+	
+				
+				\noindent \underbar{\textbf{UC15 - Pregled hijerarhija zaposlenika}}
+				\begin{packed_item}
+					
+					\item \textbf{Glavni sudionik:} Korisnik
+					\item  \textbf{Cilj:} Omogućiti prikaz hijarhije korisnika unutar firme
+					\item  \textbf{Sudionici:} Baza podataka
+					\item  \textbf{Preduvjet:} 
+					\item  \textbf{Opis osnovnog tijeka:}
+					
+					\item[] \begin{packed_enum}
+						
+						\item Korisnik odabire pregled hijerarhije
+						\item Korisniku je prikazana hijerarhija svih korisnika unutar firme
+					\end{packed_enum}
+					
+				\end{packed_item}
+					
+				\noindent \underbar{\textbf{UC16 -	Pregled statistike zaposlenika}}
+				\begin{packed_item}
+					
+					\item \textbf{Glavni sudionik:} Direktor
+					\item  \textbf{Cilj:} Omogućiti pregled statistike svakog zaposlenika
+					\item  \textbf{Sudionici:} Baza podataka
+					\item  \textbf{Preduvjet:} Firma mora imati zaposlenike
+					\item  \textbf{Opis osnovnog tijeka:}
+					
+					\item[] \begin{packed_enum}
+						
+						\item Direktor odabire prikaz hijerarhije zaposlenika
+						\item Direktor odabire pojedinačnog zaposlenika 
+                        \item Prikaz statistike odabranog zaposlenika
+					\end{packed_enum}
+					
+				\end{packed_item}
+
+				\noindent \underbar{\textbf{UC17 - Pregled novih registracija}}
+				\begin{packed_item}
+					
+					\item \textbf{Glavni sudionik:} Direktor
+					\item  \textbf{Cilj:} Omogućiti pregled novih registracija
+					\item  \textbf{Sudionici:} Baza podataka
+					\item  \textbf{Preduvjet:} 
+					\item  \textbf{Opis osnovnog tijeka:}
+					
+					\item[] \begin{packed_enum}
+						
+						\item Direktor odabire pregled novih registracija
+						\item Opcija pojedinačnog pregleda registracije
+                        
+					\end{packed_enum}
+					
+				\end{packed_item}
+					
+
+				\noindent \underbar{\textbf{UC18 - Odobrenje registracije}}
+				\begin{packed_item}
+					
+					\item \textbf{Glavni sudionik:} Direktor
+					\item  \textbf{Cilj:} Omogućiti registraciju novog korisnika
+					\item  \textbf{Sudionici:} Baza podataka
+					\item  \textbf{Preduvjet:} 
+					\item  \textbf{Opis osnovnog tijeka:}
+					
+					\item[] \begin{packed_enum}
+						
+						\item Direktor odabire pojedinačnu registraciju
+						\item Direktor ima opciju odobriti ili ne odobriti registraciju
+                    
+					\end{packed_enum}
+					
+				\end{packed_item}
+					
