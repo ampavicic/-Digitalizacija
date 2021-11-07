@@ -103,15 +103,17 @@
 							\item Zaposlenik označuje slike koje će se priložiti i prilaže ih
 							\item Zaposlenik inicira OCR test
 							\item Web aplikacija vraća dokumente u skeniranom obliku
-							\item Zaposlenik označava jeli dokument krivo ili točno poslan
-							\item Dokumenti se spremaju u bazu podataka (bili krivi ili točni) i šalju se na obradu revizoru
+							\item Zaposlenik označava jeli dokument krivo ili točno skeniran
+							\item Zaposlenik šalje revizoru dokument
+							
+							
 						\end{packed_enum}
 						
 						\item  \textbf{Opis mogućih odstupanja:}
 						
 						\item[] \begin{packed_item}
 	
-							\item[2.a] Korisnik je priložio više od 50 slika
+							\item[1.] Korisnik je priložio više od 50 slika
 							\item[] \begin{packed_enum}
 								
 								\item Javiti korisniku grešku i onemogućiti slanje
@@ -134,7 +136,7 @@
 							
 							\item Zaposlenik klikće na mjesto za prikaz povijesti dokumenata
 							\item Web aplikacija šalje upit bazi podataka koji sadrži podatke o zaposleniku
-							\item Baza podataka vraća tablicu dokumenata
+							\item Baza podataka vraća listu skeniranih dokumenata
 							
 						\end{packed_enum}
 						
@@ -151,8 +153,10 @@
 					
 					\item[] \begin{packed_enum}
 						
-						\item Revizor dobiva obavijest u inboxu i poslani skenirani dokument
-						\item Revizor provjerava dokument i sam ga šalje računovođi ili obavlja sken koji automatski šalje određenom računovođi
+						\item Revizor dobiva poslani skenirani dokument
+						\item Revizor provjerava dokument i sam ga šalje ga web aplikaciji
+						\item Web aplikacija prosljeđuje dokument računovođi kojeg je revizor odabrao
+						\item Ako je revizor skenirao dokument, web aplikacija će sama odrediti kojem se računovođi šalje
 
 					\end{packed_enum}
 					
@@ -169,8 +173,8 @@
 					
 					\item[] \begin{packed_enum}
 						
-						\item Dodjeli jedinstveni broj arhiva dokumentu
-						\item Spremi dokumente u bazu
+						\item Računovođa šalje dokumente za arhivirat web aplikaciji
+						\item Web aplikacija šalje bazi podataka dokumente koje je potrebno arhivirati
 						
 					\end{packed_enum}
 					
@@ -187,9 +191,11 @@
 					
 					\item[] \begin{packed_enum}
 						
+						\item Računovođa šalje web aplikaciji nepotpisani nearhivirani dokument
+						\item Web aplikacija ga prosljeđuje direktoru
 						\item Direktor dobiva obavijest u inboxu i poslani nearhivirani dokument
-						\item Direktor potpisuje dokument
-						\item Direktor šalje obavijest da je dokument potpisan i sprema ga u bazu
+						\item Direktor potpisuje dokument i šalje potpisani dokument web aplikaciji
+						\item Web aplikacija šalje upit za arhiviranje potpisanog dokumenta u bazi podataka 
 						
 					\end{packed_enum}
 					
@@ -206,14 +212,16 @@
 					
 					\item[] \begin{packed_enum}
 						
-						\item Direktor šalje upit bazi podataka za tablicu potpisanih dokumenata 
-						\item Baza vraća tablicu potpisanih dokumenata
+						\item Direktor šalje upit web aplikaciji za za potpisane dokumente 
+						\item Web aplikacija šalje upit bazi podataka
+						\item Nakon što baza podataka vrati listu dokumenata, web aplikacija je prosljeđuje direktoru
+						\item Direktor odabrati iz liste potpisani dokument i pregledati ga
 						
 					\end{packed_enum}
 					
 				\end{packed_item}
 					
-				\noindent \underbar{\textbf{UC7 - Pregled statistike}}
+				\noindent \underbar{\textbf{UC7 - Pregled podataka o zaposlenicima}}
 				\begin{packed_item}
 					
 					\item \textbf{Glavni sudionik:} Direktor
@@ -224,200 +232,292 @@
 					
 					\item[] \begin{packed_enum}
 						
-						\item Direktor šalje upit bazi podataka za statistiku o zaposlenicima
-						\item Baza vraća tablicu zaposlenika
+						\item Direktor šalje upit web aplikaciji o statistici o zaposlenicima
+						\item Web aplikacija šalje upit bazi podataka
+						\item Nakon što baza podataka vrati listu, web aplikacija je prosljeđuje direktoru
+						\item Direktor odabrati iz liste zaposlenika i pregledati sve o njemu
 						
 					\end{packed_enum}
 					
 				\end{packed_item}
 			
-				\noindent \underbar{\textbf{UC8 - prijava korisnika  }}
+				\noindent \underbar{\textbf{UC8 - Prijava korisnika}}
 				\begin{packed_item}
 					
-					\item \textbf{Glavni sudionik:} Korisnik
-					\item  \textbf{Cilj:} Omogućiti prijavu postojećim korisnicima ili odabrati registraciju novih
+					\item \textbf{Glavni sudionik:} Zaposlenik
+					\item  \textbf{Cilj:} Omogućiti prijavu već registriranim zaposlenicima ili odabrati registraciju novih
 					\item  \textbf{Sudionici:} Baza podataka
-					\item  \textbf{Preduvjet:} U bazi podataka mora postojati račun korisnika, odnosno direktor mora odobriti registraciju
+					\item  \textbf{Preduvjet:} U bazi podataka mora postojati račun zaposlenika
 					\item  \textbf{Opis osnovnog tijeka:}
 					
 					\item[] \begin{packed_enum}
 						
-						\item Korisnik unosi svoje korisničke detalje i nakon provjere ulazi u home page
-						\item Nepostojeći korisnici imaju opciju preusmjeravanja na registraciju
+						\item Zaposlenik unosi svoje korisničke detalje i nakon provjere ulazi u početnu stranicu 
+						\item Neregistrirani zaposlenici imaju opciju preusmjerenja na registraciju
+						\item Ako je sve uspješno bilo, web aplikacija započinje sesiju
 						
 					\end{packed_enum}
 					\item  \textbf{Opis mogućih odstupanja:}
 					
 					\item[] \begin{packed_item}
 						
-						\item[2.a] Korisnik je unio korisničke detalje su krivi ili nepostojani
+						\item[1.] Zaposlenik je unio korisničke detalje su krivi ili nepostojani
 						\item[] \begin{packed_enum}
 							
-							\item Ako je korisničko ime poznato ali korisnička šifra kriva korisnik mora ponovno unijeti šifru dok ne bude ispravna
-							\item Ako je korisničko ime nepostojano unutar baze podataka korisnika se navodi na registraciju
+							\item Ako je korisničko ime poznato ali korisnička šifra kriva zaposlenik mora ponovno unijeti šifru dok ne bude ispravna
+							\item Ako je korisničko ime nepostojano unutar baze podataka zaposlenika se navodi na registraciju
+							
 						\end{packed_enum}
+						\item[2.] Ako je račun bio deaktiviran, ponovno se aktivira
 						
-					\end{packed_item}					
+						
+					\end{packed_item}			
 				\end{packed_item}
-				
-				\noindent \underbar{\textbf{UC9 - Registracija korisnika}}
+			
+				\noindent \underbar{\textbf{UC9 - Odjava korisnika}}
 				\begin{packed_item}
 					
-					\item \textbf{Glavni sudionik:} Korisnik
-					\item  \textbf{Cilj:} Registrirati nove članove
-					\item  \textbf{Sudionici:} Baza podataka, Direktor
-					\item  \textbf{Preduvjet:} 
+					\item \textbf{Glavni sudionik:} Zaposlenik
+					\item  \textbf{Cilj:} Omogućiti odjavu zaposlenika
+					\item  \textbf{Sudionici:} -
+					\item  \textbf{Preduvjet:} -
 					\item  \textbf{Opis osnovnog tijeka:}
 					
 					\item[] \begin{packed_enum}
 						
-						\item Korisnik odabire opciju registracije te unosi svoje osnovne podatke i poziciju
+						\item Zaposlenik odabire opciju odjave
+						\item Web aplikacija završava sesiju
 						
 					\end{packed_enum}
 					
 				\end{packed_item}
 				
-				\noindent \underbar{\textbf{UC10 - Prilaganje dokumenta}}
+				\noindent \underbar{\textbf{UC10 - Otvaranje korisničkog računa}}
 				\begin{packed_item}
 					
-					\item \textbf{Glavni sudionik:} Korisnik
-					\item  \textbf{Cilj:} Priložiti dokument
-					\item  \textbf{Sudionici:} Baze podataka
-					\item  \textbf{Preduvjet:} Ulogirani verificirani korisnik, funkcionalna kamera, ispravno skenirani dokument
+					\item \textbf{Glavni sudionik:} Zaposlenik
+					\item  \textbf{Cilj:} Registrirati nove zaposlenike
+					\item  \textbf{Sudionici:} Baza podataka
+					\item  \textbf{Preduvjet:} -
 					\item  \textbf{Opis osnovnog tijeka:}
 					
 					\item[] \begin{packed_enum}
 						
-						\item Korisnik odabire  označeno mjesto za prilaganje slika
-						\item Korisnik označuje slike koje će se priložiti i prilaže ih
-						\item Korisnik inicira OCR testiranje
-						\item Web aplikacija vraća dokumente u skeniranom obliku
-						\item Korisnik označava je li dokument krivo ili točno poslan
-						\item Dokumenti se spremaju u bazu podataka 						\end{packed_enum}
-					
+						\item Korisnik odabire opciju registracije te unosi svoje osnovne podatke, jedinstvenu šifru što je dobio pri zaposlenju te aktivira svoj račun
+						\item Web aplikacija dobiva obrazac te provjerava postoji li zaposlena osoba sa odgovarajućom jedinstvenom šifrom, imenom i prezimenom
+						\item Ako postoji zaposlena osoba, u bazi podataka će se umetnuti novi korisnički račun 
+						
+					\end{packed_enum}
+				
 					\item  \textbf{Opis mogućih odstupanja:}
 					
 					\item[] \begin{packed_item}
 						
-						\item[2.a] Korisnik je priložio više od 50 slika
+						\item[1.] Zaposlenik je unio nepostojeću šifru u bazi podataka (ne postoji zaposlenik s tom šifrom)
+						
 						\item[] \begin{packed_enum}
 							
-							\item Javiti korisniku grešku i onemogućiti slanje
-							\item OCR je krivo parsirao dokument
+							\item Odbiti registraciju
+							
 						\end{packed_enum}
 						
 					\end{packed_item}
+					
 				\end{packed_item}
 				
-				
-				\noindent \underbar{\textbf{UC11 - Pregled priloženih dokumenata}}
+				\noindent \underbar{\textbf{UC11 - Deaktivacija korisničkog računa}}
 				\begin{packed_item}
 					
 					\item \textbf{Glavni sudionik:} Korisnik
-					\item  \textbf{Cilj:} Omogućiti pregled svih dokumenata koje je korisnik priložio
+					\item  \textbf{Cilj:} Deaktivirati račun korisnika
 					\item  \textbf{Sudionici:} Baze podataka
-					\item  \textbf{Preduvjet:} Korisnik mora imati priložene dokumente
+					\item  \textbf{Preduvjet:} -
 					\item  \textbf{Opis osnovnog tijeka:}
 					
 					\item[] \begin{packed_enum}
 						
-						\item Korisniku odabire pregled priloženih dokumenata
-						\item Korisiniku su prikazani svi dokumenti te može odabrati pojedinačno dokument 
+						\item Korisnik odabire opciju deaktivacije računa, potvrđuje deaktivaciju te upisuje zaporku
+						\item Web aplikacija će dobiti obrazac te će deaktivirati korisnički račun slanjem upita bazi podataka za deaktivacijom korisničkog računa
+						\item Baza podataka će postaviti atribut aktivnog računa na false
+						
+					\end{packed_enum}
+					
+				\end{packed_item}
+			
+				\noindent \underbar{\textbf{UC12 - Potpuno brisanje korisničkog računa}}
+				\begin{packed_item}
+					
+					\item \textbf{Glavni sudionik:} Direktor
+					\item  \textbf{Cilj:} Obrisati račun korisnika
+					\item  \textbf{Sudionici:} Baze podataka
+					\item  \textbf{Preduvjet:} Zaposlenik mora dobit otkaz
+					\item  \textbf{Opis osnovnog tijeka:}
+					
+					\item[] \begin{packed_enum}
+						
+						\item Ako je zaposlenik dobio otkaz nema više pravo koristiti aplikaciju te baza podataka uklanja račune onima koji su dobili otkaz (ON DELETE)
 						
 					\end{packed_enum}
 					
 				\end{packed_item}
 				
-				\noindent \underbar{\textbf{UC12 - Dodavanje sažetka dokumentu}}
+				\noindent \underbar{\textbf{UC13 - Dodavanje komenatara dokumentu}}
 				\begin{packed_item}
 					
 					\item \textbf{Glavni sudionik:} Zaposlenik
 					\item  \textbf{Cilj:} Dodavanje kratkog opisa svakom priloženom dokumentu
 					\item  \textbf{Sudionici:} Baza podataka
-					\item  \textbf{Preduvjet:} 
+					\item  \textbf{Preduvjet:} -
 					\item  \textbf{Opis osnovnog tijeka:}
 					
 					\item[] \begin{packed_enum}
 						
-						\item Korisnik odabire dokument te ima opciju nadodati kratak opis cijelog dokumenta
+						\item Zaposlenik odabire dokument te ima opciju nadodati kratak opis cijelog dokumenta
 						
 					\end{packed_enum}
 					
 				\end{packed_item}
 				
-				\noindent \underbar{\textbf{UC13 - Brisanje dokumenata}}
+				\noindent \underbar{\textbf{UC14 - Pregled arhiviranih dokumenata}}
 				\begin{packed_item}
 					
-					\item \textbf{Glavni sudionik:} Korisnik
-					\item  \textbf{Cilj:} Omogućiti brisanje dokumenata iz baze
+					\item \textbf{Glavni sudionik:} Računovođa
+					\item  \textbf{Cilj:} Omogućiti pregled svih arhiviranih dokumenata
 					\item  \textbf{Sudionici:} Baza podataka
-					\item  \textbf{Preduvjet:} 
+					\item  \textbf{Preduvjet:} -
 					\item  \textbf{Opis osnovnog tijeka:}
 					
 					\item[] \begin{packed_enum}
 						
-						\item Korisnik odabire dokument
-						\item Korisnik odabire opciju obriši
+						\item Računovođa bira pregled arhiviranih dokumenata
+						\item Web aplikacija šalje upit bazi podataka za listu sa arhiviranim dokumentima
+						\item Nakon što baza vrati listu, web aplikacija je prosljeđuje računovođi
+						\item Računovođi su prikazani svi arhivirani dokumenti te ih može pojedinačno odabrati i pregledati
 						
 					\end{packed_enum}
 					
 				\end{packed_item}
 				
-				
-				\noindent \underbar{\textbf{UC14 - Slanje dokumenata}}
+				\noindent \underbar{\textbf{UC15 - Pregled hijerarhija zaposlenika}}
 				\begin{packed_item}
 					
-					\item \textbf{Glavni sudionik:} Revizor, računovođa, direktor
-					\item  \textbf{Cilj:} Slanje dokumenata na daljnju obradu
-					\item  \textbf{Sudionici:} 
-					\item  \textbf{Preduvjet:} Ako revizor šalje računovođi dokument mora biti verificiran
+					\item \textbf{Glavni sudionik:} Zaposlenik
+					\item  \textbf{Cilj:} Omogućiti prikaz hijarhije zaposlenika unutar firme
+					\item  \textbf{Sudionici:} Baza podataka
+					\item  \textbf{Preduvjet:} -
 					\item  \textbf{Opis osnovnog tijeka:}
 					
 					\item[] \begin{packed_enum}
 						
-						\item Korisnik odabire dokumente koje želi poslati te odabire jednog od 									ponuđenih korisnika
+						\item Zaposleniks odabire pregled hijerarhije
+						\item Web aplikacija šalje upit bazi podataka za listu sa hijerarhijom zaposlenih
+						\item Nakon što baza vrati listu, web aplikacija je prosljeđuje zaposleniku
 						
 					\end{packed_enum}
 					
 				\end{packed_item}
 				
-				
-				\noindent \underbar{\textbf{UC15 -	Pregled dobivenih dokumenata}}
+				\noindent \underbar{\textbf{UC16 - Pregled novijih registracija}}
 				\begin{packed_item}
 					
-					\item \textbf{Glavni sudionik:} Revizor, računovođa, direktor
-					\item  \textbf{Cilj:} Omogućiti pregled dobivenih dokumenata
-					\item  \textbf{Sudionici:} 
-					\item  \textbf{Preduvjet:} 
+					\item \textbf{Glavni sudionik:} Direktor
+					\item  \textbf{Cilj:} Omogućiti pregled novih registracija
+					\item  \textbf{Sudionici:} Baza podataka
+					\item  \textbf{Preduvjet:} -
 					\item  \textbf{Opis osnovnog tijeka:}
 					
 					\item[] \begin{packed_enum}
 						
-						\item Korisnik odabire pregled dobivenih dokumenata te može pojedinačno pregledati dokumente te daljnje postupati prema svojoj funkciji
+						\item Direktor šalje upit web aplikaciji sa odabranim periodom zadnjih registracija npr. 1 dan, 1 tjedan, 3 mjeseca... (filtar)
+						\item Web aplikacija šalje upit bazi podataka za listu sa uvjetom perioda
+						\item Nakon što baza vrati listu, web aplikacija je prosljeđuje direktoru
+						\item Direktor može pregledati listu registriranih u tom periodu
 						
 					\end{packed_enum}
 					
 				\end{packed_item}
 				
-				
-				\noindent \underbar{\textbf{UC16 - Verifikacija dokumenata}}
+				\noindent \underbar{\textbf{UC17 - Dodjela pozicije zaposleniku}}
 				\begin{packed_item}
 					
-					\item \textbf{Glavni sudionik:} Revizor
-					\item  \textbf{Cilj:} Verificirati dokumente i poslati računovođi
-					\item  \textbf{Sudionici:} 
-					\item  \textbf{Preduvjet:} Svi dokumenti moraju biti verificirani
+					\item \textbf{Glavni sudionik:} Direktor
+					\item  \textbf{Cilj:} Dodjeliti poziciju zaposlenika u tvrtci
+					\item  \textbf{Sudionici:} Baza podataka
+					\item  \textbf{Preduvjet:} -
 					\item  \textbf{Opis osnovnog tijeka:}
 					
 					\item[] \begin{packed_enum}
 						
-						\item Revizor dobiva obavijest u inboxu i poslani skenirani dokument
-						\item Revizor provjerava dokument i sam ga šalje računovođi ili obavlja sken koji automatski šalje određenom računovođi
+						\item Direktor šalje upit web aplikaciji sa ili šifrom ili imenom ili prezimenom zaposlenika (filtar)
+						\item Web aplikacija šalje upit bazi podataka za listu sa ili šifrom ili imenom ili prezimenom 
+						\item Nakon što baza vrati listu, web aplikacija je prosljeđuje direktoru
+						\item Direktor iz liste može odabrati traženog zaposlenika i kliknuti na mjesto postavljanje uloge zaposlenika
+						\item Šalje se uputa web aplikaciji za ažuriranje uloge zaposlenika specifične jedinstvene šifre
 						
 					\end{packed_enum}
 					
 				\end{packed_item}
-				
+			
+				\noindent \underbar{\textbf{UC18 - Dodati zaposlenika u tablicu zaposlenih}}
+				\begin{packed_item}
+					
+					\item \textbf{Glavni sudionik:} Direktor
+					\item  \textbf{Cilj:} Zaposliti osobu
+					\item  \textbf{Sudionici:} Baza podataka
+					\item  \textbf{Preduvjet:} -
+					\item  \textbf{Opis osnovnog tijeka:}
+					
+					\item[] \begin{packed_enum}
+						
+						\item Direktor upisuje sve podatke o osobi u zato predviđena mjesta te šalje obrazac web aplikaciji
+						\item Web aplikacija generira jedinstvenu šifru te sve zajedno sprema u bazu podataka, a također još tu šifru vraća direktoru
+						
+					\end{packed_enum}
+					
+				\end{packed_item}
+			
+				\noindent \underbar{\textbf{UC19 - Ukloniti zaposlenika iz tablice zaposlenih}}
+				\begin{packed_item}
+					
+					\item \textbf{Glavni sudionik:} Direktor
+					\item  \textbf{Cilj:} Dati otkaz zaposlenom
+					\item  \textbf{Sudionici:} Baza podataka
+					\item  \textbf{Preduvjet:} -
+					\item  \textbf{Opis osnovnog tijeka:}
+					
+					\item[] \begin{packed_enum}
+						
+						\item Direktor šalje upit web aplikaciji sa ili šifrom ili imenom ili prezimenom zaposlenika (filtar)
+						\item Web aplikacija šalje upit bazi podatak za listu sa ili šifrom ili imenom ili prezimenom 
+						\item Nakon što baza vrati listu, web aplikacija je prosljeđuje direktoru
+						\item Direktor iz liste može odabrati traženog zaposlenika i kliknuti na gumb za davanje otkaza
+						\item Šalje se uputa web aplikaciji za uklanjanje zaposlenika specifične jedinstvene šifre te web aplikacija uklanja zaposlenika te se njegova jedinstvena šifra deaktivira (također se miče iz baze podataka)
+						\item račun zaposlenika (ako postoji) se također automatski uklanja iz baze podataka
+								
+					\end{packed_enum}
+					
+				\end{packed_item}
+
+				\noindent \underbar{\textbf{UC20 - Postavljanje plaće zaposlenicima}}				
+				\begin{packed_item}
+					
+					\item \textbf{Glavni sudionik:} Direktor
+					\item  \textbf{Cilj:} Dati otkaz radniku
+					\item  \textbf{Sudionici:} Baza podataka
+					\item  \textbf{Preduvjet:} -
+					\item  \textbf{Opis osnovnog tijeka:}
+					
+					\item[] \begin{packed_enum}
+						
+						\item Direktor šalje upit web aplikaciji sa ili šifrom ili imenom ili prezimenom radnika (filtar)
+						\item Web aplikacija šalje upit bazi podatak za listu sa ili šifrom ili imenom ili prezimenom 
+						\item Nakon što baza vrati listu, web aplikacija je prosljeđuje direktoru
+						\item Direktor iz liste može odabrati traženog radnika i kliknuti na mjesto postavljanje plaće
+						\item Šalje se uputa web aplikaciji za ažuriranje plaće radnika specifične jedinstvene šifre
+						
+					\end{packed_enum}
+					
+				\end{packed_item}
 				
 				\subsubsection{Dijagrami obrazaca uporabe}
 					
