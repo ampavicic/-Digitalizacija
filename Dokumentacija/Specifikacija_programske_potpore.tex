@@ -81,7 +81,7 @@
 						\noindent \underbar{\textbf{UC1 - Prijava korisnika  }}
 					\begin{packed_item}
 						
-						\item \textbf{Glavni sudionik:} Korisnik
+						\item \textbf{Glavni sudionik:} Zaposlenik
 						\item  \textbf{Cilj:} Omogućiti prijavu postojećim korisnicima ili odabrati registraciju novih
 						\item  \textbf{Sudionici:} Baza podataka
 						\item  \textbf{Preduvjet:} U bazi podataka mora postojati račun korisnika, odnosno direktor mora odobriti registraciju
@@ -161,8 +161,26 @@
 						\end{packed_item}
 					\end{packed_item}
 				
+					\noindent \underbar{\textbf{UC4 - Verifikacija dokumenata}}
+				\begin{packed_item}
 					
-				
+					\item \textbf{Glavni sudionik:} Revizor
+					\item  \textbf{Cilj:} Verificirati dokumente i poslati računovođi
+					\item  \textbf{Sudionici:} Računovođa
+					\item  \textbf{Preduvjet:} Zaposlenik mora nešto poslati
+					\item  \textbf{Opis osnovnog tijeka:}
+					
+					\item[] \begin{packed_enum}
+						
+						\item Revizor dobiva poslani skenirani dokument
+						\item Revizor provjerava dokument i sam ga šalje ga web aplikaciji
+						\item Web aplikacija prosljeđuje dokument računovođi kojeg je revizor odabrao
+						\item Ako je revizor skenirao dokument, web aplikacija će sama odrediti kojem se računovođi šalje
+						
+					\end{packed_enum}
+					
+				\end{packed_item}
+			
 					\noindent \underbar{\textbf{UC5 - Pregled povijesti skeniranih dokumenata}}
 					\begin{packed_item}
 						
@@ -181,28 +199,8 @@
 						\end{packed_enum}
 						
 					\end{packed_item}
-				
-				\noindent \underbar{\textbf{UC6 - Verifikacija dokumenata}}
-				\begin{packed_item}
-					
-					\item \textbf{Glavni sudionik:} Revizor
-					\item  \textbf{Cilj:} Verificirati dokumente i poslati računovođi
-					\item  \textbf{Sudionici:} Računovođa
-					\item  \textbf{Preduvjet:} Zaposlenik mora nešto poslati
-					\item  \textbf{Opis osnovnog tijeka:}
-					
-					\item[] \begin{packed_enum}
-						
-						\item Revizor dobiva poslani skenirani dokument
-						\item Revizor provjerava dokument i sam ga šalje ga web aplikaciji
-						\item Web aplikacija prosljeđuje dokument računovođi kojeg je revizor odabrao
-						\item Ako je revizor skenirao dokument, web aplikacija će sama odrediti kojem se računovođi šalje
-
-					\end{packed_enum}
-					
-				\end{packed_item}
-					
-				\noindent \underbar{\textbf{UC7 - Arhiviranje dokumenata}}
+				\pagebreak
+				\noindent \underbar{\textbf{UC6 - Arhiviranje dokumenata}}
 				\begin{packed_item}
 					
 					\item \textbf{Glavni sudionik:} Računovođa
@@ -229,7 +227,7 @@
 				\end{packed_item}
 			
 			
-				\noindent \underbar{\textbf{UC8 - Direktorski potpis}}
+				\noindent \underbar{\textbf{UC7 - Direktorski potpis}}
 				\begin{packed_item}
 					
 					\item \textbf{Glavni sudionik:} Direktor
@@ -250,7 +248,7 @@
 					
 				\end{packed_item}
 			
-				\noindent \underbar{\textbf{UC9 - Pregled potpisanih dokumenata}}
+				\noindent \underbar{\textbf{UC8 - Pregled potpisanih dokumenata}}
 				\begin{packed_item}
 					
 					\item \textbf{Glavni sudionik:} Direktor
@@ -269,8 +267,8 @@
 					\end{packed_enum}
 					
 				\end{packed_item}
-					
-				\noindent \underbar{\textbf{UC10 - Pregled podataka o zaposlenicima}}
+				\pagebreak	
+				\noindent \underbar{\textbf{UC9 - Pregled podataka o zaposlenicima}}
 				\begin{packed_item}
 					
 					\item \textbf{Glavni sudionik:} Direktor
@@ -290,8 +288,25 @@
 					
 				\end{packed_item}
 			
+				\noindent \underbar{\textbf{UC10 - Dodavanje komenatara dokumentu}}
+				\begin{packed_item}
+					
+					\item \textbf{Glavni sudionik:} Zaposlenik
+					\item  \textbf{Cilj:} Dodavanje kratkog opisa svakom priloženom dokumentu
+					\item  \textbf{Sudionici:} Baza podataka
+					\item  \textbf{Preduvjet:} -
+					\item  \textbf{Opis osnovnog tijeka:}
+					
+					\item[] \begin{packed_enum}
+						
+						\item Zaposlenik odabire dokument te ima opciju nadodati kratak opis cijelog dokumenta
+						
+					\end{packed_enum}
+					
+				\end{packed_item}
+			
 				
-				\noindent \underbar{\textbf{UC11 - Otvaranje korisničkog računa}}
+				\noindent \underbar{\textbf{UC11 -  Stvaranje korisničkog računa}}
 				\begin{packed_item}
 					
 					\item \textbf{Glavni sudionik:} Zaposlenik
@@ -360,24 +375,8 @@
 					
 				\end{packed_item}
 				
-				\noindent \underbar{\textbf{UC14 - Dodavanje komenatara dokumentu}}
-				\begin{packed_item}
-					
-					\item \textbf{Glavni sudionik:} Zaposlenik
-					\item  \textbf{Cilj:} Dodavanje kratkog opisa svakom priloženom dokumentu
-					\item  \textbf{Sudionici:} Baza podataka
-					\item  \textbf{Preduvjet:} -
-					\item  \textbf{Opis osnovnog tijeka:}
-					
-					\item[] \begin{packed_enum}
-						
-						\item Zaposlenik odabire dokument te ima opciju nadodati kratak opis cijelog dokumenta
-						
-					\end{packed_enum}
-					
-				\end{packed_item}
 				
-				\noindent \underbar{\textbf{UC15 - Pregled arhiviranih dokumenata}}
+				\noindent \underbar{\textbf{UC14 - Pregled arhiviranih dokumenata}}
 				\begin{packed_item}
 					
 					\item \textbf{Glavni sudionik:} Računovođa
@@ -399,7 +398,7 @@
 				\end{packed_item}
 				
 				
-				\pagebreak\noindent \underbar{\textbf{UC16 - Pregled hijerarhija zaposlenika}}
+				\pagebreak\noindent \underbar{\textbf{UC15 - Pregled hijerarhija zaposlenika}}
 				\begin{packed_item}
 					
 					\item \textbf{Glavni sudionik:} Zaposlenik
@@ -418,7 +417,7 @@
 					
 				\end{packed_item}
 				
-				\noindent \underbar{\textbf{UC17 - Pregled novijih registracija}}
+				\noindent \underbar{\textbf{UC16 - Pregled novijih registracija}}
 				\begin{packed_item}
 					
 					\item \textbf{Glavni sudionik:} Direktor
@@ -438,7 +437,7 @@
 					
 				\end{packed_item}
 				
-				\noindent \underbar{\textbf{UC18 - Dodjela pozicije zaposleniku}}
+				\noindent \underbar{\textbf{UC17 - Dodjela pozicije zaposleniku}}
 				\begin{packed_item}
 					
 					\item \textbf{Glavni sudionik:} Direktor
@@ -459,7 +458,7 @@
 					
 				\end{packed_item}
 			
-				\noindent \underbar{\textbf{UC19 - Dodati zaposlenika u tablicu zaposlenih}}
+				\noindent \underbar{\textbf{UC18 - Dodati zaposlenika u tablicu zaposlenih}}
 				\begin{packed_item}
 					
 					\item \textbf{Glavni sudionik:} Direktor
@@ -477,7 +476,7 @@
 					
 				\end{packed_item}
 			
-				\noindent \underbar{\textbf{UC20 - Ukloniti zaposlenika iz tablice zaposlenih}}
+				\noindent \underbar{\textbf{UC19 - Ukloniti zaposlenika iz tablice zaposlenih}}
 				\begin{packed_item}
 					
 					\item \textbf{Glavni sudionik:} Direktor
@@ -496,6 +495,28 @@
 						\item račun zaposlenika (ako postoji) se također automatski uklanja iz baze podataka
 								
 					\end{packed_enum}
+				\pagebreak
+				\noindent \underbar{\textbf{UC20 - Postavljanje plaće zaposlenicima}}				
+				\begin{packed_item}
+					
+					\item \textbf{Glavni sudionik:} Direktor
+					\item  \textbf{Cilj:} Dati otkaz radniku
+					\item  \textbf{Sudionici:} Baza podataka
+					\item  \textbf{Preduvjet:} -
+					\item  \textbf{Opis osnovnog tijeka:}
+					
+					\item[] \begin{packed_enum}
+						
+						\item Direktor šalje upit web aplikaciji sa ili šifrom ili imenom ili prezimenom radnika (filtar)
+						\item Web aplikacija šalje upit bazi podatak za listu sa ili šifrom ili imenom ili prezimenom 
+						\item Nakon što baza vrati listu, web aplikacija je prosljeđuje direktoru
+						\item Direktor iz liste može odabrati traženog radnika i kliknuti na mjesto postavljanje plaće
+						\item Šalje se uputa web aplikaciji za ažuriranje plaće radnika specifične jedinstvene šifre
+						
+					\end{packed_enum}
+					
+				\end{packed_item}
+				
 					
 				\end{packed_item}
 
@@ -507,10 +528,40 @@
 				
 			\subsection{Sekvencijski dijagrami}
 				
-				\textbf{\textit{dio 1. revizije}}\\
 				
-				\textit{Nacrtati sekvencijske dijagrame koji modeliraju najvažnije dijelove sustava (max. 4 dijagrama). Ukoliko postoji nedoumica oko odabira, razjasniti s asistentom. Uz svaki dijagram napisati detaljni opis dijagrama.}
-				\eject
+				Zaposlenik unosi svoje podatke kako bi se mogao prijaviti i ući u aplikaciju. Poslužitelj iz baze podataka dohvaća sve zaposlenike unutar tvrtke te traži postoji li zaposlenik s upisanim podacima. Ukoliko zaposlenik postoji u bazi podataka, zaposlenik se uspješno prijavio, a ukoliko ne postoji, poslužitelj ga šalje na stranicu registracije.
+				\begin{figure}[H]
+					\includegraphics[scale=0.7]{slike/UC1 - Prijava korisnika.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+					\centering
+					\caption{UC1 - Prijava korisnika}
+					\label{uc1}
+				\end{figure}
+			
+			\pagebreak
+			Zaposlenik priloži (engl. uploada) sliku. Ima mogućnost priložiti do 50 slika. Ukoliko priloži više od 50 slika, ponavlja postupak sve dok ne priloži dozvoljeni broj. Nakon što uspješno priloži slike, slike se šalju poslužitelju koji radi OCR te zaposleniku vraća skenirani dokument. Zaposlenik ima mogućnost pogledati sve skenirane dokumente te mora označiti koji skenirirani dokumenti su ispravni te ih šalje na poslužitelj koji ih prosljeđuje revizoru na daljnju obradu.
+			\begin{figure}[H]
+				\includegraphics[scale=0.8]{slike/UC3 - Prilaganje dokumenta.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+				\centering
+				\caption{UC3 - Prilaganje dokumenta}
+				\label{uc3}
+			\end{figure}
+		\pagebreak
+		Zaposlenik šalje upit poslužitelju za povijest skeniranih dokumenata. Poslužitelj upit prosljeđuje bazi podataka. Baza podataka iz tablice uzima zatražene dokumente te ih šalje poslužitelju koji ih proslijedi zaposleniku.
+		\begin{figure}[H]
+			\includegraphics[scale=0.8]{slike/UC5 - Pregled povijesti skeniranih dokumenata.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+			\centering
+			\caption{UC5 Pregled - povijesti skeniranih dokumenata}
+			\label{uc5}
+		\end{figure}
+	
+		\pagebreak
+		Zaposlenik unosi svoje podatke. Podaci se šalju poslužitelju koji pita bazu postoji li ovaj korisnik. Ako korisnik postoji, poslužitelj korisniku javlja da je registracija pogrešna, a ako korisnik ne postoji, web poslužitelj šalje upit bazi je li zaposlenik upisao dobar jedinstveni kod. Ukoliko je kod neispravan, poslužitelj korisniku javlja da je registracija pogrešna, a ako je kod ispravan podaci se zapisuju u bazu podataka te se korisnik prosljeđuje na stranicu za prijavu.
+		\begin{figure}[H]
+			\includegraphics[scale=0.8]{slike/UC11 - Stvaranje korisničkog računa.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+			\centering
+			\caption{UC11 -  Registracija računa}
+			\label{uc5}
+		\end{figure}
 	
 		\section{Ostali zahtjevi}
 		
