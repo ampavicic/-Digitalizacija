@@ -63,6 +63,8 @@ public class DirectorController {
 
         mv.addObject("result", result);
 
+        mv.addObject("string", "Success: added one employee: genId = [" + result + "]");
+
         return mv;
 
     }
@@ -104,10 +106,8 @@ public class DirectorController {
 
 
 
-        if(result >= 0 && result <= 1) {
-            System.out.println(result);
-            return new RedirectView("/director/employees/" + result);
-        }
+        if(result == 0) return new RedirectView("/director/employees/" + result);
+        else if(result == 1) return new RedirectView("/director/employees/" + genIdString);
         else return new RedirectView("/error");
 
     }
