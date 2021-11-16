@@ -44,7 +44,7 @@ public class DirectorController {
         List<Role> roleList = jdbcTemplate.query(sqlSelectRoles, new RoleRowMapper());
 
         mv.addObject("roles", roleList);
-        mv.addObject("result", "");
+        mv.addObject("result", -1);
 
         return mv;
 
@@ -59,18 +59,9 @@ public class DirectorController {
         String sqlSelectRoles = "SELECT * FROM role;";
         List<Role> roleList = jdbcTemplate.query(sqlSelectRoles, new RoleRowMapper());
 
-
-        System.out.println(result);
-
-
-
         mv.addObject("roles", roleList);
 
-        String string;
-        if(result == 0) string = "Error: no rows added!";
-        else string = "Success: one row added";
-
-        mv.addObject("result", string);
+        mv.addObject("result", result);
 
         return mv;
 
@@ -115,7 +106,7 @@ public class DirectorController {
 
         if(result >= 0 && result <= 1) {
             System.out.println(result);
-            return new RedirectView("/employees/" + result);
+            return new RedirectView("/director/employees/" + result);
         }
         else return new RedirectView("/error");
 
