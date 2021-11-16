@@ -16,8 +16,13 @@
     <div class="company-name"> <h2> COMPANY.co </h2> </div>
     <div class="navigation">
       <a href="/"> Homepage </a>
-      <a href="/login"> Login </a>
-      <a href="/register"> Register </a>
+      <td>
+        <a th:if="${loggedIn == false}" href="/login"> Login </a>
+        <a th:if="${loggedIn == false}" href="/register"> Register </a>
+        <a th:if="${loggedIn == true}" href="/user"> Userpage </a>
+        <a th:if="${roleDirector == true}" href="/director"> Director </a>
+        <a th:if="${loggedIn == true}" href="/logout"> Logout </a>
+      </td>
     </div>
   </header>
   <main>
@@ -45,6 +50,7 @@
         <input name="_csrf" type="hidden" value="c8c67b2c-e4fc-4c74-b145-f223782c8a17">
         <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
     </form>
+    <div style="color:red;"><span th:text="${registerError}"> </span></div>
   </div>
   </main>
   <footer>
