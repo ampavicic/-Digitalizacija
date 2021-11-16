@@ -9,7 +9,7 @@ body {
     background-size: cover;
     display: flex;
     flex-direction: column;
-    min-height: 100%;
+    min-height: 100vh;
 }
 
 main {
@@ -122,7 +122,7 @@ footer h2 {
 
 .container {
     text-align: center;
-
+    padding-bottom: 10vh;
 }
 
 .error-container {
