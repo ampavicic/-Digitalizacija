@@ -42,16 +42,14 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers("/").permitAll()
                 .antMatchers("/register").permitAll()
                 .antMatchers("/login").permitAll().and()
-                .formLogin(form -> form.defaultSuccessUrl("/userpage").failureForwardUrl("/login?error=true"))
+                .formLogin().loginPage("/login").defaultSuccessUrl("/user").failureForwardUrl("/login?error=true").and()
                 .logout().clearAuthentication(true).deleteCookies().invalidateHttpSession(true).logoutSuccessUrl("/");
 
-                /*.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/homepage").deleteCookies("JSESSIONID")
-                .invalidateHttpSession(true);*/
+        /*.formLogin(form -> form.defaultSuccessUrl("/userpage").failureForwardUrl("/login?error=true")).*/
 
         http.httpBasic(); //Osnovna konfiguracija
         http.csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-        .invalidSessionUrl("/login"); //Defaultna, bitna kod login formi
+                .invalidSessionUrl("/login"); //Defaultna, bitna kod login formi
 
     }
 

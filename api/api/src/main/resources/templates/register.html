@@ -8,41 +8,48 @@
   <meta name="description" content="">
   <meta name="author" content="">
   <title>Please register</title>
-  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
-  <link rel="stylesheet" th:href="@{/css/register.css}">
+  <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 
 <body>
+  <header>
+    <div class="company-name"> <h2> COMPANY.co </h2> </div>
+    <div class="navigation">
+      <a href="/"> Homepage </a>
+      <a href="/login"> Login </a>
+      <a href="/register"> Register </a>
+    </div>
+  </header>
+  <main>
   <div class="container">
-    <form class="form-signin" method="post" action="/registerSubmit">
-      <h2 class="form-signin-heading">Please register</h2>
+    <form class="form-basic" method="post" action="/register">
+      <h2 class="form-basic-heading">Please register</h2>
       <p>
         <label for="Uniqueid" class="sr-only">Unique ID</label>
         <input type="text" id="uniqueID" name="uniqueID" class="form-control" placeholder="Unique ID" required=""
           autofocus="">
       </p>
-
       <p>
         <label for="email" class="sr-only">E-mail</label>
         <input type="text" id="email" name="email" class="form-control" placeholder="E-mail" required="" autofocus="">
       </p>
-
       <p>
         <label for="username" class="sr-only">Username</label>
         <input type="text" id="username" name="username" class="form-control" placeholder="Username" required=""
           autofocus="">
       </p>
-
       <p>
         <label for="password" class="sr-only">Password</label>
         <input type="password" id="password" name="password" class="form-control" placeholder="Password" required="">
       </p>
-
-
-      <input name="_csrf" type="hidden" value="c8c67b2c-e4fc-4c74-b145-f223782c8a17">
-      <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
+        <input name="_csrf" type="hidden" value="c8c67b2c-e4fc-4c74-b145-f223782c8a17">
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
     </form>
   </div>
+  </main>
+  <footer>
+    <div class="creator-name"> <h2> @zelenaLipa </h2> </div>
+  </footer>
 </body>
 
 </html>

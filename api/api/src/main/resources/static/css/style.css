@@ -1,0 +1,146 @@
+* {
+    padding: 0;
+    margin: 0;
+    font-family: sans-serif;
+}
+
+body {
+    background-color: white;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}
+
+main {
+    width: 350px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    color: darkslategray;
+}
+
+.form-basic-heading {
+    font-size: 40px;
+    text-align: center;
+    text-transform: uppercase;
+    margin: 40px 0;
+}
+
+.form-basic p {
+    font-size: 20px;
+    margin: 15px 0;
+}
+
+.form-control {
+    background-color: #e8f0fe;
+    border: 2px solid darkslategray;
+    outline: darkslategray;
+}
+
+.form-basic input {
+    font-size: 16px;
+    width: 100%;
+    padding: 15px 10px;
+    border: 1px solid darkslategray;
+    outline: darkslategray;
+    border-radius: 5px;
+}
+
+.form-basic button {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 20px 0;
+    padding: 10px, 15px;
+    width: 50%;
+    border-radius: 5px;
+    border: 1px solid darkslategray;
+    outline: darkslategray;
+}
+
+header, footer {
+    position: absolute;
+    background-color: darkslategray;
+    width: 100%;
+    color: white;
+}
+
+header {
+    height: 10vh;
+}
+
+.company-name {
+    margin: auto;
+    position: absolute;
+    width: 50%;
+    text-align: center;
+}
+
+header h2 {
+    margin-top: 20px;
+
+}
+
+footer {
+    min-height: 15vh;
+    bottom: 0;
+
+}
+
+.navigation {
+    margin: auto;
+    position: absolute;
+    width: 50%;
+    text-align: center;
+}
+
+.navigation a {
+    position: relative;
+    left: 50%;
+    top: 50px;
+    color: white;
+    text-decoration: none;
+    margin-right: 20px;
+}
+
+.creator-name {
+    margin: auto;
+    position: absolute;
+    width: 50%;
+    text-align: center;
+}
+
+footer h2 {
+    position: relative;
+    left: 50%;
+    top: 50px;
+    color: white;
+    text-decoration: none;
+    margin-right: 20px;
+}
+
+.container {
+    text-align: center;
+
+}
+
+.error-container {
+    margin-top: -10%;
+    text-align: center;
+}
+
+.homepage-container {
+    margin-top: -20%;
+    text-align: center;
+}
+
+.userpage-container {
+    margin-top: -20%;
+    text-align: center;
+}
+
+.directorpage-container {
+    margin-top: -20%;
+    text-align: center;
+}

@@ -34,13 +34,13 @@ public class UserController {
 
         System.out.println("Na homepageu sam i: " + currentPrincipalName);
 
-        ModelAndView mv = new ModelAndView("homepage.html");
+        ModelAndView mv = new ModelAndView("home.html");
 
         return mv;
 
     }
 
-    @GetMapping("/userpage")
+    @GetMapping("/user")
     public ModelAndView userPage() {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -48,10 +48,17 @@ public class UserController {
 
         System.out.println("Na userpageu sam i: " + currentPrincipalName);
 
-        ModelAndView mv = new ModelAndView("userpage.html");
+        ModelAndView mv = new ModelAndView("user.html");
 
         return mv;
 
+
+    }
+
+    @GetMapping("/login")
+    public ModelAndView login() {
+
+        return new ModelAndView("login.html");
 
     }
 
@@ -66,7 +73,7 @@ public class UserController {
 
     }
 
-    @PostMapping("/registerSubmit")
+    @PostMapping("/register")
     public RedirectView loginSubmit(@RequestParam("uniqueID") String genId,
                                     @RequestParam("email") String email,
                                     @RequestParam("username") String username,
@@ -81,21 +88,22 @@ public class UserController {
         String sqlSelectEmployee = "SELECT * FROM employee WHERE genid = '" + genId + "';";             //Provjeri jeli korisnik zaposlen u tvrtci
         List<Employee> employeeList = jdbcTemplate.query(sqlSelectEmployee, new EmployeeRowMapper());
 
-        if(employeeList.size() < 1) return new RedirectView("/errorNoAccount"); //Ako nije vrati pogresku
+        if(employeeList.size() < 1) return new RedirectView("/error"); //Ako nije vrati pogresku
         else {
 
             String sqlSelectUserAccount = "SELECT * FROM useraccount WHERE genid = '" + genId + "';";    //Ispitaj jeli zaposlenik vec ima otvoren racun
             List<UserAccount> userAccountList = jdbcTemplate.query(sqlSelectUserAccount, new UserAccountRowMapper());
 
-            if(userAccountList.size() > 1) return new RedirectView("/doubleAccounts");               //Ako da, onemoguci mu registraciju
+            if(userAccountList.size() > 1) return new RedirectView("/error");               //Ako da, onemoguci mu registraciju
             else {                                                                                       //Ako ne, ubaci novi korisnicki racun u bazu podataka
 
-                String sqlInsertUserAccount = "INSERT INTO useraccount (username, password, email, genid) VALUES " +
+                String sqlInsertUserAccount = "INSERT INTO useraccount (username, password, email, genid, enabled) VALUES " +
                         "( '"
                         + username + "', '"
                         + encodedPassword + "', '"
                         + email + "', '"
-                        + genId + "');";
+                        + genId + "', " +
+                        " true);";
                 int result = jdbcTemplate.update(sqlInsertUserAccount);
 
                 return new RedirectView("/login");
