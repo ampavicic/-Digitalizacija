@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Homepage</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+<header>
+    <div class="company-name"> <h2> COMPANY.co </h2> </div>
+    <div class="navigation">
+        <a href="/"> Homepage </a>
+        <td>
+            <a th:if="${loggedIn == false}" href="/login"> Login </a>
+            <a th:if="${loggedIn == false}" href="/register"> Register </a>
+            <a th:if="${loggedIn == true}" href="/user"> Userpage </a>
+            <a th:if="${roleDirector == true}" href="/director"> Director </a>
+            <a th:if="${loggedIn == true}" href="/logout"> Logout </a>
+        </td>
+    </div>
+</header>
+<main>
+    <div class="container">
+        <form class="form-basic" method="post" action="/director/employees/add">
+            <h2 class="form-basic-heading">Please register</h2>
+            <p>
+                <label for="pid" class="sr-only">Personal ID</label>
+                <input type="text" id="pid" name="pid" class="form-control" placeholder="Personal ID" required=""
+                       autofocus="">
+            </p>
+            <p>
+                <label for="name" class="sr-only">Name</label>
+                <input type="text" id="name" name="name" class="form-control" placeholder="Name" required="" autofocus="">
+            </p>
+            <p>
+                <label for="surname" class="sr-only">Surname</label>
+                <input type="text" id="surname" name="surname" class="form-control" placeholder="Surname" required="" autofocus="">
+            </p>
+            <p>
+                <label for="residence" class="sr-only">Residence</label>
+                <input type="text" id="residence" name="residence" class="form-control" placeholder="Residence" required="" autofocus="">
+            </p>
+            <p>
+                <label for="salary" class="sr-only">Salary</label>
+                <input type="text" id="salary" name="salary" class="form-control" placeholder="Salary" required="" autofocus="">
+            </p>
+            <label for="roleid" class="sr-only"> Role: </label>
+            <select class="form-control" name="roleid" id="roleid">
+                <tr th:each="role : ${roles}">
+                    <td><option th:value="${role.getRoleId()}" th:text="${role.getName()}"></option></td>
+                </tr>
+            </select>
+            <input name="_csrf" type="hidden" value="c8c67b2c-e4fc-4c74-b145-f223782c8a17">
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Add employee</button>
+        </form>
+        <div style="color:red;"><span th:text="${result}"> </span></div>
+    </div>
+</main>
+<footer>
+    <div class="creator-name"> <h2> @zelenaLipa </h2> </div>
+</footer>
+</body></html>
