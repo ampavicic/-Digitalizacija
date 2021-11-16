@@ -16,7 +16,7 @@ main {
     width: 350px;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -45%); /*DODANO PRIJE (-50%, -50%)*/
     position: absolute;
     color: darkslategray;
 }
@@ -85,7 +85,6 @@ header h2 {
 footer {
     min-height: 15vh;
     bottom: 0;
-    top: 100vh; /*nadodano*/
 }
 
 .navigation {
@@ -121,6 +120,7 @@ footer h2 {
 }
 
 .container {
+    margin-top: -15%; /*DODANO*/
     text-align: center;
 }
 
@@ -153,3 +153,6 @@ footer h2 {
     display: inline-block;
 }
 
+.lowered-footer {
+    top: 100vh;     /*NADODANO*/
+}
