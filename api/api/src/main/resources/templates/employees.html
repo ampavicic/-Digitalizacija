@@ -59,7 +59,9 @@
             <input name="_csrf" type="hidden" value="c8c67b2c-e4fc-4c74-b145-f223782c8a17">
             <button class="btn btn-lg btn-primary btn-block" type="submit">Add employee</button>
         </form>
-        <div style="color:red;"><span th:text="${result}"> </span></div>
+        <div style="color:red;" th:if="${result == 0}"><span> Error: no employee added! </span></div>
+        <div style="color:green;" th:if="${result == 1}"><span> Success: added one employee! </span></div>
+        <div style="color:red;" th:if="${result >= 2}"><span> Error! </span></div>
     </div>
 </main>
 <footer>
