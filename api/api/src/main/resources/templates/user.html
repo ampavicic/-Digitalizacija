@@ -16,12 +16,18 @@
     <div class="company-name"> <h2> COMPANY.co </h2> </div>
     <div class="navigation">
         <a href="/"> Homepage </a>
-        <a href="/logout"> Logout </a>
+        <td>
+            <a th:if="${loggedIn == false}" href="/login"> Login </a>
+            <a th:if="${loggedIn == false}" href="/register"> Register </a>
+            <a th:if="${loggedIn == true}" href="/user"> Userpage </a>
+            <a th:if="${roleDirector == true}" href="/director"> Director </a>
+            <a th:if="${loggedIn == true}" href="/logout"> Logout </a>
+        </td>
     </div>
 </header>
 <main>
     <div class="userpage-container">
-        <p> This is an unfinished user page <p>
+        <h2> Welcome user <span th:text="${username}"></span> </h2>
     </div>
 </main>
 <footer>

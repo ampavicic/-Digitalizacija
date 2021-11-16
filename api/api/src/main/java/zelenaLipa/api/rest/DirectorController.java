@@ -1,5 +1,8 @@
 package zelenaLipa.api.rest;
 
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,11 +13,11 @@ import org.springframework.web.servlet.ModelAndView;
 public class DirectorController {
 
     @GetMapping("")
-    public ModelAndView directorPage() {
-
-        System.out.println("Kao direktor, na svojoj stranici sam");
+    public ModelAndView director() {
 
         ModelAndView mv = new ModelAndView("director.html");
+        checkVariables(mv);
+
         return mv;
 
     }
@@ -22,77 +25,68 @@ public class DirectorController {
     @GetMapping("/listOfEmployees") //POST treba biti
     public void listOfEmployees() {
 
-        System.out.println("Kao direktor, na listi zaposlenih sam");
-
     }
 
     @GetMapping("/listOfRoles")
     public void listOfRoles() {
-
-        System.out.println("Kao direktor, na listi uloga sam");
 
     }
 
     @GetMapping("/setSalary")
     public void setSalary() {
 
-        System.out.println("Kao direktor, postavljam placu zaposleniku");
-
     }
 
     @GetMapping("/addRoleToEmployee")
     public void addRoleToEmployee() {
-
-        System.out.println("Kao direktor, postavljam ulogu zaposleniku");
 
     }
 
     @GetMapping("/removeEmployee")
     public void removeEmployee() {
 
-        System.out.println("Kao direktor, micem zaposlenika");
-
     }
 
     @GetMapping("/addEmployee")
     public void updateSalary() {
-
-        System.out.println("Kao direkor, dodajem zaposlenog");
 
     }
 
     @GetMapping("/newestRegistrations")
     public void getNewestRegistrations() {
 
-        System.out.println("Kao direkor, pregledavam najnovije registracije");
-
     }
 
     @GetMapping("/deleteEmployeeAccount")
     public void deleteEmployeeAccount() {
-
-        System.out.println("Kao direkor, brisem racun zaposlenika");
 
     }
 
     @GetMapping("/getStatistics")
     public void getStatistics() {
 
-        System.out.println("Kao direkor, pregledavam statistiku");
-
     }
 
     @GetMapping("/getSignedDocuments")
     public void getSignedDocuments() {
-
-        System.out.println("Kao direkor, pregledavam potpisane dokumente");
 
     }
 
     @GetMapping("/signDocument")
     public void signDocument() {
 
-        System.out.println("Kao direkor, potpisujem dokument");
+    }
+
+    private void checkVariables(ModelAndView mv) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication != null) {
+            if (authentication instanceof AnonymousAuthenticationToken) mv.addObject("loggedIn", false);
+            else mv.addObject("loggedIn", true);
+
+            if (authentication.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("ROLE_DIRECTOR")))
+                mv.addObject("roleDirector", true);
+            else mv.addObject("roleDirector", false);
+        } else { mv.addObject("loggedIn", false); mv.addObject("roleDirector", false); }
 
     }
 

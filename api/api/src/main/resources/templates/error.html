@@ -16,13 +16,18 @@
     <div class="company-name"> <h2> COMPANY.co </h2> </div>
     <div class="navigation">
         <a href="/"> Homepage </a>
-        <a href="/login"> Login </a>
-        <a href="/register"> Register </a>
+        <td>
+            <a th:if="${loggedIn == false}" href="/login"> Login </a>
+            <a th:if="${loggedIn == false}" href="/register"> Register </a>
+            <a th:if="${loggedIn == true}" href="/user"> Userpage </a>
+            <a th:if="${roleDirector == true}" href="/director"> Director </a>
+            <a th:if="${loggedIn == true}" href="/logout"> Logout </a>
+        </td>
     </div>
 </header>
 <main>
     <div class="error-container">
-        <h2> Looks like an error :( [] </h2>
+        <h2> Looks like an error :( [<span th:text="${errorCode}"></span>] </h2>
     </div>
 </main>
 <footer>
