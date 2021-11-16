@@ -143,3 +143,13 @@ footer h2 {
     margin-top: -20%;
     text-align: center;
 }
+
+#director-buttons {
+    width:100%;
+    text-align: center;
+}
+
+.director-button {
+    display: inline-block;
+}
+
