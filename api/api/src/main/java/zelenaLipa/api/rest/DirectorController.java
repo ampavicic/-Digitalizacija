@@ -14,7 +14,7 @@ public class DirectorController {
 
         System.out.println("Kao direktor, na svojoj stranici sam");
 
-        ModelAndView mv = new ModelAndView("directorpage.html");
+        ModelAndView mv = new ModelAndView("director.html");
         return mv;
 
     }
