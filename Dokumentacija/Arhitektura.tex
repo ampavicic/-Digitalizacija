@@ -1,26 +1,34 @@
 \chapter{Arhitektura i dizajn sustava}
 		
-		\textbf{\textit{dio 1. revizije}}\\
 
-		\textit{ Potrebno je opisati stil arhitekture te identificirati: podsustave, preslikavanje na radnu platformu, spremišta podataka, mrežne protokole, globalni upravljački tok i sklopovsko-programske zahtjeve. Po točkama razraditi i popratiti odgovarajućim skicama:}
-	\begin{itemize}
-		\item 	\textit{izbor arhitekture temeljem principa oblikovanja pokazanih na predavanjima (objasniti zašto ste baš odabrali takvu arhitekturu)}
-		\item 	\textit{organizaciju sustava s najviše razine apstrakcije (npr. klijent-poslužitelj, baza podataka, datotečni sustav, grafičko sučelje)}
-		\item 	\textit{organizaciju aplikacije (npr. slojevi frontend i backend, MVC arhitektura) }		
-	\end{itemize}
+	\text Arhitektura se može podijeliti na tri podsustava:
+	\begin{packed_item}
+		\item Web poslužitelj
+		\item Web aplikacija
+		\item Baza podataka
+	\end{packed_item}
 
+	 \textit{Web preglednik} je program (Google Chrome) koji korisniku omogućuje pregled web-stranice, a ujedno je i prevoditelj. Dakle, stranica je pisana u kodu kojeg preglednik razumije te ga nakon toga interpretira kao nešto razumljivo korisniku.
+	 
+	 
+	 \textit{Web poslužitelj} ima zadaću omogućiti komunikaciju klijenta s aplikacijom. Komunikacija se odvija preko HTTP (engl. Hyper Text Transfer Protocol) protokola. 
+	 Poslužitelj je onaj koji pokreće web aplikaciju te joj prosljeđuje zahtjeve.
+	 
+	 \textit{Web aplikacija} obrađuje zahtjeve koje korisnik pošalje te je u komunikaciji s bazom podataka s kojom preko poslužitelja vraća korisniku odgvor u obliku HTML dokumenta vidljibog web pregledniku.
+	 
+	 Programski jezik korišten za izradu aplikacije je Java i Javascript. Za baze podataka korišen je pgAdmin. Aplikacija je puštena u pogon preko Heroku-a.
+	 Arhitektura sustava temeljit će se na MVC (Model-View-Controller) konceptu. MVC koncept smo koristili jer je podržan u JavaSpringBoot-u kojeg koristimo te je pogodan za moguće kohezije.
+	 MVC model odvaja korisničko sučelje od ostatka sustava.
+	\begin{packed_item}
+		\item Model sadrži razrede čiji objekti se obrađuju
+		\item Pogled sadrži razrede čiji objekti služe za prikaz podataka
+		\item Nadglednik (Controller) sadrži razrede koji upravljaju i rukuju korisničkom interakcijom s pogledom i modelom
+	\end{packed_item}
 	
-		
-
-		
-
-				
+		\newpage		
 		\section{Baza podataka}
 			
-			\textbf{\textit{dio 1. revizije}}\\
-			
-		\textit{Potrebno je opisati koju vrstu i implementaciju baze podataka ste odabrali, glavne komponente od kojih se sastoji i slično.}
-		\text{U našoj web aplikaciji koristili smo relacijsku bazu podataka. Baza se sastoji od tablica koje imaju svoje atribute. Baza podataka je jako bitna da bi web aplikacija radila jer su na njoj pohranjeni svi podaci o zaposlenicima i svi skenirani dokumenti.}
+		\text U našoj web aplikaciji koristili smo relacijsku bazu podataka. Baza se sastoji od tablica koje imaju svoje atribute. Baza podataka je jako bitna da bi web aplikacija radila jer su na njoj pohranjeni svi podaci o zaposlenicima i svi skenirani dokumenti.
 		\newline
 		\text{Entiteti baze podataka su sljedeći:}
 		\begin{packed_item}
@@ -37,7 +45,6 @@
 			\subsection{Opis tablica}
 			
 
-				\textit{Svaku tablicu je potrebno opisati po zadanom predlošku. Lijevo se nalazi točno ime varijable u bazi podataka, u sredini se nalazi tip podataka, a desno se nalazi opis varijable. Svjetlozelenom bojom označite primarni ključ. Svjetlo plavom označite strani ključ}
 				
 				\textbf{Zaposlenik}  Ovaj entitet sadrži osnovne informacije o zaposleniku. Sadrži sljedeće atribute: genID, PID, Name, Surname, Residence, Salary i roleID. genID je alternativni ključ dok je PID primarni ključ. Entitet je povezan s entitetom \textbf{UserAccount} preko genID i \textbf{Role} preko roleID.
 				
@@ -57,7 +64,7 @@
 					Surname & VARCHAR & Prezime zaposlenika \\ \hline
 					Residence & VARCHAR &  Mjesto stanovanja \\ \hline 
 					Salary & INT	& Plaća zaposlenika 		\\ \hline 
-					\SetCell{LightBlue} roleID	& VARCHAR &  jedinstveni kod pozicije (uloge) 	\\ \hline 
+					\SetCell{LightBlue} roleID	& INT &  jedinstveni kod pozicije (uloge) 	\\ \hline 
 				\end{longtblr}
 				
 				
@@ -165,18 +172,31 @@
 				
 			
 			\subsection{Dijagram baze podataka}
-				\textit{ U ovom potpoglavlju potrebno je umetnuti dijagram baze podataka. Primarni i strani ključevi moraju biti označeni, a tablice povezane. Bazu podataka je potrebno normalizirati. Podsjetite se kolegija "Baze podataka".}
+				
+				\begin{figure}[H]
+					\includegraphics[scale=0.58]{slike/REL_schema.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+					\centering
+					\caption{Relacijski model baze podataka}
+					\label{REL}
+				\end{figure}
+				
+				
 			
-			\eject
+		
 			
 			
 		\section{Dijagram razreda}
 		
-			\textit{Potrebno je priložiti dijagram razreda s pripadajućim opisom. Zbog preglednosti je moguće dijagram razlomiti na više njih, ali moraju biti grupirani prema sličnim razinama apstrakcije i srodnim funkcionalnostima.}\\
 			
-			\textbf{\textit{dio 1. revizije}}\\
-			
-			\textit{Prilikom prve predaje projekta, potrebno je priložiti potpuno razrađen dijagram razreda vezan uz \textbf{generičku funkcionalnost} sustava. Ostale funkcionalnosti trebaju biti idejno razrađene u dijagramu sa sljedećim komponentama: nazivi razreda, nazivi metoda i vrste pristupa metodama (npr. javni, zaštićeni), nazivi atributa razreda, veze i odnosi između razreda.}\\
+			\begin{figure}[H]
+				\includegraphics[scale=0.58]{slike/DijagramRazredaAlfa.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+				\centering
+				\caption{Dijagram razreda}
+				\label{DR1}
+			\end{figure}
+		
+		
+		
 			
 			\textbf{\textit{dio 2. revizije}}\\			
 			
