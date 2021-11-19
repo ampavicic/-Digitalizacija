@@ -20,11 +20,26 @@
 			\textbf{\textit{dio 1. revizije}}\\
 			
 		\textit{Potrebno je opisati koju vrstu i implementaciju baze podataka ste odabrali, glavne komponente od kojih se sastoji i slično.}
+		\text{U našoj web aplikaciji koristili smo relacijsku bazu podataka. Baza se sastoji od tablica koje imaju svoje atribute. Baza podataka je jako bitna da bi web aplikacija radila jer su na njoj pohranjeni svi podaci o zaposlenicima i svi skenirani dokumenti.}
+		\newline
+		\text{Entiteti baze podataka su sljedeći:}
+		\begin{packed_item}
+			\item {Dokument}
+			\item {Zaposlenik}
+			\item {Korisnički račun}
+			\item {Uloga}
+			\item {Racun}
+			\item {Ponuda}
+			\item {Interni}
+		\end{packed_item}
+	
 		
 			\subsection{Opis tablica}
 			
 
 				\textit{Svaku tablicu je potrebno opisati po zadanom predlošku. Lijevo se nalazi točno ime varijable u bazi podataka, u sredini se nalazi tip podataka, a desno se nalazi opis varijable. Svjetlozelenom bojom označite primarni ključ. Svjetlo plavom označite strani ključ}
+				
+				\textbf{Zaposlenik}  Ovaj entitet sadrži osnovne informacije o zaposleniku. Sadrži sljedeće atribute: genID, PID, Name, Surname, Residence, Salary i roleID. genID je alternativni ključ dok je PID primarni ključ. Entitet je povezan s entitetom \textbf{UserAccount} preko genID i \textbf{Role} preko roleID.
 				
 				
 				\begin{longtblr}[
@@ -35,14 +50,118 @@
 						colspec={|X[6,l]|X[6, l]|X[20, l]|}, 
 						rowhead = 1,
 					} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
-					\hline \multicolumn{3}{|c|}{\textbf{korisnik - ime tablice}}	 \\ \hline[3pt]
-					\SetCell{LightGreen}IDKorisnik & INT	&  	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod  	\\ \hline
-					korisnickoIme	& VARCHAR &   	\\ \hline 
-					email & VARCHAR &   \\ \hline 
-					ime & VARCHAR	&  		\\ \hline 
-					\SetCell{LightBlue} primjer	& VARCHAR &   	\\ \hline 
+					\hline \multicolumn{3}{|c|}{\textbf{Employee}}	 \\ \hline[3pt]
+					\SetCell{LightGreen}genID & VARCHAR	&  kod koji zaposlenik dobije od direktora 	\\ \hline
+					PID & VARCHAR	&  OIB zaposlenika 	\\ \hline
+					Name	& VARCHAR &   Ime zaposlenika	\\ \hline 
+					Surname & VARCHAR & Prezime zaposlenika \\ \hline
+					Residence & VARCHAR &  Mjesto stanovanja \\ \hline 
+					Salary & INT	& Plaća zaposlenika 		\\ \hline 
+					\SetCell{LightBlue} roleID	& VARCHAR &  jedinstveni kod pozicije (uloge) 	\\ \hline 
 				\end{longtblr}
 				
+				
+				\textbf{Role}  Ovaj entitet sadržava roleID te RoleName što su ujedno i atributi. Povezan je sa entitetom \textbf{Employee} preko roleID.
+				
+				\begin{longtblr}[
+					label=none,
+					entry=none
+					]{
+						width = \textwidth,
+						colspec={|X[6,l]|X[6, l]|X[20, l]|}, 
+						rowhead = 1,
+					} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
+					\hline \multicolumn{3}{|c|}{\textbf{Role}}	 \\ \hline[3pt]
+					\SetCell{LightGreen}roleID & INT	& jedinstveni kod uloge 	\\ \hline
+					RoleName	& VARCHAR &  ime uloge	\\ \hline 
+				\end{longtblr}
+			
+			\textbf{Document} Ovaj entitet sadrži osnovne informacije o dokumentu. Sadrži sljedeće atribute: documentID, arhiviran, potpis te korisničko ime. Entitet je nadklasa entitetima \textbf{Receipt}, \textbf{Intern} i \textbf{Offer} te je s tim entitetima povezan preko svog documentID-a. Isto tako, povezan je s entitetom \textbf{UserAccount} preko atributa Username.
+			
+				\begin{longtblr}[
+					label=none,
+					entry=none
+					]{
+						width = \textwidth,
+						colspec={|X[6,l]|X[6, l]|X[20, l]|}, 
+						rowhead = 1,
+					} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
+					\hline \multicolumn{3}{|c|}{\textbf{Document}}	 \\ \hline[3pt]
+					\SetCell{LightGreen}documentID & INT	& jedinstveni kod dokumenta 	\\ \hline
+					Archived	& INT &  je li dokument arhiviran (da/ne))	\\ \hline 
+					Signature & INT & je li potreban direktorski potpis (da/ne) \\ \hline
+					\SetCell{LightBlue} Username & VARCHAR & korisnicko ime osobe koja je skenirala dokument \\ \hline
+				\end{longtblr}
+			
+			\textbf{Intern} Ovaj entitet je vrsta dokumenta, dakle to je specijalzacija entiteta \textbf{Document}. Sadrži atribute INT4 što je alternativni ključ, documentID što je primarni ključ i ClientName.
+				\begin{longtblr}[
+					label=none,
+					entry=none
+					]{
+						width = \textwidth,
+						colspec={|X[6,l]|X[6, l]|X[20, l]|}, 
+						rowhead = 1,
+					} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
+					\hline \multicolumn{3}{|c|}{\textbf{Intern}}	 \\ \hline[3pt]
+					\SetCell{LightGreen}documentID & INT	& jedinstveni kod uloge 	\\ \hline
+					INT4	& VARCHAR &  "INT" + 4 znamenke	\\ \hline
+					ClientName & VARCHAR & ime klijenta \\ \hline
+				\end{longtblr}		
+			
+			\textbf{Receipt} Ovaj entitet je vrsta dokumenta, dakle to je specijalzacija entiteta \textbf{Document}. Sadrži atribute R6 što je alternativni ključ i documentID što je primarni ključ.
+				\begin{longtblr}[
+					label=none,
+					entry=none
+					]{
+						width = \textwidth,
+						colspec={|X[6,l]|X[6, l]|X[20, l]|}, 
+						rowhead = 1,
+					} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
+					\hline \multicolumn{3}{|c|}{\textbf{Receipt}}	 \\ \hline[3pt]
+					\SetCell{LightGreen}documentID & INT	& jedinstveni kod dokumenta 	\\ \hline
+					R6	& VARCHAR &  "R" + 6 znamenki	\\ \hline
+				\end{longtblr}	
+			
+			\textbf{Offer}	Ovaj entitet je vrsta dokumenta, dakle to je specijalzacija entiteta \textbf{Document}. Sadrži atribute P9 što je alternativni ključ te documentID što je primarni ključ.	
+				\begin{longtblr}[
+					label=none,
+					entry=none
+					]{
+						width = \textwidth,
+						colspec={|X[6,l]|X[6, l]|X[20, l]|}, 
+						rowhead = 1,
+					} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
+					\hline \multicolumn{3}{|c|}{\textbf{Offer}}	 \\ \hline[3pt]
+					\SetCell{LightGreen}documentID & INT	& jedinstveni kod uloge 	\\ \hline
+					P9	& VARCHAR &  "P" + 9 znamenki	\\ \hline
+				\end{longtblr}
+			
+			\textbf{UserAccount} Ovaj entitet sadrži podatke o korisnčkim računima. Sadrži sljedeće atribute: Username što je ujedno i primarni key, password, email, enabled i PID što je strani ključ. Entitet je povezan s entitetom \textbf{Document} preko atributa Username i s entitetom \textbf{Employee} preko atributa PID.
+				
+				\begin{longtblr}[
+					label=none,
+					entry=none
+					]{
+						width = \textwidth,
+						colspec={|X[6,l]|X[6, l]|X[20, l]|}, 
+						rowhead = 1,
+					} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
+					\hline \multicolumn{3}{|c|}{\textbf{UserAccount}}	 \\ \hline[3pt]
+					\SetCell{LightGreen}Username & VARCHAR	& korisničko ime	\\ \hline
+					password	& VARCHAR &  šifra	\\ \hline 
+					email & VARCHAR & mail adresa \\ \hline
+					\SetCell{LightBlue} PID & VARCHAR & oib zaposlenika \\ \hline
+				\end{longtblr}
+				
+			
+			
+			
+			
+			
+			
+			
+			
+			
 				
 			
 			\subsection{Dijagram baze podataka}

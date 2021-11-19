@@ -557,17 +557,24 @@
 		\pagebreak
 		Zaposlenik unosi svoje podatke. Podaci se šalju poslužitelju koji pita bazu postoji li ovaj korisnik. Ako korisnik postoji, poslužitelj korisniku javlja da je registracija pogrešna, a ako korisnik ne postoji, web poslužitelj šalje upit bazi je li zaposlenik upisao dobar jedinstveni kod. Ukoliko je kod neispravan, poslužitelj korisniku javlja da je registracija pogrešna, a ako je kod ispravan podaci se zapisuju u bazu podataka te se korisnik prosljeđuje na stranicu za prijavu.
 		\begin{figure}[H]
-			\includegraphics[scale=0.8]{slike/UC11 - Stvaranje korisničkog računa.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+			\includegraphics[scale=0.8]{slike/UC11 - Stvaranje korisnickog racuna.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
 			\centering
 			\caption{UC11 -  Registracija računa}
 			\label{uc5}
 		\end{figure}
 	
 		\section{Ostali zahtjevi}
-		
-			\textbf{\textit{dio 1. revizije}}\\
-		 
-			 \textit{Nefunkcionalni zahtjevi i zahtjevi domene primjene dopunjuju funkcionalne zahtjeve. Oni opisuju \textbf{kako se sustav treba ponašati} i koja \textbf{ograničenja} treba poštivati (performanse, korisničko iskustvo, pouzdanost, standardi kvalitete, sigurnost...). Primjeri takvih zahtjeva u Vašem projektu mogu biti: podržani jezici korisničkog sučelja, vrijeme odziva, najveći mogući podržani broj korisnika, podržane web/mobilne platforme, razina zaštite (protokoli komunikacije, kriptiranje...)... Svaki takav zahtjev potrebno je navesti u jednoj ili dvije rečenice.}
+			\begin{packed_item}
+				 \item {Sustav treba omogućiti rad više korisnika u isto vrijeme}
+				 \item {Korisničko sučelje za prijavu i registraciju moraju podržavati hrvatsku abecedu}
+				 \item {Pristup sustavu mora biti omogućen iz javne mreže pomoću HTTPS (heroku deployment)}
+				 \item {Ukoliko se korisnik krivo služi aplikacijom, aplikacija mora i dalje biti funkcionalna}
+				 \item {Pristup bazi podataka ne smije trajati dulje od 5 sekundi}
+				 \item {Sustav treba biti implementiran kao web aplikacija koristeci objektno-orijentirane jezike}
+				 \item {OCR treba biti funkcionalan}
+			\end{packed_item}
+				
+			 
 			 
 			 
 			 
