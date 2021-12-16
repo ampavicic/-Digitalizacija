@@ -1,0 +1,121 @@
+body {
+    background-color: white;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}
+* {
+    padding: 0;
+    margin: 0;
+    font-family: sans-serif;
+}
+header ,footer {
+    position: absolute;
+    background-color: darkslategray;
+    width: 100%;
+    color: white;
+}
+header h2 {
+    margin-top: 20px; 
+}
+header {
+    height: 10vh;
+}
+footer {
+    min-height: 15vh;
+    bottom: 0;
+}
+footer h2 {
+    position: relative;
+    left: 50%;
+    top: 50px;
+    color: white;
+    text-decoration: none;
+    margin-right: 20px;
+}
+
+/*.docs-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 5px solid darkslategray;
+    border-radius : 10px;
+    width: 50vw;
+    height: 58vh;
+}*/
+
+.docs-container {
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 10% 10% 10% 10% 10% 10% 10% 10% 10% 10%;
+    justify-items: center;
+    border: 5px solid darkslategray;
+    border-radius : 10px;
+    width: 50vw;
+    height: 58vh;
+}
+
+.document-link {
+    background-color: rgb(201, 201, 201);
+    width: 80%;
+    margin: 10px 0;
+    font-size: large;
+    text-align: center;
+    font-weight: bold;
+}
+.creator-name {
+    margin: auto;
+    position: absolute;
+    width: 50%;
+    text-align: center;
+}
+
+.company-name {
+    margin: auto;
+    position: absolute;
+    width: 50%;
+    text-align: center;
+}
+.navigation {
+    margin: auto;
+    position: absolute;
+    width: 50%;
+    text-align: center;
+}
+
+.navigation a {
+    position: relative;
+    left: 50%;
+    top: 50px;
+    color: white;
+    text-decoration: none;
+    margin-right: 20px;
+}
+main {
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -55%);
+    position: absolute;
+    color: darkslategray;
+}
+
+.button-container {
+    margin: 10px 0;
+    display: flex;
+    justify-content: center;
+}
+
+.btn {
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 5px;
+    border: 1px solid;
+    margin: 0 5px;
+    padding: 0 10px;
+}
