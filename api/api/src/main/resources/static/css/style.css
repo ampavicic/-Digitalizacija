@@ -52,7 +52,7 @@ main {
     font-size: 18px;
     font-weight: bold;
     margin: 20px 0;
-    padding: 10px, 15px;
+    padding: 10px 15px;
     width: 50%;
     border-radius: 5px;
     border: 1px solid darkslategray;
@@ -144,12 +144,32 @@ footer h2 {
     text-align: center;
 }
 
+.employeepage-container {
+    margin-top: -20%;
+    text-align: center;
+}
+
 #director-buttons {
     width:100%;
     text-align: center;
 }
 
 .director-button {
+    display: inline-block;
+}
+
+.basic-button {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 20px 0;
+    padding: 10px 15px;
+    width: 50%;
+    border-radius: 5px;
+    border: 1px solid darkslategray;
+    outline: darkslategray;
+}
+
+.basic-button-inline {
     display: inline-block;
 }
 

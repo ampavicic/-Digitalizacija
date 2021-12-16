@@ -2,21 +2,18 @@ package zelenaLipa.api.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
+import zelenaLipa.api.conditionCheckers.ConditionChecker;
 import zelenaLipa.api.rowMappers.EmployeeRowMapper;
 import zelenaLipa.api.rowMappers.UserAccountRowMapper;
 import zelenaLipa.api.rows.Employee;
 import zelenaLipa.api.rows.UserAccount;
 
-
-import javax.websocket.server.PathParam;
 import java.util.List;
 
 @RestController
@@ -29,7 +26,7 @@ public class UserController {
     public ModelAndView welcomePage() {
 
         ModelAndView mv = new ModelAndView("home.html");
-        checkVariables(mv);
+        ConditionChecker.checkVariables(mv);
 
         return mv;
 
@@ -39,7 +36,7 @@ public class UserController {
     public ModelAndView userPage() {
 
         ModelAndView mv = new ModelAndView("user.html");
-        checkVariables(mv);
+        ConditionChecker.checkVariables(mv);
 
         checkUsername(mv);
 
@@ -52,7 +49,7 @@ public class UserController {
     public ModelAndView loginError(@RequestParam boolean error) {
 
         ModelAndView mv = new ModelAndView("login.html");
-        checkVariables(mv);
+        ConditionChecker.checkVariables(mv);
         mv.addObject("loginError", true);
 
         return mv;
@@ -63,7 +60,7 @@ public class UserController {
     public ModelAndView login() {
 
         ModelAndView mv = new ModelAndView("login.html");
-        checkVariables(mv);
+        ConditionChecker.checkVariables(mv);
         mv.addObject("loginError", false);
 
         return mv;
@@ -74,7 +71,7 @@ public class UserController {
     public ModelAndView registerError(@PathVariable(value="error") int error) {
 
         ModelAndView mv = new ModelAndView("register.html");
-        checkVariables(mv);
+        ConditionChecker.checkVariables(mv);
         String string;
         if(error == 0) string = "Error: you are not employed in this company!";
         else string = "Error: you already have an account!";
@@ -87,7 +84,7 @@ public class UserController {
     public ModelAndView register() {
 
         ModelAndView mv = new ModelAndView("register.html"); //Vraća stranicu logina (src/main/java/resources)
-        checkVariables(mv);
+        ConditionChecker.checkVariables(mv);
 
         return mv;
 
@@ -130,20 +127,6 @@ public class UserController {
         }
 
     }
-
-    private void checkVariables(ModelAndView mv) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication != null) {
-            if (authentication instanceof AnonymousAuthenticationToken) mv.addObject("loggedIn", false);
-            else mv.addObject("loggedIn", true);
-
-            if (authentication.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("ROLE_DIRECTOR")))
-                mv.addObject("roleDirector", true);
-            else mv.addObject("roleDirector", false);
-        } else { mv.addObject("loggedIn", false); mv.addObject("roleDirector", false); }
-
-    }
-
     private void checkUsername(ModelAndView mv) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
