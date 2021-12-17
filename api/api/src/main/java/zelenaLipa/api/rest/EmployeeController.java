@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 import zelenaLipa.api.conditionCheckers.ConditionChecker;
 import zelenaLipa.api.rowMappers.DocumentLinkRowMapper;
+import zelenaLipa.api.rowMappers.EmployeeRowMapper;
 import zelenaLipa.api.rows.DocumentLink;
 
 import javax.servlet.http.HttpServletRequest;
@@ -49,11 +50,12 @@ public class EmployeeController {
         ModelAndView mv = new ModelAndView("employeeUpload.html");
         ConditionChecker.checkVariables(mv);
 
+
         return mv;
 
     }
 
-    @GetMapping("/upload/submit/result/{groupId}")
+    /*@GetMapping("/upload/submit/result/{groupId}")
     public ModelAndView employeeShowResult(@PathVariable(value="groupId") int groupId) {
 
         ModelAndView mv = new ModelAndView("employeeUploadResult.html");
@@ -65,7 +67,7 @@ public class EmployeeController {
 
         return mv;
 
-    }
+    }*/
 
     public void addLinksToPage(ModelAndView mv, List<DocumentLink> documentLinks) {
 
@@ -74,7 +76,22 @@ public class EmployeeController {
 
     }
 
-    public List<DocumentLink> pullLinksFromDB(int groupId) {
+    @GetMapping ("/documentHistory")
+    public ModelAndView getDocumentHisotry () {
+        ModelAndView mv = new ModelAndView("documentHistory");
+        ConditionChecker.checkVariables(mv);
+
+        String username = ConditionChecker.checkUsername();
+
+        String sqlExists = "SELECT * FROM document where username ='" + username + "';"; //WHERE groupid = " + groupId + ") AS exists;";
+        List<DocumentLink> result = jdbcTemplate.query(sqlExists, new DocumentLinkRowMapper());
+
+        mv.addObject("documents", result);
+
+        return mv;
+    }
+
+    /*public List<DocumentLink> pullLinksFromDB(int groupId) {
 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username;
@@ -88,7 +105,7 @@ public class EmployeeController {
 
         return documentLinks;
 
-    }
+    }*/
 
     @PostMapping("/upload/submit")
     public RedirectView employeeUploadSubmit(HttpServletRequest request, @RequestParam("files") MultipartFile[] files) {

@@ -30,15 +30,15 @@
 </header>
 <main>
     <div class="container">
-        <div>
-            <h2> Welcome employee! </h2>
-        </div>
-        <br>
-        <a href="/employee/upload"><button class="basic-button" type="submit">Upload Documents</button></a>
-        <a href="/employee/documentHistory"><button class="basic-button" type="submit">View Document History</button></a>
+        <!--<div class="form-control" name="roleid" id="roleid">-->
+            <tr th:each="document : ${documents}">
+                <!--<td><a th:value="document.getDocuId()" href="employee/documentHistory"><option th:value="${document.getGroupId()}" th:text="${document.getTitle()}"></option></a></td>-->
+                <td><a th:href="@{documentHistory/{id}(id=${document.getDocuId})}"><option th:value="${document.getGroupId()}" th:text="${document.getTitle()}"></option></a></td>
+            </tr>
+        <!--</div>-->
     </div>
 </main>
-<footer>
+<footer class="lowered-footer">
     <div class="creator-name"> <h2> @zelenaLipa </h2> </div>
 </footer>
 </body></html>

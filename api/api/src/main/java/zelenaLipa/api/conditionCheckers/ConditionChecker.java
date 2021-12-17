@@ -36,6 +36,14 @@ public class ConditionChecker {
 
     }
 
-
-
+    public static String checkUsername() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username;
+        if(principal instanceof UserDetails) {
+            username = ((UserDetails)principal).getUsername();
+        } else {
+            username = "anonymous";
+        }
+        return username;
+    }
 }
