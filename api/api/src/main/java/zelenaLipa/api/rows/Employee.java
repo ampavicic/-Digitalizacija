@@ -3,8 +3,6 @@ package zelenaLipa.api.rows;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-//@Entity
-//@Table(name = "Employee")
 public class Employee {
 
     @Size(min = 9, max = 9)

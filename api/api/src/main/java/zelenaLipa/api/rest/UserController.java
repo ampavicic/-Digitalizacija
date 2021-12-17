@@ -2,8 +2,6 @@ package zelenaLipa.api.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -38,7 +36,9 @@ public class UserController {
         ModelAndView mv = new ModelAndView("user.html");
         ConditionChecker.checkVariables(mv);
 
-        checkUsername(mv);
+        String username = ConditionChecker.checkUsername();
+
+        mv.addObject("username", username);
 
         return mv;
 
@@ -124,17 +124,6 @@ public class UserController {
                 return new RedirectView("/login");
 
             }
-        }
-
-    }
-    private void checkUsername(ModelAndView mv) {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        if(principal instanceof UserDetails) {
-            String username = ((UserDetails)principal).getUsername();
-            mv.addObject("username", username);
-        } else {
-            mv.addObject("username", "anonymous");
         }
 
     }

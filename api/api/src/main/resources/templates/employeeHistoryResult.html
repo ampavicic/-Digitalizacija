@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Employee Upload Result</title>
+    <title>Employee History Result</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
@@ -31,14 +31,14 @@
     <div class="docs-container">
         <th:block th:each="documentLink, iter : ${documentLinks}">
             <div th:if="${iter.index >= startIndex && iter.index < startIndex + 10}" class="document-link">
-                <a th:href="@{/employee/upload/submit/result/{groupid}/{page}/{docuid}(groupid=${groupId}, page=${page}, docuid=${documentLink.docuId})}" style="color: darkslategrey"><span th:text="${documentLink.title}"></span></a>
+                <a th:href="@{/employee/documentHistory/{page}/{docuid}(page=${page}, docuid=${documentLink.docuId})}" style="color: darkslategrey"><span th:text="${documentLink.title}"></span></a>
             </div>
         </th:block>
     </div>
     <div class="button-container">
-        <a th:href="@{/employee/upload/submit/result/{groupid}/{page}(groupid=${groupId}, page=${page} - 1)}"><button class="btn" th:disabled="${prevDisabled}">Previous</button></a>
+        <a th:href="@{/employee/documentHistory/{page}(page=${page} - 1)}"><button class="btn" th:disabled="${prevDisabled}">Previous</button></a>
         <span class="pgnum" th:text="${page}"></span>
-        <a th:href="@{/employee/upload/submit/result/{groupid}/{page}(groupid=${groupId}, page=${page} + 1)}"><button class="btn" th:disabled="${nextDisabled}">Next</button></a>
+        <a th:href="@{/employee/documentHistory/{page}(page=${page} + 1)}"><button class="btn" th:disabled="${nextDisabled}">Next</button></a>
     </div>
 </main>
 </body>

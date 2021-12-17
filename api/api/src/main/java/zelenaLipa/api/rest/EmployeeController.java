@@ -4,27 +4,24 @@ import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 import zelenaLipa.api.conditionCheckers.ConditionChecker;
 import zelenaLipa.api.rowMappers.DocumentLinkRowMapper;
+import zelenaLipa.api.rowMappers.DocumentRowMapper;
+import zelenaLipa.api.rows.Document;
 import zelenaLipa.api.rows.DocumentLink;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.sql.PreparedStatement;
-import java.util.Base64;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 
 @RestController
 @RequestMapping("/employee")
@@ -53,36 +50,138 @@ public class EmployeeController {
 
     }
 
-    @GetMapping("/upload/submit/result/{groupId}")
-    public ModelAndView employeeShowResult(@PathVariable(value="groupId") int groupId) {
+    @GetMapping("/upload/submit/result/{groupId}/{page}/{docuId}")
+    public ModelAndView employeeShowDocu(@PathVariable(value="groupId") int groupId, @PathVariable(value = "page") int page, @PathVariable(value = "docuId") int docuId) {
+
+        ModelAndView mv = new ModelAndView("employeeResultDocument.html");
+        ConditionChecker.checkVariables(mv);
+
+        List<Document> documents = pullDocumentFromDB(docuId);
+
+        addDocumentToPage(mv, documents, docuId);
+
+        return mv;
+
+    }
+
+    public void addDocumentToPage(ModelAndView mv, List<Document> documents, int docuId) {
+
+        Document document = documents.get(0);
+
+        mv.addObject("title", document.getTitle());
+
+        mv.addObject("content", document.getContent());
+
+        mv.addObject("docuId", docuId);
+        mv.addObject("type", document.getType());
+
+        if(document.getArchived() > 0) mv.addObject("archived", "Yes");
+        else mv.addObject("archived", "No");
+
+        if(document.getSignature() > 0) mv.addObject("signature", "Yes");
+        else mv.addObject("signature", "No");
+
+    }
+
+    public List<Document> pullDocumentFromDB(int docuId) {
+
+        String username = ConditionChecker.checkUsername();
+
+        List<Document> documents;
+
+        String sqlSelectDocument = "SELECT content, title, type, archived, signature FROM document WHERE username = '" + username + "' AND documentid = " + docuId + ";";
+
+        documents = jdbcTemplate.query(sqlSelectDocument, new DocumentRowMapper());
+
+        return documents;
+
+    }
+
+    @GetMapping("/upload/submit/result/{groupId}/{page}")
+    public ModelAndView employeeShowResult(@PathVariable(value="groupId") int groupId, @PathVariable(value = "page") int page) {
 
         ModelAndView mv = new ModelAndView("employeeUploadResult.html");
         ConditionChecker.checkVariables(mv);
 
         List<DocumentLink> documentLinks = pullLinksFromDB(groupId);
 
-        addLinksToPage(mv, documentLinks);
+        addLinksToPage(mv, documentLinks, groupId, page);
 
         return mv;
 
     }
 
-    public void addLinksToPage(ModelAndView mv, List<DocumentLink> documentLinks) {
+    @GetMapping("/documentHistory/{page}")
+    public ModelAndView getDocumentHisotry (@PathVariable(value = "page") int page) {
 
+        ModelAndView mv = new ModelAndView("employeeHistoryResult.html");
+        ConditionChecker.checkVariables(mv);
 
+        String username = ConditionChecker.checkUsername();
 
+        List<DocumentLink> documentLinks = pullAllLinksFromDB();
+
+        addLinksToPage(mv, documentLinks, -1, page);
+
+        return mv;
+    }
+
+    @GetMapping("/documentHistory/{page}/{docuId}")
+    public ModelAndView employeeShowHistoryDocu(@PathVariable(value = "page") int page, @PathVariable(value = "docuId") int docuId) {
+
+        ModelAndView mv = new ModelAndView("employeeResultDocument.html");
+        ConditionChecker.checkVariables(mv);
+
+        List<Document> documents = pullDocumentFromDB(docuId);
+
+        addDocumentToPage(mv, documents, docuId);
+
+        return mv;
+
+    }
+
+    public List<DocumentLink> pullAllLinksFromDB() {
+
+        String username = ConditionChecker.checkUsername();
+
+        List<DocumentLink> documentLinks;
+
+        String sqlSelectDocumentInfo = "SELECT groupid, documentid, title, type FROM document WHERE username = '" + username + "';";
+
+        documentLinks = jdbcTemplate.query(sqlSelectDocumentInfo, new DocumentLinkRowMapper());
+
+        return documentLinks;
+
+    }
+
+    public void addLinksToPage(ModelAndView mv, List<DocumentLink> documentLinks, int groupId, int page) {
+
+        int pages = documentLinks.size() / 10;
+        int extra = documentLinks.size() % 10;
+        boolean prevDisabled = false, nextDisabled = false;
+
+        if(extra > 0) pages++; //Ako ima ostatka dodaj još jednu stranicu
+
+        int startIndex = (page - 1) * 10; //10 linkova po stranici
+        mv.addObject("documentLinks", documentLinks);
+        mv.addObject("startIndex", startIndex);
+        mv.addObject("page", page);
+
+        if(page == 1) prevDisabled = true;
+        if(page == pages) nextDisabled = true;
+        mv.addObject("prevDisabled", prevDisabled);
+        mv.addObject("nextDisabled", nextDisabled);
+        if(groupId > 0) mv.addObject("groupId", groupId);
 
     }
 
     public List<DocumentLink> pullLinksFromDB(int groupId) {
 
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username;
+        String username = ConditionChecker.checkUsername();
 
-        if (principal instanceof UserDetails) username = ((UserDetails) principal).getUsername();
-        else username = "anonymous";
+        List<DocumentLink> documentLinks;
 
-        String sqlSelectDocumentInfo = "SELECT groupid, documentid, title FROM document WHERE username = '" + username + "' AND groupid = " + groupId + ";";
+        String sqlSelectDocumentInfo = "SELECT groupid, documentid, title, type FROM document WHERE username = '" + username + "' AND groupid = " + groupId + ";";
 
         documentLinks = jdbcTemplate.query(sqlSelectDocumentInfo, new DocumentLinkRowMapper());
 
@@ -122,7 +221,7 @@ public class EmployeeController {
 
         }
 
-        return new RedirectView("/employee/upload/submit/result/" + groupId);
+        return new RedirectView("/employee/upload/submit/result/" + groupId + "/1");
 
     }
 
@@ -142,8 +241,6 @@ public class EmployeeController {
         tesseract.setLanguage("hrv"); //Set Croatian
 
         String resultOCR = tesseract.doOCR(file);
-
-        System.out.println(resultOCR);
 
         int docuId = storeDocuInDB(resultOCR, groupId, mpf.getOriginalFilename());
 
@@ -166,63 +263,48 @@ public class EmployeeController {
             else exists = false;
         } while(exists);
 
-        String designation;
-        int type = 0; //INT 1, P 2, R 3
+        String designation = "";
 
         Pattern patternINT = Pattern.compile("INT[0-9][0-9][0-9][0-9]");
         Matcher matcher = patternINT.matcher(resultOCR);
 
-        if(matcher.find()) { designation = matcher.group(); type = 1; }
+        if(matcher.find()) { designation = matcher.group(); }
         else {
 
             Pattern patternP = Pattern.compile("P[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]");
             matcher = patternP.matcher(resultOCR);
 
-            if(matcher.find()) { designation = matcher.group(); type = 2; }
+            if(matcher.find()) { designation = matcher.group(); }
             else {
 
                 Pattern patternR = Pattern.compile("R[0-9][0-9][0-9][0-9][0-9][0-9]");
                 matcher = patternR.matcher(resultOCR);
 
-                if(matcher.find()) { designation = matcher.group(); type = 3; }
-                else designation = null;
+                if(matcher.find()) { designation = matcher.group(); }
 
             }
 
         }
 
-        return insertDocuInDB(resultOCR, designation, type, docuId, groupId, title);
+        return insertDocuInDB(resultOCR, designation, docuId, groupId, title);
 
     }
 
-    public int insertDocuInDB(String resultOCR, String designation, int type, int docuId, int groupId, String title) {
+    public int insertDocuInDB(String resultOCR, String designation, int docuId, int groupId, String title) {
 
-        String sqlInsertDocu;
-        String sqlInsertType;
-
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username;
-
-        String resultOCRbase64 = Base64.getEncoder().encodeToString(resultOCR.getBytes(StandardCharsets.UTF_8));
-
-        if (principal instanceof UserDetails) username = ((UserDetails) principal).getUsername();
-        else username = "anonymous";
-
-        sqlInsertDocu = "INSERT INTO document (documentid, archived, signature, username, content, groupid, title) VALUES("
+        String username = ConditionChecker.checkUsername();
+        String sqlInsertDocu = "INSERT INTO document (documentid, archived, signature, username, content, groupid, title, type) VALUES("
                 + docuId + ", "
                 + 0 + ", "
                 + 0 + ", '"
-                + username + "', "
-                + "decode('" + resultOCRbase64 + "', 'base64'), "
+                + username + "', '"
+                + resultOCR + "', "
                 + groupId + ", '"
-                + title + "')";
-
-        sqlInsertType = "INSERT INTO internaldocument (documentid, int) VALUES (" + docuId + ", '" + designation + "');";
+                + title + "', '"
+                + designation + "')";
 
         int resultDocu, resultType = 0;
         resultDocu = jdbcTemplate.update(sqlInsertDocu);
-
-        if (type != 0) resultType = jdbcTemplate.update(sqlInsertType);
 
         return docuId;
 
