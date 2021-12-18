@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Employee History Result</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header>
+    <div class="company-name"> <h2> COMPANY.co </h2> </div>
+    <div class="navigation">
+        <a href="/"> Homepage </a>
+        <td>
+            <a th:if="${loggedIn == false}" href="/login"> Login </a>
+            <a th:if="${loggedIn == false}" href="/register"> Register </a>
+            <a th:if="${loggedIn == true}" href="/user"> Userpage </a>
+            <a th:if="${roleDirector == true}" href="/director"> Director </a>
+            <a th:if="${roleEmployee == true}" href="/employee"> Employee </a>
+            <a th:if="${roleReviser == true}" href="/reviser"> Reviser </a>
+            <a th:if="${roleAccountant == true}" href="/accountant"> Accountant </a>
+            <a th:if="${loggedIn == true}" href="/logout"> Logout </a>
+        </td>
+    </div>
+</header>
+<main class="docs-container-container">
+    <h2>All employees</h2>
+    <div >
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Surname</th>
+                <th>Residence</th>
+                <th>Role</th>
+                <th>PID</th>
+                <th>Salary</th>
+                <th>GenId</th>
+            </tr>
+            <th:block th:each="employee, iter : ${allEmployees}">
+                <tr>
+                    <td>
+                        <div th:if="${iter.index >= startIndex && iter.index < startIndex + 10}" class="document-link">
+                        <span th:text="${employee.getName}"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div th:if="${iter.index >= startIndex && iter.index < startIndex + 10}" class="document-link">
+                            <span th:text="${employee.getSurname}"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div th:if="${iter.index >= startIndex && iter.index < startIndex + 10}" class="document-link">
+                            <span th:text="${employee.getResidence}"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div th:if="${iter.index >= startIndex && iter.index < startIndex + 10}" class="document-link">
+                            <span th:text="${employee.getRoleId}"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div th:if="${iter.index >= startIndex && iter.index < startIndex + 10}" class="document-link">
+                            <span th:text="${employee.getPid}"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div th:if="${iter.index >= startIndex && iter.index < startIndex + 10}" class="document-link">
+                            <span th:text="${employee.getSalary}"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div th:if="${iter.index >= startIndex && iter.index < startIndex + 10}" class="document-link">
+                            <span th:text="${employee.getGenId}"></span>
+                        </div>
+                    </td>
+                </tr>
+            </th:block>
+        </table>
+
+    </div>
+    <div class="button-container">
+        <a th:href="@{/employee/documentHistory/{page}(page=${page} - 1)}"><button class="btn" th:disabled="${prevDisabled}">Previous</button></a>
+        <span class="pgnum" th:text="${page}"></span>
+        <a th:href="@{/employee/documentHistory/{page}(page=${page} + 1)}"><button class="btn" th:disabled="${nextDisabled}">Next</button></a>
+    </div>
+</main>
+</body>
+<footer class="lowered-footer">
+    <div class="creator-name"> <h2> @zelenaLipa </h2> </div>
+</footer>
+</html>

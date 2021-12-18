@@ -6,7 +6,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 import zelenaLipa.api.conditionCheckers.ConditionChecker;
+import zelenaLipa.api.rowMappers.DocumentLinkRowMapper;
+import zelenaLipa.api.rowMappers.EmployeeRowMapper;
 import zelenaLipa.api.rowMappers.RoleRowMapper;
+import zelenaLipa.api.rows.DocumentLink;
+import zelenaLipa.api.rows.Employee;
 import zelenaLipa.api.rows.Role;
 
 import java.util.List;
@@ -101,5 +105,53 @@ public class DirectorController {
         else return new RedirectView("/error");
 
     }
+
+
+    @GetMapping("/allEmployees/{page}")
+    public ModelAndView getAllEmployees (@PathVariable(value = "page") int page) {
+
+        ModelAndView mv = new ModelAndView("allEmployees.html");
+        ConditionChecker.checkVariables(mv);
+
+        List<Employee> allEmployees = pullAllEmployeesFromDB();
+
+        addAllEmployeesToPage(mv, allEmployees, -1, page);
+
+        return mv;
+    }
+
+    public List<Employee> pullAllEmployeesFromDB() {
+
+        List<Employee> allEmployees;
+
+        String sqlSelectEmployeeInfo = "SELECT * FROM employee;";
+
+        allEmployees = jdbcTemplate.query(sqlSelectEmployeeInfo, new EmployeeRowMapper());
+
+        return allEmployees;
+
+    }
+
+    public void addAllEmployeesToPage(ModelAndView mv, List<Employee> allEmployees, int groupId, int page) {
+
+        int pages = allEmployees.size() / 10;
+        int extra = allEmployees.size() % 10;
+        boolean prevDisabled = false, nextDisabled = false;
+
+        if(extra > 0) pages++; //Ako ima ostatka dodaj još jednu stranicu
+
+        int startIndex = (page - 1) * 10; //10 linkova po stranici
+        mv.addObject("allEmployees", allEmployees);
+        mv.addObject("startIndex", startIndex);
+        mv.addObject("page", page);
+
+        if(page == 1) prevDisabled = true;
+        if(page == pages) nextDisabled = true;
+        mv.addObject("prevDisabled", prevDisabled);
+        mv.addObject("nextDisabled", nextDisabled);
+        if(groupId > 0) mv.addObject("groupId", groupId);
+
+    }
+
 
 }
