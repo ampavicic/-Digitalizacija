@@ -58,7 +58,10 @@
                     </td>
                     <td>
                         <div th:if="${iter.index >= startIndex && iter.index < startIndex + 10}" class="document-link">
-                            <span th:text="${employee.getRoleId}"></span>
+                            <span th:if="${employee.getRoleId == 0}" >Director</span>
+                            <span th:if="${employee.getRoleId == 1}" >Employee</span>
+                            <span th:if="${employee.getRoleId == 2}" >Accountant</span>
+                            <span th:if="${employee.getRoleId == 3}" >Reviser</span>
                         </div>
                     </td>
                     <td>
