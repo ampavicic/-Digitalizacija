@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./index_style.css">
+    <title>Digitalizacija</title>
+</head>
+
+<body>
+    <header>
+        <div class="company-name">
+            <h2>Company.co</h2>
+        </div>
+        <div class="navigation">
+            <a href="/">Homepage</a>
+            <a href="/login">Login</a>
+            <a href="/register">Register</a>
+        </div>
+    </header>
+    <main>
+        <div class="main-container">
+            <div class="employees-list">
+                <h2>Employees</h2>
+                <div class="employee-grid">
+                    <div class="employee">
+                        Nulti zaposlenik
+                        <input type="checkbox" class="employee-checkbox">
+                    </div>
+                    <div class="employee">
+                        Prvi zaposlenik
+                        <input type="checkbox" class="employee-checkbox">
+                    </div>
+                    <div class="employee">
+                        Drugi zaposlenik
+                        <input type="checkbox" class="employee-checkbox">
+                    </div>
+                    <div class="employee">
+                        Treći zaposlenik
+                        <input type="checkbox" class="employee-checkbox">
+                    </div>
+                    <div class="employee">
+                        Četvrti zaposlenik
+                        <input type="checkbox" class="employee-checkbox">
+                    </div>
+                    <div class="employee">
+                        Peti zaposlenik
+                        <input type="checkbox" class="employee-checkbox">
+                    </div>
+                    <div class="employee">
+                        Šesti zaposlenik
+                        <input type="checkbox" class="employee-checkbox">
+                    </div>
+                </div>
+                <div class="button-container">
+                    <button class="btn">Previous</button>
+                    <button class="btn">Next</button>
+                </div>
+            </div>
+            <div class="add-employee-container">
+                <p>
+                    <input type="text" id="pid" name="pid" class="input" placeholder="Personal ID" required=""
+                        autofocus="">
+                </p>
+                <p>
+                    <input type="text" id="name" name="name" class="input" placeholder="Name" required="" autofocus="">
+                </p>
+                <p>
+                    <input type="text" id="surname" name="surname" class="input" placeholder="Surname" required=""
+                        autofocus="">
+                </p>
+                <p>
+                    <input type="text" id="residence" name="residence" class="input" placeholder="Residence" required=""
+                        autofocus="">
+                </p>
+                <p>
+                    <input type="text" id="salary" name="salary" class="input" placeholder="Salary" required=""
+                        autofocus="">
+                </p>
+                <select class="select-role" name="roleid" id="roleid">
+                    <tr th:each="role : ${roles}">
+                        <td>
+                            <option th:value="${role.getRoleId()}" th:text="${role.getName()}"></option>
+                        </td>
+                    </tr>
+                </select>
+                <button class="btn btn-add-employee" type="submit">Add employee</button>
+            </div>
+            <div class="filter-employee-container">
+                <div class="filter-input-container">
+                    <input type="text" id="" name="" class="filter-input" placeholder="Filter" required="" autofocus="">
+                    <button class="btn btn-filter" type="submit">Filter</button>
+                    <button class="btn btn-filter" type="submit">Remove selected</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div class="creator-name">
+            <h2>@zelenaLipa</h2>
+        </div>
+    </footer>
+
+</body>
+
+</html>
