@@ -9,6 +9,7 @@
     <meta name="author" content="">
     <title>Director Employees</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/director/directorEmployee.css}">
 </head>
 
 <body>
@@ -29,43 +30,56 @@
     </div>
 </header>
 <main>
-    <div class="container">
-        <form class="form-basic" method="post" action="/director/employees/add">
-            <h2 class="form-basic-heading">Add employee</h2>
+    <form class="main-container" method="post">
+        <div class="employees-list">
+            <h2>Employees</h2>
+            <div class="employee-grid">
+                <th:block th:each="employee, iter : ${employees}">
+                    <div th:if="${iter.index >= startIndex && iter.index < startIndex + 10}" class="employee">
+                        <span style="color: darkslategrey" th:text="${employee.pid}"></span><input type="checkbox" id="pids[]" name="pids[]" class="employee-checkbox" th:value="${employee.pid}"></a>
+                    </div>
+                </th:block>
+            </div>
+            <div class="button-container">
+                <button type="submit" class="btn" th:formaction="@{/director/employees/filter/{page}(page=${page} - 1)}" th:disabled="${prevDisabled}">Previous</button>
+                <span class="pgnum" th:if="${page != 0}" th:text="${page}"></span>
+                <button type="submit" class="btn" th:formaction="@{/director/employees/filter/{page}(page=${page} + 1)}" th:disabled="${nextDisabled}">Next</button>
+            </div>
+        </div>
+        <div class="add-employee-container">
             <p>
-                <label for="pid" class="sr-only">Personal ID</label>
-                <input type="text" id="pid" name="pid" class="form-control" placeholder="Personal ID" required=""
-                       autofocus="">
+                <input type="text" id="pid" name="pid" class="input" placeholder="Personal ID" autofocus="">
             </p>
             <p>
-                <label for="name" class="sr-only">Name</label>
-                <input type="text" id="name" name="name" class="form-control" placeholder="Name" required="" autofocus="">
+                <input type="text" id="name" name="name" class="input" placeholder="Name" autofocus="">
             </p>
             <p>
-                <label for="surname" class="sr-only">Surname</label>
-                <input type="text" id="surname" name="surname" class="form-control" placeholder="Surname" required="" autofocus="">
+                <input type="text" id="surname" name="surname" class="input" placeholder="Surname" autofocus="">
             </p>
             <p>
-                <label for="residence" class="sr-only">Residence</label>
-                <input type="text" id="residence" name="residence" class="form-control" placeholder="Residence" required="" autofocus="">
+                <input type="text" id="residence" name="residence" class="input" placeholder="Residence" autofocus="">
             </p>
             <p>
-                <label for="salary" class="sr-only">Salary</label>
-                <input type="text" id="salary" name="salary" class="form-control" placeholder="Salary" required="" autofocus="">
+                <input type="text" id="salary" name="salary" class="input" placeholder="Salary" autofocus="">
             </p>
-            <label for="roleid" class="sr-only"> Role: </label>
-            <select class="form-control" name="roleid" id="roleid">
+            <select class="select-role" name="roleid" id="roleid">
                 <tr th:each="role : ${roles}">
-                    <td><option th:value="${role.getRoleId()}" th:text="${role.getName()}"></option></td>
+                    <td>
+                        <option th:value="${role.getRoleId()}" th:text="${role.getName()}"></option>
+                    </td>
                 </tr>
             </select>
-            <input name="_csrf" type="hidden" value="c8c67b2c-e4fc-4c74-b145-f223782c8a17">
-            <button class="btn btn-lg btn-primary btn-block" type="submit">Add employee</button>
-        </form>
-        <div style="color:red;" th:if="${result == 0}"><span> Error: no employee added! </span></div>
-        <div style="color:green;" th:if="${result > 99999999}"><span th:text="${string}"></span></div>
-        <div style="color:red;" th:if="${result == 1}"><span> Error! </span></div>
-    </div>
+            <button class="btn btn-add-employee" type="submit" formaction="/director/employees/add">Add employee</button>
+        </div>
+        <div class="filter-employee-container">
+            <div class="filter-input-container">
+                <input type="text" id="filter" name="filter" class="filter-input" placeholder="Filter" autofocus="" th:value="${filter}">
+                <button class="btn btn-filter" type="submit" formaction="/director/employees/filter/1">Filter</button>
+                <button class="btn btn-filter" type="submit" formaction="/director/employees/filter/remove">Remove selected</button>
+            </div>
+        </div>
+    </form>
+    <div style="color:red;"><span th:text="${message}"></span></div>
 </main>
 <footer class="lowered-footer">
     <div class="creator-name"> <h2> @zelenaLipa </h2> </div>
