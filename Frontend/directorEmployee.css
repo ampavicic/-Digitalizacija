@@ -193,3 +193,9 @@ main {
     margin: 0 5px;
     padding: 0 10px;
 }
+
+.message-container {
+    color:red;
+    text-align: center;
+    margin: 10px auto;
+}
