@@ -2,18 +2,14 @@ package zelenaLipa.api.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 import zelenaLipa.api.conditionCheckers.ConditionChecker;
 import zelenaLipa.api.rowMappers.EmployeeRowMapper;
 import zelenaLipa.api.rowMappers.RoleRowMapper;
 import zelenaLipa.api.rows.Employee;
 import zelenaLipa.api.rows.Role;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Random;
 
@@ -27,7 +23,7 @@ public class DirectorController {
     @GetMapping("")
     public ModelAndView director() {
 
-        ModelAndView mv = new ModelAndView("director.html");
+        ModelAndView mv = new ModelAndView("director/director.html");
         ConditionChecker.checkVariables(mv);
 
         return mv;
@@ -37,7 +33,7 @@ public class DirectorController {
     @GetMapping("/employees")
     public ModelAndView employees() {
 
-        ModelAndView mv = new ModelAndView("directorEmployees.html");
+        ModelAndView mv = new ModelAndView("director/directorEmployees.html");
         ConditionChecker.checkVariables(mv);
 
         fillWithRoles(mv);
@@ -54,7 +50,7 @@ public class DirectorController {
     @PostMapping("/employees/filter/remove")
     public ModelAndView employeeRemoveBySelected(@RequestParam(value="filter") String filter, @RequestParam(value="pids[]", required = false) String[] checkBoxes) {
 
-        ModelAndView mv = new ModelAndView("directorEmployees.html");
+        ModelAndView mv = new ModelAndView("director/directorEmployees.html");
 
         if(checkBoxes != null) {
             int result = removeEmployeesFromDB(checkBoxes);
@@ -87,7 +83,7 @@ public class DirectorController {
     @PostMapping("/employees/filter/{page}")
     public ModelAndView employeeFilterGet(@RequestParam(value="filter") String filter, @PathVariable(value="page") int page) {
 
-        ModelAndView mv = new ModelAndView("directorEmployees.html");
+        ModelAndView mv = new ModelAndView("director/directorEmployees.html");
         filterList(mv, filter, page);
         fillWithRoles(mv);
         return mv;
@@ -134,7 +130,7 @@ public class DirectorController {
     @GetMapping("/employees/{result}")
     public ModelAndView employeesResult(@PathVariable(value="result") int result) {
 
-        ModelAndView mv = new ModelAndView("directorEmployees.html");
+        ModelAndView mv = new ModelAndView("director/directorEmployees.html");
         ConditionChecker.checkVariables(mv);
 
         String sqlSelectRoles = "SELECT * FROM role;";
@@ -159,7 +155,7 @@ public class DirectorController {
                                      @RequestParam("roleid") String roleid,
                                      @RequestParam("filter") String filter) {
 
-        ModelAndView mv = new ModelAndView("directorEmployees.html");
+        ModelAndView mv = new ModelAndView("director/directorEmployees.html");
         ConditionChecker.checkVariables(mv);
 
         if(pid != null && name != null && surname != null && residence != null && salary != null && roleid != null) {

@@ -7,8 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Director</title>
+    <title>Employee</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/employee/employee.css}">
 </head>
 
 <body>
@@ -29,13 +30,13 @@
     </div>
 </header>
 <main>
-    <div class="directorpage-container container">
+    <div class="container">
         <div>
-            <h2> Welcome director! </h2>
+            <h2> Welcome employee! </h2>
         </div>
         <br>
-        <a href="/director/employees"><button class="basic-button" type="submit">Employees</button></a>
-        <a href="/director/documents"><button class="basic-button" type="submit">Documents</button></a>
+        <a href="/employee/upload"><button class="basic-button" type="submit">Upload Documents</button></a>
+        <a href="/employee/documentHistory/1"><button class="basic-button" type="submit">View Document History</button></a>
     </div>
 </main>
 <footer>

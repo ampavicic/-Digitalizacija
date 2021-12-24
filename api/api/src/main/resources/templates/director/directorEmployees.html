@@ -9,7 +9,7 @@
     <meta name="author" content="">
     <title>Director Employees</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link rel="stylesheet" th:href="@{/css/director/directorEmployee.css}">
+    <link rel="stylesheet" th:href="@{/css/director/directorEmployees.css}">
 </head>
 
 <body>
@@ -30,13 +30,13 @@
     </div>
 </header>
 <main>
-    <form class="main-container" method="post">
-        <div class="employees-list">
+    <form class="form-container" method="post">
+        <div class="list-employee-container">
             <h2>Employees</h2>
             <div class="employee-grid">
                 <th:block th:each="employee, iter : ${employees}">
                     <div th:if="${iter.index >= startIndex && iter.index < startIndex + 10}" class="employee">
-                        <span style="color: darkslategrey" th:text="${employee.pid}"></span><input type="checkbox" id="pids[]" name="pids[]" class="employee-checkbox" th:value="${employee.pid}"></a>
+                        <span style="color: darkslategrey" th:text="${employee.pid + ' ' + employee.genId + ' ' + employee.name + ' ' + employee.surname}"></span><input type="checkbox" id="pids[]" name="pids[]" class="employee-checkbox" th:value="${employee.pid}"></a>
                     </div>
                 </th:block>
             </div>
@@ -79,7 +79,9 @@
             </div>
         </div>
     </form>
-    <div style="color:red;"><span th:text="${message}"></span></div>
+    <div class="message-container">
+        <span th:text="${message}"></span>
+    </div>
 </main>
 <footer class="lowered-footer">
     <div class="creator-name"> <h2> @zelenaLipa </h2> </div>

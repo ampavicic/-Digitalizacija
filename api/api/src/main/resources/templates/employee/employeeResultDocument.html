@@ -1,16 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Error</title>
+    <title>Employee Result Document</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/employee/employeeResultDocument.css}">
 </head>
-
 <body>
 <header>
     <div class="company-name"> <h2> COMPANY.co </h2> </div>
@@ -28,12 +27,20 @@
         </td>
     </div>
 </header>
-<main>
-    <div class="error-container">
-        <h2> Looks like an error :( [<span th:text="${errorCode}"></span>] </h2>
+<main class="docs-container-container">
+    <h2><span th:text="${title}"></span></h2>
+    <div class="content-outer-container">
+        <div class="content-inner-container" th:text="${content}"></div>
+    </div>
+    <div class="label-container">
+        <div class="label">Signed: <span th:text="${signature}"></span></div>
+        <div class="label">Archived: <span th:text="${archived}"></span></div>
+        <div class="label">ID: <span th:text="${docuId}"></span></div>
+        <div class="label">Type: <span th:text="${type}"></span></div>
     </div>
 </main>
-<footer>
+</body>
+<footer class="lowered-footer">
     <div class="creator-name"> <h2> @zelenaLipa </h2> </div>
 </footer>
-</body></html>
+</html>

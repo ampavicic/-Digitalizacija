@@ -33,7 +33,7 @@ public class EmployeeController {
     @GetMapping("")
     public ModelAndView employee() {
 
-        ModelAndView mv = new ModelAndView("employee.html");
+        ModelAndView mv = new ModelAndView("employee/employee.html");
         ConditionChecker.checkVariables(mv);
 
         return mv;
@@ -43,7 +43,7 @@ public class EmployeeController {
     @GetMapping("/upload")
     public ModelAndView employeeUpload() {
 
-        ModelAndView mv = new ModelAndView("employeeUpload.html");
+        ModelAndView mv = new ModelAndView("employee/employeeUpload.html");
         ConditionChecker.checkVariables(mv);
 
         return mv;
@@ -53,7 +53,7 @@ public class EmployeeController {
     @GetMapping("/upload/submit/result/{groupId}/{page}/{docuId}")
     public ModelAndView employeeShowDocu(@PathVariable(value="groupId") int groupId, @PathVariable(value = "page") int page, @PathVariable(value = "docuId") int docuId) {
 
-        ModelAndView mv = new ModelAndView("employeeResultDocument.html");
+        ModelAndView mv = new ModelAndView("employee/employeeResultDocument.html");
         ConditionChecker.checkVariables(mv);
 
         List<Document> documents = pullDocumentFromDB(docuId);
@@ -100,7 +100,7 @@ public class EmployeeController {
     @GetMapping("/upload/submit/result/{groupId}/{page}")
     public ModelAndView employeeShowResult(@PathVariable(value="groupId") int groupId, @PathVariable(value = "page") int page) {
 
-        ModelAndView mv = new ModelAndView("employeeUploadResult.html");
+        ModelAndView mv = new ModelAndView("employee/employeeUploadResult.html");
         ConditionChecker.checkVariables(mv);
 
         List<DocumentLink> documentLinks = pullLinksFromDB(groupId);
@@ -114,7 +114,7 @@ public class EmployeeController {
     @GetMapping("/documentHistory/{page}")
     public ModelAndView getDocumentHisotry (@PathVariable(value = "page") int page) {
 
-        ModelAndView mv = new ModelAndView("employeeHistoryResult.html");
+        ModelAndView mv = new ModelAndView("employee/employeeHistoryResult.html");
         ConditionChecker.checkVariables(mv);
 
         String username = ConditionChecker.checkUsername();
@@ -129,7 +129,7 @@ public class EmployeeController {
     @GetMapping("/documentHistory/{page}/{docuId}")
     public ModelAndView employeeShowHistoryDocu(@PathVariable(value = "page") int page, @PathVariable(value = "docuId") int docuId) {
 
-        ModelAndView mv = new ModelAndView("employeeResultDocument.html");
+        ModelAndView mv = new ModelAndView("employee/employeeResultDocument.html");
         ConditionChecker.checkVariables(mv);
 
         List<Document> documents = pullDocumentFromDB(docuId);

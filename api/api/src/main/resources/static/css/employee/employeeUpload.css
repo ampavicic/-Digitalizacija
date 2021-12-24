@@ -1,0 +1,47 @@
+.container {
+    margin-top: -15%;
+    text-align: center;
+}
+
+.employeepage-container {
+    margin-top: -20%;
+    text-align: center;
+}
+
+.form-basic-heading {
+    font-size: 40px;
+    text-align: center;
+    text-transform: uppercase;
+    margin: 40px 0;
+}
+
+.form-basic p { /*OSTAJE*/
+    font-size: 20px;
+    margin: 15px 0;
+}
+
+.form-control {
+    background-color: #e8f0fe;
+    border: 2px solid darkslategray;
+    outline: darkslategray;
+}
+
+.form-basic input { /*OSTAJE*/
+    font-size: 16px;
+    width: 100%;
+    padding: 15px 10px;
+    border: 1px solid darkslategray;
+    outline: darkslategray;
+    border-radius: 5px;
+}
+
+.form-basic button { /*OSTAJE*/
+    font-size: 18px;
+    font-weight: bold;
+    margin: 20px 0;
+    padding: 10px 15px;
+    width: 50%;
+    border-radius: 5px;
+    border: 1px solid darkslategray;
+    outline: darkslategray;
+}
