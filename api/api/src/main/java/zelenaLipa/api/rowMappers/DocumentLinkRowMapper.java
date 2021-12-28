@@ -16,6 +16,7 @@ public class DocumentLinkRowMapper implements RowMapper<DocumentLink> {
         documentLink.setGroupId(Integer.parseInt(rs.getString("groupid")));
         documentLink.setDocuId(Integer.parseInt(rs.getString("documentid")));
         documentLink.setTitle(rs.getString("title"));
+        documentLink.setType(rs.getString("type"));
 
         return documentLink;
 

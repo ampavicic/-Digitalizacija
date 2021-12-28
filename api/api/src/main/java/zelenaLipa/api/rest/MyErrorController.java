@@ -24,7 +24,7 @@ public class MyErrorController implements ErrorController {
 
             if(statusCode == HttpStatus.FORBIDDEN.value()) {
 
-                ModelAndView mv = new ModelAndView("error.html");
+                ModelAndView mv = new ModelAndView("error/error.html");
                 ConditionChecker.checkVariables(mv);
                 setErrorCode(mv, statusCode);
                 return mv;
@@ -33,7 +33,7 @@ public class MyErrorController implements ErrorController {
 
         }
 
-        ModelAndView mv = new ModelAndView("error.html");
+        ModelAndView mv = new ModelAndView("error/error.html");
         ConditionChecker.checkVariables(mv);
         setErrorCode(mv, statusCode);
         return mv;

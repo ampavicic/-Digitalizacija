@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Employee Result Document</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/employee/employeeResultDocument.css}">
+</head>
+<body>
+<header>
+    <div class="company-name"> <h2> COMPANY.co </h2> </div>
+    <div class="navigation">
+        <a href="/"> Homepage </a>
+        <td>
+            <a th:if="${loggedIn == false}" href="/login"> Login </a>
+            <a th:if="${loggedIn == false}" href="/register"> Register </a>
+            <a th:if="${loggedIn == true}" href="/user"> Userpage </a>
+            <a th:if="${roleDirector == true}" href="/director"> Director </a>
+            <a th:if="${roleEmployee == true}" href="/employee"> Employee </a>
+            <a th:if="${roleReviser == true}" href="/reviser"> Reviser </a>
+            <a th:if="${roleAccountant == true}" href="/accountant"> Accountant </a>
+            <a th:if="${loggedIn == true}" href="/logout"> Logout </a>
+        </td>
+    </div>
+</header>
+<main class="docs-container-container">
+    <h2><span th:text="${title}"></span></h2>
+    <div class="content-outer-container">
+        <div class="content-inner-container" th:text="${content}"></div>
+    </div>
+    <div class="label-container">
+        <div class="label">Signed: <span th:text="${signature}"></span></div>
+        <div class="label">Archived: <span th:text="${archived}"></span></div>
+        <div class="label">ID: <span th:text="${docuId}"></span></div>
+        <div class="label">Type: <span th:text="${type}"></span></div>
+    </div>
+</main>
+</body>
+<footer class="lowered-footer">
+    <div class="creator-name"> <h2> @zelenaLipa </h2> </div>
+</footer>
+</html>

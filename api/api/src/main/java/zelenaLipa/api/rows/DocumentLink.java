@@ -15,6 +15,8 @@ public class DocumentLink {
     @Size(max = 255)
     private String title;
 
+    private String type;
+
     public int getGroupId() {
         return groupId;
     }
@@ -39,12 +41,22 @@ public class DocumentLink {
         this.title = title;
     }
 
+    public String getType() {
+        return this.type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     @Override
     public String toString() {
         return "DocumentLink{" +
                 "groupId=" + groupId +
                 ", docuId=" + docuId +
                 ", title='" + title + '\'' +
+                ", type='" + type + '\'' +
                 '}';
     }
+
 }

@@ -2,8 +2,6 @@ package zelenaLipa.api.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -25,7 +23,7 @@ public class UserController {
     @GetMapping("/")
     public ModelAndView welcomePage() {
 
-        ModelAndView mv = new ModelAndView("home.html");
+        ModelAndView mv = new ModelAndView("user/home.html");
         ConditionChecker.checkVariables(mv);
 
         return mv;
@@ -35,10 +33,12 @@ public class UserController {
     @GetMapping("/user")
     public ModelAndView userPage() {
 
-        ModelAndView mv = new ModelAndView("user.html");
+        ModelAndView mv = new ModelAndView("user/user.html");
         ConditionChecker.checkVariables(mv);
 
-        checkUsername(mv);
+        String username = ConditionChecker.checkUsername();
+
+        mv.addObject("username", username);
 
         return mv;
 
@@ -48,7 +48,7 @@ public class UserController {
     @PostMapping("/login{error}")
     public ModelAndView loginError(@RequestParam boolean error) {
 
-        ModelAndView mv = new ModelAndView("login.html");
+        ModelAndView mv = new ModelAndView("user/login.html");
         ConditionChecker.checkVariables(mv);
         mv.addObject("loginError", true);
 
@@ -59,7 +59,7 @@ public class UserController {
     @GetMapping("/login")
     public ModelAndView login() {
 
-        ModelAndView mv = new ModelAndView("login.html");
+        ModelAndView mv = new ModelAndView("user/login.html");
         ConditionChecker.checkVariables(mv);
         mv.addObject("loginError", false);
 
@@ -70,7 +70,7 @@ public class UserController {
     @GetMapping("/register/{error}")
     public ModelAndView registerError(@PathVariable(value="error") int error) {
 
-        ModelAndView mv = new ModelAndView("register.html");
+        ModelAndView mv = new ModelAndView("user/register.html");
         ConditionChecker.checkVariables(mv);
         String string;
         if(error == 0) string = "Error: you are not employed in this company!";
@@ -83,7 +83,7 @@ public class UserController {
     @GetMapping("/register")
     public ModelAndView register() {
 
-        ModelAndView mv = new ModelAndView("register.html"); //Vraća stranicu logina (src/main/java/resources)
+        ModelAndView mv = new ModelAndView("user/register.html"); //Vraća stranicu logina (src/main/java/resources)
         ConditionChecker.checkVariables(mv);
 
         return mv;
@@ -124,17 +124,6 @@ public class UserController {
                 return new RedirectView("/login");
 
             }
-        }
-
-    }
-    private void checkUsername(ModelAndView mv) {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        if(principal instanceof UserDetails) {
-            String username = ((UserDetails)principal).getUsername();
-            mv.addObject("username", username);
-        } else {
-            mv.addObject("username", "anonymous");
         }
 
     }
