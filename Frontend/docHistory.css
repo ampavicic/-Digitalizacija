@@ -1,0 +1,15 @@
+.main-container{
+    margin: 5px 15px;
+    display: grid;
+    grid-template-columns: 40% 60%;
+    grid-template-rows: 80% 20%;
+    top: 50%;
+    justify-items: stretch;
+    height: 60vh;
+}
+
+.button-container {
+    margin: 10px 0;
+    display: flex;
+    justify-content: center;
+}
