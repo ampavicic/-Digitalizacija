@@ -1,0 +1,200 @@
+body {
+    background-color: white;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}
+* {
+    padding: 0;
+    margin: 0;
+    font-family: sans-serif;
+}
+header ,footer {
+    position: absolute;
+    background-color: darkslategray;
+    width: 100%;
+    color: white;
+}
+header h2 {
+    margin-top: 20px; 
+}
+header {
+    height: 10vh;
+}
+footer {
+    min-height: 15vh;
+    bottom: 0;
+}
+footer h2 {
+    position: relative;
+    left: 50%;
+    top: 50px;
+    color: white;
+    text-decoration: none;
+    margin-right: 20px;
+}
+
+.creator-name {
+    margin: auto;
+    position: absolute;
+    width: 50%;
+    text-align: center;
+}
+
+.company-name {
+    margin: auto;
+    position: absolute;
+    width: 50%;
+    text-align: center;
+}
+.navigation {
+    margin: auto;
+    position: absolute;
+    width: 50%;
+    text-align: center;
+}
+
+.navigation a {
+    position: relative;
+    left: 50%;
+    top: 50px;
+    color: white;
+    text-decoration: none;
+    margin-right: 20px;
+}
+
+main {
+    width: 100vw;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -55%);
+    position: absolute;
+    color: darkslategray;
+}
+
+/*NADODANO*/
+
+.main-container{
+    margin: 5px 15px;
+    display: grid;
+    grid-template-columns: 40% 60%;
+    grid-template-rows: 80% 20%;
+    top: 50%;
+    justify-items: stretch;
+    height: 60vh;
+}
+
+.employees-list {
+    padding: 3px 0;
+    text-align: center;
+    border-radius: 5px;
+    border-style: solid;
+    grid-column: 1;
+    grid-row: 1/3;
+    margin: auto 10px;
+}
+
+
+.employee {
+    display: grid;
+    grid-template-columns: 95% 5%;
+    background-color: rgb(201, 201, 201);
+    width: 80%;
+    margin: 6px auto;
+    font-size: large;
+    text-align: center;
+    font-weight: bold;
+    padding: 3px 0;
+}
+
+.employee-checkbox{
+    margin: 3px auto;
+}
+
+.employee-grid{
+    display: grid;
+    grid-template-rows: 10% 10% 10% 10% 10% 10% 10% 10% 10% 10%;
+    justify-items: center;
+    width: 100%;
+    height: 50vh;
+}
+
+.add-employee-container{
+    border-radius: 5px;
+    border-style: solid;
+    margin: 1px 5px;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 25% 25% 25% 25%;
+    justify-items: center;
+}
+
+.input {
+    margin: 5px 5px;
+    font-size: large;
+    width: 27vw;
+    padding: 15px 10px;
+    border: 1px solid darkslategray;
+    outline: darkslategray;
+    border-radius: 5px;
+    height: 35%;
+}
+
+.select-role{
+    margin: 2px 5px;
+    background-color: #e8f0fe;
+    border: 2px solid darkslategray;
+    outline: darkslategray;
+    width: 95%;
+    height: 73%;
+    border-radius: 5px;
+}
+
+.btn-add-employee{
+    margin: 2px 5px;
+    width: 50%;
+    height: 70%;
+}
+
+.button-container {
+    margin: 10px 0;
+    display: flex;
+    justify-content: center;
+}
+
+.filter-employee-container{
+    margin: 5px 5px;
+}
+
+.filter-input-container{
+    display: flex;
+    align-content: center;
+    margin: 10px 0px;
+    justify-content: center;
+}
+
+.filter-input{
+    margin: 2px 5px;
+    font-size:medium;
+    width: 35vw;
+    padding: 15px 10px;
+    border: 1px solid darkslategray;
+    outline: darkslategray;
+    border-radius: 5px;
+}
+
+.btn {
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 5px;
+    border: 1px solid;
+    margin: 0 5px;
+    padding: 0 10px;
+}
+
+.message-container {
+    color:red;
+    text-align: center;
+    margin: 10px auto;
+}
