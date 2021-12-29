@@ -76,6 +76,105 @@ public class AccountantController {
 
     }
 
+    @GetMapping("/allDocuments/{page}")
+    public ModelAndView getDocumentHisotry (@PathVariable(value = "page") int page) {
+
+        ModelAndView mv = new ModelAndView("accountant/accountantHistoryResult.html");
+        ConditionChecker.checkVariables(mv);
+
+        String username = ConditionChecker.checkUsername();
+
+        List<DocumentLink> documentLinks = pullAllLinksFromDB();
+
+        addLinksToPage(mv, documentLinks, -1, page);
+
+        mv.addObject("button", "allDocuments");
+
+        return mv;
+    }
+
+    @GetMapping("/scannedDocuments/{page}")
+    public ModelAndView getScannedDocumentHisotry (@PathVariable(value = "page") int page) {
+
+        ModelAndView mv = new ModelAndView("accountant/accountantHistoryResult.html");
+        ConditionChecker.checkVariables(mv);
+
+        String username = ConditionChecker.checkUsername();
+
+        List<DocumentLink> documentLinks = pullAllLinksFromDB();
+
+        addLinksToPage(mv, documentLinks, -1, page);
+
+        mv.addObject("button", "scannedDocuments");
+
+        return mv;
+    }
+
+    @GetMapping("/receivedDocuments/{page}")
+    public ModelAndView getReceivedDocumentsHisotry (@PathVariable(value = "page") int page) {
+
+        ModelAndView mv = new ModelAndView("accountant/accountantHistoryResult.html");
+        ConditionChecker.checkVariables(mv);
+
+        String username = ConditionChecker.checkUsername();
+
+        List<DocumentLink> documentLinks = pullAllLinksFromDB();
+
+        addLinksToPage(mv, documentLinks, -1, page);
+
+        mv.addObject("button", "receivedDocuments");
+
+        return mv;
+    }
+
+    @GetMapping("/signedDocuments/{page}")
+    public ModelAndView getSignedDocumentsHisotry (@PathVariable(value = "page") int page) {
+
+        ModelAndView mv = new ModelAndView("accountant/accountantHistoryResult.html");
+        ConditionChecker.checkVariables(mv);
+
+        String username = ConditionChecker.checkUsername();
+
+        List<DocumentLink> documentLinks = pullSignedLinksFromDB();
+
+        addLinksToPage(mv, documentLinks, -1, page);
+
+        mv.addObject("button", "signedDocuments");
+
+        return mv;
+    }
+
+    @GetMapping("/archivedDocuments/{page}")
+    public ModelAndView getArchivedDocumentsHisotry (@PathVariable(value = "page") int page) {
+
+        ModelAndView mv = new ModelAndView("accountant/accountantHistoryResult.html");
+        ConditionChecker.checkVariables(mv);
+
+        String username = ConditionChecker.checkUsername();
+
+        List<DocumentLink> documentLinks = pullarchivedLinksFromDB();
+
+        addLinksToPage(mv, documentLinks, -1, page);
+
+        mv.addObject("button", "archivedDocuments");
+
+        return mv;
+    }
+
+    @GetMapping("/documents/{page}/{docuId}")
+    public ModelAndView accountantShowHistoryDocu(@PathVariable(value = "page") int page, @PathVariable(value = "docuId") int docuId) {
+
+        ModelAndView mv = new ModelAndView("accountant/accountantResultDocument.html");
+        ConditionChecker.checkVariables(mv);
+
+        List<Document> documents = pullDocumentFromDB(docuId);
+
+        addDocumentToPage(mv, documents, docuId);
+
+        return mv;
+
+    }
+
     public void addDocumentToPage(ModelAndView mv, List<Document> documents, int docuId) {
 
         Document document = documents.get(0);
@@ -130,6 +229,34 @@ public class AccountantController {
         List<DocumentLink> documentLinks;
 
         String sqlSelectDocumentInfo = "SELECT groupid, documentid, title, type FROM document WHERE username = '" + username + "';";
+
+        documentLinks = jdbcTemplate.query(sqlSelectDocumentInfo, new DocumentLinkRowMapper());
+
+        return documentLinks;
+
+    }
+
+    public List<DocumentLink> pullSignedLinksFromDB() {
+
+        String username = ConditionChecker.checkUsername();
+
+        List<DocumentLink> documentLinks;
+
+        String sqlSelectDocumentInfo = "SELECT groupid, documentid, title, type FROM document WHERE username = '" + username + "' and signature<>0;";
+
+        documentLinks = jdbcTemplate.query(sqlSelectDocumentInfo, new DocumentLinkRowMapper());
+
+        return documentLinks;
+
+    }
+
+    public List<DocumentLink> pullarchivedLinksFromDB() {
+
+        String username = ConditionChecker.checkUsername();
+
+        List<DocumentLink> documentLinks;
+
+        String sqlSelectDocumentInfo = "SELECT groupid, documentid, title, type FROM document WHERE username = '" + username + "' and archived<>0;";
 
         documentLinks = jdbcTemplate.query(sqlSelectDocumentInfo, new DocumentLinkRowMapper());
 

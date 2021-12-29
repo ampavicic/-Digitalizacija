@@ -33,8 +33,11 @@
         <div class="content-inner-container" th:text="${content}"></div>
     </div>
     <div class="label-container">
-        <div class="label">Signed: <span th:text="${signature}"></span></div>
-        <div class="label">Archived: <span th:text="${archived}"></span></div>
+        <div class="label" ><a th:if="${signature == 'No'}" href="/accountant/signing">Send to signing</a></div>
+        <!--<div class="label" ><a th:if="${signature == 'Yes'}" >Signed</a></div>-->
+        <div th:if="${signature == 'Yes'}" class="label" >Signed</div>
+        <div class="label" ><a th:if="${archived == 'No'}" href="/accountant/archiving">Archive</a></div>
+        <div th:if="${archived == 'Yes'}" class="label">Archived </div>
         <div class="label">ID: <span th:text="${docuId}"></span></div>
         <div class="label">Type: <span th:text="${type}"></span></div>
     </div>
