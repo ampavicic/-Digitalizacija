@@ -7,15 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-<<<<<<< HEAD
-    <title>Accountant</title>
+    <title>Homepage</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link rel="stylesheet" th:href="@{/css/accountant/accountant.css}">
-=======
-    <title>Employee</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link rel="stylesheet" th:href="@{/css/employee/employee.css}">
->>>>>>> 1b8d82ec02ff50deed4ebcbfb077292bf42f8839
 </head>
 
 <body>
@@ -36,14 +29,13 @@
     </div>
 </header>
 <main>
-    <div class="accountantpage-container">
+    <div class="container">
         <div>
-            <h2> Welcome accountant! </h2>
+            <h2> Welcome employee! </h2>
         </div>
         <br>
-        <a href="/accountant/inbox/1?message=false"><button class="basic-button" type="submit">Documents</button></a>
-        <a href="/accountant/archivedSubmit/1?message=false"><button class="basic-button" type="submit">Archive Documents</button></a>
-        <a href="/accountant/archived/1?message=false"><button class="basic-button" type="submit">Archived Documents</button></a>
+        <a href="/employee/upload"><button class="basic-button" type="submit">Upload Documents</button></a>
+        <a href="/employee/documentHistory"><button class="basic-button" type="submit">View Document History</button></a>
     </div>
 </main>
 <footer>

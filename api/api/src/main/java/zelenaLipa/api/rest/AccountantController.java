@@ -43,7 +43,7 @@ public class AccountantController {
         mv.addObject("title", "Inbox");
         mv.addObject("redirect", "inbox");
 
-        if(messageBoolean) {
+        if (messageBoolean) {
             mv.addObject("message", "Sent to director for signup");
             mv.addObject("color", "color: green");
         }
@@ -103,21 +103,21 @@ public class AccountantController {
         mv.addObject("docuId", docuId);
         mv.addObject("type", document.getType());
 
-        if(document.getArchivedByAccountant().equals("t")) mv.addObject("archived", "Yes");
+        if (document.getArchivedByAccountant().equals("t")) mv.addObject("archived", "Yes");
         else mv.addObject("archived", "No");
 
-        if(document.getSignedByDirector().equals("t")) mv.addObject("signed", "Yes");
+        if (document.getSignedByDirector().equals("t")) mv.addObject("signed", "Yes");
         else mv.addObject("signed", "No");
 
-        if(document.getReadByReviser().equals("t")) mv.addObject("read", "Yes");
+        if (document.getReadByReviser().equals("t")) mv.addObject("read", "Yes");
         else mv.addObject("read", "No");
 
-        if(document.getSubmittedByEmployee().equals("t")) mv.addObject("submitted", "Yes");
+        if (document.getSubmittedByEmployee().equals("t")) mv.addObject("submitted", "Yes");
         else mv.addObject("submitted", "No");
 
         mv.addObject("dateOfSubmission", document.getDateOfSubmission());
 
-        if(document.getArchiveId() == -1) mv.addObject("archiveId", "");
+        if (document.getArchiveId() == -1) mv.addObject("archiveId", "");
         else mv.addObject("archiveId", document.getArchiveId());
 
     }
@@ -143,7 +143,7 @@ public class AccountantController {
         mv.addObject("title", "Archive documents");
         mv.addObject("redirect", "archivedSubmit");
 
-        if(messageBoolean) {
+        if (messageBoolean) {
             mv.addObject("message", "Document archived");
             mv.addObject("color", "color: green");
         }
@@ -182,7 +182,7 @@ public class AccountantController {
         do {
             archiveId = rand.nextInt(900000) + 100000;
             exists = DatabaseSQL.existsByArchiveId(archiveId, jdbcTemplate);
-        } while(exists);
+        } while (exists);
 
         result = DatabaseSQL.updateArchiveId(docuId, archiveId, jdbcTemplate);
 
@@ -219,8 +219,6 @@ public class AccountantController {
 
         mv.addObject("page", page);
         mv.addObject("docuId", docuId);
-
-        mv.addObject("redirect", "archivedSubmit");
 
         return mv;
 

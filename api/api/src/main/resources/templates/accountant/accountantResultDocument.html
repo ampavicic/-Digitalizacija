@@ -1,23 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-<<<<<<< HEAD
-    <title>Accountant</title>
+    <title>Accountant Result Document</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link rel="stylesheet" th:href="@{/css/accountant/accountant.css}">
-=======
-    <title>Employee</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link rel="stylesheet" th:href="@{/css/employee/employee.css}">
->>>>>>> 1b8d82ec02ff50deed4ebcbfb077292bf42f8839
+    <link rel="stylesheet" th:href="@{/css/employee/employeeResultDocument.css}">
 </head>
-
 <body>
 <header>
     <div class="company-name"> <h2> COMPANY.co </h2> </div>
@@ -35,18 +27,23 @@
         </td>
     </div>
 </header>
-<main>
-    <div class="accountantpage-container">
-        <div>
-            <h2> Welcome accountant! </h2>
-        </div>
-        <br>
-        <a href="/accountant/inbox/1?message=false"><button class="basic-button" type="submit">Documents</button></a>
-        <a href="/accountant/archivedSubmit/1?message=false"><button class="basic-button" type="submit">Archive Documents</button></a>
-        <a href="/accountant/archived/1?message=false"><button class="basic-button" type="submit">Archived Documents</button></a>
+<main class="docs-container-container">
+    <h2><span th:text="${title}"></span></h2>
+    <div class="content-outer-container">
+        <div class="content-inner-container" th:text="${content}"></div>
+    </div>
+    <div class="label-container">
+        <div class="label" ><a th:if="${signature == 'No'}" href="/accountant/signing">Send to signing</a></div>
+        <!--<div class="label" ><a th:if="${signature == 'Yes'}" >Signed</a></div>-->
+        <div th:if="${signature == 'Yes'}" class="label" >Signed</div>
+        <div class="label" ><a th:if="${archived == 'No'}" href="/accountant/archiving">Archive</a></div>
+        <div th:if="${archived == 'Yes'}" class="label">Archived </div>
+        <div class="label">ID: <span th:text="${docuId}"></span></div>
+        <div class="label">Type: <span th:text="${type}"></span></div>
     </div>
 </main>
-<footer>
+</body>
+<footer class="lowered-footer">
     <div class="creator-name"> <h2> @zelenaLipa </h2> </div>
 </footer>
-</body></html>
+</html>
