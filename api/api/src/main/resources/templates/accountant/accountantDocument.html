@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Employee Result Document</title>
+    <title>Accountant Document</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link rel="stylesheet" th:href="@{/css/employee/employeeResultDocument.css}">
+    <link rel="stylesheet" th:href="@{/css/accountant/accountantDocument.css}">
 </head>
 <body>
 <header>
@@ -42,14 +42,19 @@
         <div class="label">ID: <span th:text="${docuId}"></span></div>
         <div class="label">Type: <span th:text="${type}"></span></div>
     </div>
-    <div th:if="${#strings.contains(#httpServletRequest.requestURI, '/employee/upload/submit/result/')}">
-        <form method="post" th:action="@{/employee/upload/submit/result/{groupId}/{page}/{docuId}(page=${page}, docuId=${docuId}, groupId=${groupId})}">
-            <button class="btn" type="submit"> Send to reviser </button>
+    <div th:if="${redirect == 'inbox'}">
+        <form method="post" th:action="@{/accountant/inbox/{page}/{docuId}(page=${page}, docuId=${docuId})}">
+            <button class="btn" type="submit"> Send to director </button>
         </form>
     </div>
+    <div th:if="${redirect == 'archivedSubmit'}">
+        <form method="post" th:action="@{/accountant/archivedSubmit/{page}/{docuId}(page=${page}, docuId=${docuId})}">
+    <button class="btn" type="submit"> Archive document </button>
+    </form>
+    </div>
 </main>
-</body>
 <footer class="lowered-footer">
     <div class="creator-name"> <h2> @zelenaLipa </h2> </div>
 </footer>
+</body>
 </html>

@@ -17,6 +17,10 @@ public class DocumentLink {
 
     private String type;
 
+    private String dateOfSubmission;
+
+    private int archiveId = -1;
+
     public int getGroupId() {
         return groupId;
     }
@@ -49,6 +53,22 @@ public class DocumentLink {
         this.type = type;
     }
 
+    public String getDateOfSubmission() {
+        return dateOfSubmission;
+    }
+
+    public void setDateOfSubmission(String dateOfSubmission) {
+        this.dateOfSubmission = dateOfSubmission;
+    }
+
+    public int getArchiveId() {
+        return archiveId;
+    }
+
+    public void setArchiveId(int archiveId) {
+        this.archiveId = archiveId;
+    }
+
     @Override
     public String toString() {
         return "DocumentLink{" +
@@ -56,6 +76,8 @@ public class DocumentLink {
                 ", docuId=" + docuId +
                 ", title='" + title + '\'' +
                 ", type='" + type + '\'' +
+                ", dateOfSubmission='" + dateOfSubmission + '\'' +
+                ", archiveId=" + archiveId +
                 '}';
     }
 

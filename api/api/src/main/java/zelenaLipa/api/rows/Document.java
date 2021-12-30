@@ -12,21 +12,26 @@ public class Document {
     @Size(max = 255)
     private String title;
 
-    @NotNull
-    private int signature;
-
-    @NotNull
-    private int archived;
-
     private String type;
 
-    public int getArchived() {
-        return archived;
-    }
+    @NotNull
+    private String readByReviser;
 
-    public void setArchived(int archived) {
-        this.archived = archived;
-    }
+    @NotNull
+    private String archivedByAccountant;
+
+    @NotNull
+    private String signedByDirector;
+
+    @NotNull
+    private String submittedByEmployee;
+
+    private String dateOfSubmission;
+
+    @NotNull
+    private String sentToDirector;
+
+    private int archiveId = -1;
 
     public String getContent() {
         return content;
@@ -44,14 +49,6 @@ public class Document {
         this.title = title;
     }
 
-    public int getSignature() {
-        return signature;
-    }
-
-    public void setSignature(int signature) {
-        this.signature = signature;
-    }
-
     public String getType() {
         return type;
     }
@@ -60,13 +57,75 @@ public class Document {
         this.type = type;
     }
 
+    public String getReadByReviser() {
+        return readByReviser;
+    }
+
+    public void setReadByReviser(String readByReviser) {
+        this.readByReviser = readByReviser;
+    }
+
+    public String getArchivedByAccountant() {
+        return archivedByAccountant;
+    }
+
+    public void setArchivedByAccountant(String archivedByAccountant) {
+        this.archivedByAccountant = archivedByAccountant;
+    }
+
+    public String getSignedByDirector() {
+        return signedByDirector;
+    }
+
+    public void setSignedByDirector(String signedByDirector) {
+        this.signedByDirector = signedByDirector;
+    }
+
+    public String getSubmittedByEmployee() {
+        return submittedByEmployee;
+    }
+
+    public void setSubmittedByEmployee(String submittedByEmployee) {
+        this.submittedByEmployee = submittedByEmployee;
+    }
+
+    public String getDateOfSubmission() {
+        return dateOfSubmission;
+    }
+
+    public void setDateOfSubmission(String dateOfSubmission) {
+        this.dateOfSubmission = dateOfSubmission;
+    }
+
+    public String getSentToDirector() {
+        return sentToDirector;
+    }
+
+    public void setSentToDirector(String sentToDirector) {
+        this.sentToDirector = sentToDirector;
+    }
+
+    public int getArchiveId() {
+        return archiveId;
+    }
+
+    public void setArchiveId(int archiveId) {
+        this.archiveId = archiveId;
+    }
+
     @Override
     public String toString() {
         return "Document{" +
                 "content='" + content + '\'' +
                 ", title='" + title + '\'' +
-                ", signature=" + signature +
                 ", type='" + type + '\'' +
+                ", readByReviser='" + readByReviser + '\'' +
+                ", archivedByAccountant='" + archivedByAccountant + '\'' +
+                ", signedByDirector='" + signedByDirector + '\'' +
+                ", submittedByEmployee='" + submittedByEmployee + '\'' +
+                ", dateOfSubmission='" + dateOfSubmission + '\'' +
+                ", sentToDirector='" + sentToDirector + '\'' +
+                ", archiveId=" + archiveId +
                 '}';
     }
 

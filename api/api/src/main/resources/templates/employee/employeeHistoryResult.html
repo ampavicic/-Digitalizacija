@@ -38,12 +38,12 @@
     </div>
     <div class="button-container">
         <a th:href="@{/employee/documentHistory/{page}(page=${page} - 1)}"><button class="btn" th:disabled="${prevDisabled}">Previous</button></a>
-        <span class="pgnum" th:text="${page}"></span>
+        <span class="pgnum" th:if="${page != 0}" th:text="${page}"></span>
         <a th:href="@{/employee/documentHistory/{page}(page=${page} + 1)}"><button class="btn" th:disabled="${nextDisabled}">Next</button></a>
     </div>
 </main>
-</body>
 <footer class="lowered-footer">
     <div class="creator-name"> <h2> @zelenaLipa </h2> </div>
 </footer>
+</body>
 </html>

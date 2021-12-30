@@ -15,9 +15,17 @@ public class DocumentRowMapper implements RowMapper<Document> {
 
         document.setContent(rs.getString("content"));
         document.setTitle(rs.getString("title"));
-        document.setSignature(Integer.parseInt(rs.getString("signature")));
-        document.setArchived(Integer.parseInt(rs.getString("archived")));
+        document.setSubmittedByEmployee(rs.getString("submittedbyemployee"));
+        document.setReadByReviser(rs.getString("readbyreviser"));
+        document.setArchivedByAccountant(rs.getString("archivedbyaccountant"));
+        document.setSignedByDirector(rs.getString("signedbydirector"));
+        document.setSentToDirector(rs.getString("senttodirector"));
         document.setType(rs.getString("type"));
+        document.setArchiveId(Integer.parseInt(rs.getString("archiveid")));
+
+        String dateOfSubmission = rs.getString("dateofsubmission");
+        if(rs.wasNull()) document.setDateOfSubmission("None");
+        else document.setDateOfSubmission(dateOfSubmission);
 
         return document;
 

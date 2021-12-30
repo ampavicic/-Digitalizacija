@@ -9,8 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 import zelenaLipa.api.conditionCheckers.ConditionChecker;
-import zelenaLipa.api.rowMappers.DocumentLinkRowMapper;
-import zelenaLipa.api.rowMappers.DocumentRowMapper;
+import zelenaLipa.api.conditionCheckers.DatabaseSQL;
 import zelenaLipa.api.rows.Document;
 import zelenaLipa.api.rows.DocumentLink;
 
@@ -32,36 +31,39 @@ public class EmployeeController {
 
     @GetMapping("")
     public ModelAndView employee() {
-
         ModelAndView mv = new ModelAndView("employee/employee.html");
         ConditionChecker.checkVariables(mv);
-
         return mv;
-
     }
 
     @GetMapping("/upload")
     public ModelAndView employeeUpload() {
-
         ModelAndView mv = new ModelAndView("employee/employeeUpload.html");
         ConditionChecker.checkVariables(mv);
-
         return mv;
-
     }
 
     @GetMapping("/upload/submit/result/{groupId}/{page}/{docuId}")
     public ModelAndView employeeShowDocu(@PathVariable(value="groupId") int groupId, @PathVariable(value = "page") int page, @PathVariable(value = "docuId") int docuId) {
-
         ModelAndView mv = new ModelAndView("employee/employeeResultDocument.html");
         ConditionChecker.checkVariables(mv);
 
-        List<Document> documents = pullDocumentFromDB(docuId);
+        String username = ConditionChecker.checkUsername();
+        List<Document> documents = DatabaseSQL.getDocument(docuId, username, jdbcTemplate);
 
         addDocumentToPage(mv, documents, docuId);
 
-        return mv;
+        mv.addObject("groupId", groupId);
+        mv.addObject("page", page);
+        mv.addObject("docuId", docuId);
 
+        return mv;
+    }
+
+    @PostMapping("/upload/submit/result/{groupId}/{page}/{docuId}")
+    public RedirectView employeeSendDocuToReviser(@PathVariable(value="groupId") int groupId, @PathVariable(value = "page") int page, @PathVariable(value = "docuId") int docuId) {
+        int result = DatabaseSQL.updateColumn(docuId, DatabaseSQL.Roles.ROLE_EMPLOYEE_UPDATE_SUBMIT, true, jdbcTemplate);
+        return new RedirectView("/employee/upload/submit/result/" + groupId + "/" + page + "?message=true");
     }
 
     public void addDocumentToPage(ModelAndView mv, List<Document> documents, int docuId) {
@@ -75,51 +77,47 @@ public class EmployeeController {
         mv.addObject("docuId", docuId);
         mv.addObject("type", document.getType());
 
-        if(document.getArchived() > 0) mv.addObject("archived", "Yes");
+        if(document.getArchivedByAccountant().equals("t")) mv.addObject("archived", "Yes");
         else mv.addObject("archived", "No");
-
-        if(document.getSignature() > 0) mv.addObject("signature", "Yes");
-        else mv.addObject("signature", "No");
-
-    }
-
-    public List<Document> pullDocumentFromDB(int docuId) {
-
-        String username = ConditionChecker.checkUsername();
-
-        List<Document> documents;
-
-        String sqlSelectDocument = "SELECT content, title, type, archived, signature FROM document WHERE username = '" + username + "' AND documentid = " + docuId + ";";
-
-        documents = jdbcTemplate.query(sqlSelectDocument, new DocumentRowMapper());
-
-        return documents;
+        if(document.getSignedByDirector().equals("t")) mv.addObject("signed", "Yes");
+        else mv.addObject("signed", "No");
+        if(document.getReadByReviser().equals("t")) mv.addObject("read", "Yes");
+        else mv.addObject("read", "No");
+        if(document.getSubmittedByEmployee().equals("t")) mv.addObject("submitted", "Yes");
+        else mv.addObject("submitted", "No");
+        mv.addObject("dateOfSubmission", document.getDateOfSubmission());
+        if(document.getArchiveId() == -1) mv.addObject("archiveId", "");
+        else mv.addObject("archiveId", document.getArchiveId());
 
     }
 
     @GetMapping("/upload/submit/result/{groupId}/{page}")
-    public ModelAndView employeeShowResult(@PathVariable(value="groupId") int groupId, @PathVariable(value = "page") int page) {
+    public ModelAndView employeeShowResult(@PathVariable(value="groupId") int groupId, @PathVariable(value = "page") int page, @RequestParam(value="message") boolean messageBoolean) {
 
         ModelAndView mv = new ModelAndView("employee/employeeUploadResult.html");
         ConditionChecker.checkVariables(mv);
-
-        List<DocumentLink> documentLinks = pullLinksFromDB(groupId);
+        String username = ConditionChecker.checkUsername();
+        List<DocumentLink> documentLinks = DatabaseSQL.getDocumentLinksByUsernameAndGroupId(groupId, username, jdbcTemplate);
 
         addLinksToPage(mv, documentLinks, groupId, page);
+
+        if(messageBoolean) {
+            mv.addObject("message", "Submitted to reviser");
+            mv.addObject("color", "color: green");
+        }
 
         return mv;
 
     }
 
     @GetMapping("/documentHistory/{page}")
-    public ModelAndView getDocumentHisotry (@PathVariable(value = "page") int page) {
+    public ModelAndView getDocumentHistory (@PathVariable(value = "page") int page) {
 
         ModelAndView mv = new ModelAndView("employee/employeeHistoryResult.html");
         ConditionChecker.checkVariables(mv);
 
         String username = ConditionChecker.checkUsername();
-
-        List<DocumentLink> documentLinks = pullAllLinksFromDB();
+        List<DocumentLink> documentLinks = DatabaseSQL.getDocumentLinksByUsername(username, jdbcTemplate);
 
         addLinksToPage(mv, documentLinks, -1, page);
 
@@ -132,25 +130,12 @@ public class EmployeeController {
         ModelAndView mv = new ModelAndView("employee/employeeResultDocument.html");
         ConditionChecker.checkVariables(mv);
 
-        List<Document> documents = pullDocumentFromDB(docuId);
+        String username = ConditionChecker.checkUsername();
+        List<Document> documents = DatabaseSQL.getDocument(docuId, username, jdbcTemplate);
 
         addDocumentToPage(mv, documents, docuId);
 
         return mv;
-
-    }
-
-    public List<DocumentLink> pullAllLinksFromDB() {
-
-        String username = ConditionChecker.checkUsername();
-
-        List<DocumentLink> documentLinks;
-
-        String sqlSelectDocumentInfo = "SELECT groupid, documentid, title, type FROM document WHERE username = '" + username + "';";
-
-        documentLinks = jdbcTemplate.query(sqlSelectDocumentInfo, new DocumentLinkRowMapper());
-
-        return documentLinks;
 
     }
 
@@ -175,20 +160,6 @@ public class EmployeeController {
 
     }
 
-    public List<DocumentLink> pullLinksFromDB(int groupId) {
-
-        String username = ConditionChecker.checkUsername();
-
-        List<DocumentLink> documentLinks;
-
-        String sqlSelectDocumentInfo = "SELECT groupid, documentid, title, type FROM document WHERE username = '" + username + "' AND groupid = " + groupId + ";";
-
-        documentLinks = jdbcTemplate.query(sqlSelectDocumentInfo, new DocumentLinkRowMapper());
-
-        return documentLinks;
-
-    }
-
     @PostMapping("/upload/submit")
     public RedirectView employeeUploadSubmit(HttpServletRequest request, @RequestParam("files") MultipartFile[] files) {
 
@@ -200,10 +171,7 @@ public class EmployeeController {
         int groupId = 0;
         do {
             groupId = rand.nextInt(900000) + 100000;
-            String sqlExists = "SELECT EXISTS(SELECT documentid FROM document WHERE groupid = " + groupId + ") AS exists;";
-            List<String> result = jdbcTemplate.query(sqlExists, (rs, rowNum) -> { return rs.getString("exists"); });
-            if(result.get(0).equals("t")) exists = true;
-            else exists = false;
+            exists = DatabaseSQL.existsByGroupId(groupId, jdbcTemplate);
         } while(exists);
 
         for (MultipartFile mpf : files) {
@@ -221,7 +189,7 @@ public class EmployeeController {
 
         }
 
-        return new RedirectView("/employee/upload/submit/result/" + groupId + "/1");
+        return new RedirectView("/employee/upload/submit/result/" + groupId + "/1?message=false");
 
     }
 
@@ -231,8 +199,6 @@ public class EmployeeController {
         img.mkdir(); //Kreiraj direktorij
 
         File file = new File(path + "/images/" + mpf.getOriginalFilename());
-
-        System.out.println(path + mpf.getOriginalFilename());
 
         mpf.transferTo(file);
 
@@ -257,10 +223,7 @@ public class EmployeeController {
         int docuId;
         do {
             docuId = rand.nextInt(900000) + 100000;
-            String sqlExists = "SELECT EXISTS(SELECT documentid FROM document WHERE documentid = " + docuId + ") AS exists;";
-            List<String> result = jdbcTemplate.query(sqlExists, (rs, rowNum) -> { return rs.getString("exists"); });
-            if(result.get(0).equals("t")) exists = true;
-            else exists = false;
+            exists = DatabaseSQL.existsByDocumentId(docuId, jdbcTemplate);
         } while(exists);
 
         String designation = "";
@@ -286,28 +249,9 @@ public class EmployeeController {
 
         }
 
-        return insertDocuInDB(resultOCR, designation, docuId, groupId, title);
-
-    }
-
-    public int insertDocuInDB(String resultOCR, String designation, int docuId, int groupId, String title) {
-
         String username = ConditionChecker.checkUsername();
-        String sqlInsertDocu = "INSERT INTO document (documentid, archived, signature, username, content, groupid, title, type) VALUES("
-                + docuId + ", "
-                + 0 + ", "
-                + 0 + ", '"
-                + username + "', '"
-                + resultOCR + "', "
-                + groupId + ", '"
-                + title + "', '"
-                + designation + "')";
-
-        int resultDocu, resultType = 0;
-        resultDocu = jdbcTemplate.update(sqlInsertDocu);
-
-        return docuId;
+        int result = DatabaseSQL.addDocumentByUsername(docuId, username, resultOCR, groupId, title, designation, jdbcTemplate);
+        return result;
 
     }
-
 }

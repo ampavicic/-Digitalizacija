@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Employee Upload Result</title>
+    <title>Accountant Document</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link rel="stylesheet" th:href="@{/css/employee/employeeUploadResult.css}">
+    <link rel="stylesheet" th:href="@{/css/director/directorDocument.css}">
 </head>
 <body>
 <header>
@@ -28,21 +28,24 @@
     </div>
 </header>
 <main class="docs-container-container">
-    <h2>Scanned documents</h2>
-    <div class="docs-container">
-        <th:block th:each="documentLink, iter : ${documentLinks}">
-            <div th:if="${iter.index >= startIndex && iter.index < startIndex + 10}" class="document-link">
-                <a th:href="@{/employee/upload/submit/result/{groupid}/{page}/{docuid}(groupid=${groupId}, page=${page}, docuid=${documentLink.docuId})}" style="color: darkslategrey"><span th:text="${documentLink.title}"></span></a>
-            </div>
-        </th:block>
+    <h2><span th:text="${title}"></span></h2>
+    <div class="content-outer-container">
+        <div class="content-inner-container" th:text="${content}"></div>
     </div>
-    <div class="button-container">
-        <a th:href="@{/employee/upload/submit/result/{groupid}/{page}(groupid=${groupId}, page=${page} - 1)}"><button class="btn" th:disabled="${prevDisabled}">Previous</button></a>
-        <span class="pgnum" th:if="${page != 0}" th:text="${page}"></span>
-        <a th:href="@{/employee/upload/submit/result/{groupid}/{page}(groupid=${groupId}, page=${page} + 1)}"><button class="btn" th:disabled="${nextDisabled}">Next</button></a>
+    <div class="label-container">
+        <div class="label">Submitted: <span th:text="${submitted}"></span></div>
+        <div class="label">Time of submission: <span th:text="${dateOfSubmission}"></span></div>
+        <div class="label">Read: <span th:text="${read}"></span></div>
+        <div class="label">Signed: <span th:text="${signed}"></span></div>
+        <div class="label">Archived: <span th:text="${archived}"></span></div>
+        <div class="label">ArchiveId: <span th:text="${archiveId}"></span></div>
+        <div class="label">ID: <span th:text="${docuId}"></span></div>
+        <div class="label">Type: <span th:text="${type}"></span></div>
     </div>
-    <div class="message-container">
-        <span th:text="${message}" th:style="${color}"></span>
+    <div th:if="${redirect == 'inbox'}">
+        <form method="post" th:action="@{/director/inbox/{page}/{docuId}(page=${page}, docuId=${docuId})}">
+            <button class="btn" type="submit"> Sign document </button>
+        </form>
     </div>
 </main>
 <footer class="lowered-footer">

@@ -4,14 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 import zelenaLipa.api.conditionCheckers.ConditionChecker;
-import zelenaLipa.api.rowMappers.EmployeeRowMapper;
-import zelenaLipa.api.rowMappers.RoleRowMapper;
+import zelenaLipa.api.conditionCheckers.DatabaseSQL;
+import zelenaLipa.api.rows.Document;
+import zelenaLipa.api.rows.DocumentLink;
 import zelenaLipa.api.rows.Employee;
 import zelenaLipa.api.rows.Role;
-
 import java.util.List;
-import java.util.Random;
 
 @RestController
 @RequestMapping("/director")
@@ -53,30 +53,14 @@ public class DirectorController {
         ModelAndView mv = new ModelAndView("director/directorEmployees.html");
 
         if(checkBoxes != null) {
-            int result = removeEmployeesFromDB(checkBoxes);
+            int result = DatabaseSQL.removeEmployee(checkBoxes, jdbcTemplate);
             mv.addObject("message", "Number of employees removed: " + result);
+            mv.addObject("color", "color: red");
         }
 
         filterList(mv, filter, 1);
         fillWithRoles(mv);
         return mv;
-
-    }
-
-    public int removeEmployeesFromDB(String[] checkBoxes) {
-
-        String sqlDelete = "DELETE FROM employee WHERE ";
-
-        for(int i = 0; i < checkBoxes.length - 1; i++) {
-
-            sqlDelete += "pid = '" + checkBoxes[i] + "' OR ";
-
-        }
-
-        sqlDelete += "pid = '" + checkBoxes[checkBoxes.length - 1] + "';";
-        int result = jdbcTemplate.update(sqlDelete);
-
-        return result;
 
     }
 
@@ -94,12 +78,7 @@ public class DirectorController {
 
         ConditionChecker.checkVariables(mv);
 
-        List<Employee> employees;
-
-        String sqlSelectFilter = "SELECT * FROM employee WHERE name = '" + filter + "' OR surname = '" + filter + "' OR genid = '" + filter + "' OR pid = '" + filter + "';";
-
-        employees = jdbcTemplate.query(sqlSelectFilter, new EmployeeRowMapper());
-
+        List<Employee> employees = DatabaseSQL.filterEmployees(filter, jdbcTemplate);
         addEmployeesToPage(mv, employees, page);
 
         mv.addObject("filter", filter);
@@ -133,14 +112,11 @@ public class DirectorController {
         ModelAndView mv = new ModelAndView("director/directorEmployees.html");
         ConditionChecker.checkVariables(mv);
 
-        String sqlSelectRoles = "SELECT * FROM role;";
-        List<Role> roleList = jdbcTemplate.query(sqlSelectRoles, new RoleRowMapper());
+        List<Role> roleList = DatabaseSQL.getRoles(jdbcTemplate);
 
         mv.addObject("roles", roleList);
 
         mv.addObject("result", result);
-
-        mv.addObject("string", "Success: added one employee: genId = [" + result + "]");
 
         return mv;
 
@@ -152,43 +128,23 @@ public class DirectorController {
                                      @RequestParam("surname") String surname,
                                      @RequestParam("residence") String residence,
                                      @RequestParam("salary") String salary,
-                                     @RequestParam("roleid") String roleid,
+                                     @RequestParam("roleid") String roleId,
                                      @RequestParam("filter") String filter) {
 
         ModelAndView mv = new ModelAndView("director/directorEmployees.html");
         ConditionChecker.checkVariables(mv);
 
-        if(pid != null && name != null && surname != null && residence != null && salary != null && roleid != null) {
+        if(pid != null && name != null && surname != null && residence != null && salary != null && roleId != null) {
 
-            String genIdString;
-            boolean exists = false;
-            Random rand = new Random(System.currentTimeMillis());
-            do {
-                genIdString = String.valueOf(rand.nextInt(900000000) + 100000000);
-                String sqlExists = "SELECT EXISTS(SELECT genid FROM employee WHERE genid = '" + genIdString + "') AS exists;";
-                List<String> result = jdbcTemplate.query(sqlExists, (rs, rowNum) -> {
-                    return rs.getString("exists");
-                });
-                if (result.get(0).equals("t")) exists = true;
-                else exists = false;
-            } while (exists);
+            DatabaseSQL.ResultPair resultPair = DatabaseSQL.addEmployee(pid, name, surname, residence, salary, roleId, jdbcTemplate);
 
-            String sqlInsertEmployee = "INSERT INTO employee (pid, genid, name, surname, residence, salary, roleid) VALUES ( '"
-                    + pid + "', '"
-                    + genIdString + "', '"
-                    + name + "', '"
-                    + surname + "', '"
-                    + residence + "', "
-                    + salary + ", "
-                    + roleid + ");";
-
-            int result = jdbcTemplate.update(sqlInsertEmployee);
-
-            mv.addObject("message", "Number of employees added: " + result + " [genid = " + genIdString + "]");
+            mv.addObject("message", "Number of employees added: " + resultPair.result + " [genid = " + resultPair.variable + "]");
+            mv.addObject("color", "color: green");
 
         } else {
 
             mv.addObject("message", "All add employee inputs must have a value!");
+            mv.addObject("color", "color: red");
 
         }
 
@@ -203,10 +159,108 @@ public class DirectorController {
 
     public void fillWithRoles(ModelAndView mv) {
 
-        String sqlSelectRoles = "SELECT * FROM role;";
-        List<Role> roleList = jdbcTemplate.query(sqlSelectRoles, new RoleRowMapper());
-
+        List<Role> roleList = DatabaseSQL.getRoles(jdbcTemplate);
         mv.addObject("roles", roleList);
+
+    }
+
+    @GetMapping("/inbox/{page}")
+    public ModelAndView getDocuments(@PathVariable(value = "page") int page, @RequestParam(value = "message") boolean messageBoolean) {
+
+        ModelAndView mv = new ModelAndView("director/directorInbox.html");
+        ConditionChecker.checkVariables(mv);
+
+        List<DocumentLink> documentLinks = DatabaseSQL.getDocumentLinks(DatabaseSQL.Roles.ROLE_DIRECTOR_CHECK_IF_SENT, true, jdbcTemplate);
+
+        addLinksToPage(mv, documentLinks, page);
+
+        mv.addObject("title", "Inbox");
+        mv.addObject("redirect", "inbox");
+
+        if(messageBoolean) {
+            mv.addObject("message", "Document signed");
+            mv.addObject("color", "color: green");
+        }
+
+        return mv;
+
+    }
+
+    public void addLinksToPage(ModelAndView mv, List<DocumentLink> documentLinks, int page) {
+
+        int pages = documentLinks.size() / 10;
+        int extra = documentLinks.size() % 10;
+        boolean prevDisabled = false, nextDisabled = false;
+
+        if (extra > 0) pages++; //Ako ima ostatka dodaj još jednu stranicu
+        if (pages == 0 && extra == 0) page = 0;
+
+        int startIndex = (page - 1) * 10; //10 zaposlenika po stranici
+        mv.addObject("documentLinks", documentLinks);
+        mv.addObject("startIndex", startIndex);
+        mv.addObject("page", page);
+
+        if (page == 1 || page == 0) prevDisabled = true;
+        if (page == pages || page == 0) nextDisabled = true;
+        mv.addObject("prevDisabled", prevDisabled);
+        mv.addObject("nextDisabled", nextDisabled);
+
+    }
+
+    @GetMapping("/inbox/{page}/{docuId}")
+    public ModelAndView getDocument(@PathVariable(value = "page") int page, @PathVariable(value = "docuId") int docuId) {
+
+        ModelAndView mv = new ModelAndView("director/directorDocument.html");
+        ConditionChecker.checkVariables(mv);
+
+        List<Document> documents = DatabaseSQL.getDocument(docuId, null, jdbcTemplate);
+
+        addDocumentToPage(mv, documents, docuId);
+
+        mv.addObject("page", page);
+        mv.addObject("docuId", docuId);
+
+        mv.addObject("redirect", "inbox");
+
+        return mv;
+
+    }
+
+    public void addDocumentToPage(ModelAndView mv, List<Document> documents, int docuId) {
+
+        Document document = documents.get(0);
+
+        mv.addObject("title", document.getTitle());
+
+        mv.addObject("content", document.getContent());
+
+        mv.addObject("docuId", docuId);
+        mv.addObject("type", document.getType());
+
+        if(document.getArchivedByAccountant().equals("t")) mv.addObject("archived", "Yes");
+        else mv.addObject("archived", "No");
+
+        if(document.getSignedByDirector().equals("t")) mv.addObject("signed", "Yes");
+        else mv.addObject("signed", "No");
+
+        if(document.getReadByReviser().equals("t")) mv.addObject("read", "Yes");
+        else mv.addObject("read", "No");
+
+        if(document.getSubmittedByEmployee().equals("t")) mv.addObject("submitted", "Yes");
+        else mv.addObject("submitted", "No");
+
+        mv.addObject("dateOfSubmission", document.getDateOfSubmission());
+
+        if(document.getArchiveId() == -1) mv.addObject("archiveId", "");
+        else mv.addObject("archiveId", document.getArchiveId());
+
+    }
+
+    @PostMapping("/inbox/{page}/{docuId}")
+    public RedirectView accountantSendDocuToAccountant(@PathVariable(value = "page") int page, @PathVariable(value = "docuId") int docuId) {
+
+        int result = DatabaseSQL.updateColumn(docuId, DatabaseSQL.Roles.ROLE_DIRECTOR_UPDATE_SIGNED, false, jdbcTemplate);
+        return new RedirectView("/director/inbox/" + page + "?message=true");
 
     }
 
