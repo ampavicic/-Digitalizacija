@@ -32,16 +32,28 @@
     <div class="docs-container">
         <th:block th:each="documentLink, iter : ${documentLinks}">
             <div th:if="${iter.index >= startIndex && iter.index < startIndex + 10}" class="document-link">
-                <a th:if="${redirect == 'inbox'}" th:href="@{/accountant/inbox/{page}/{docuid}(page=${page}, docuid=${documentLink.docuId})}" style="color: darkslategrey"><span th:text="${documentLink.title}"></span></a>
-                <a th:if="${redirect == 'archivedSubmit'}" th:href="@{/accountant/archivedSubmit/{page}/{docuid}(page=${page}, docuid=${documentLink.docuId})}" style="color: darkslategrey"><span th:text="${documentLink.title}"></span></a>
+                <a th:if="${redirect == 'inbox'}" th:href="@{/accountant/inbox/{page}/{docuid}(page=${page}, docuid=${documentLink.docuId})}" style="color: darkslategrey"><span th:text="${documentLink.title}" th:style="${documentLink.sentToDirector == 'f' ? 'font-weight: bold; color: black;' : ''}"></span></a>
+                <a th:if="${redirect == 'archivedSubmit'}" th:href="@{/accountant/archivedSubmit/{page}/{docuid}(page=${page}, docuid=${documentLink.docuId})}" style="color: darkslategrey"><span th:text="${documentLink.title}" th:style="${documentLink.archivedByAccountant == 'f' ? 'font-weight: bold; color: black;' : ''}"></span></a>
                 <a th:if="${redirect == 'archived'}" th:href="@{/accountant/archived/{page}/{docuid}(page=${page}, docuid=${documentLink.docuId})}" style="color: darkslategrey"><span th:text="${documentLink.title}"></span></a>
             </div>
         </th:block>
     </div>
     <div class="button-container">
-        <a th:href="@{/accountant/inbox/{page}(page=${page} - 1)}"><button class="btn" th:disabled="${prevDisabled}">Previous</button></a>
-        <span class="pgnum" th:if="${page != 0}" th:text="${page}"></span>
-        <a th:href="@{/accountant/inbox/{page}(page=${page} + 1)}"><button class="btn" th:disabled="${nextDisabled}">Next</button></a>
+        <form th:if="${redirect == 'inbox'}" method="post">
+            <button class="btn" th:disabled="${prevDisabled}" th:formaction="@{/accountant/inbox/{page}(page=${page} - 1)}" type="submit">Previous</button>
+            <span class="pgnum" th:if="${page != 0}" th:text="${page}"></span>
+            <button class="btn" th:disabled="${nextDisabled}" th:formaction="@{/accountant/inbox/{page}(page=${page} + 1)}" type="submit">Next</button>
+        </form>
+        <form th:if="${redirect == 'archivedSubmit'}" method="post">
+            <button class="btn" th:disabled="${prevDisabled}" th:formaction="@{/accountant/archivedSubmit/{page}(page=${page} - 1)}" type="submit">Previous</button>
+            <span class="pgnum" th:if="${page != 0}" th:text="${page}"></span>
+            <button class="btn" th:disabled="${nextDisabled}" th:formaction="@{/accountant/archivedSubmit/{page}(page=${page} + 1)}" type="submit">Next</button>
+        </form>
+        <form th:if="${redirect == 'archived'}" method="get">
+            <button class="btn" th:disabled="${prevDisabled}" th:formaction="@{/accountant/archived/{page}(page=${page} - 1)}" type="submit">Previous</button>
+            <span class="pgnum" th:if="${page != 0}" th:text="${page}"></span>
+            <button class="btn" th:disabled="${nextDisabled}" th:formaction="@{/accountant/archived/{page}(page=${page} + 1)}" type="submit">Next</button>
+        </form>
     </div>
     <div class="message-container">
         <span th:text="${message}" th:style="${color}"></span>

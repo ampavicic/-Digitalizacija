@@ -37,9 +37,11 @@
         </th:block>
     </div>
     <div class="button-container">
-        <a th:href="@{/employee/documentHistory/{page}(page=${page} - 1)}"><button class="btn" th:disabled="${prevDisabled}">Previous</button></a>
-        <span class="pgnum" th:if="${page != 0}" th:text="${page}"></span>
-        <a th:href="@{/employee/documentHistory/{page}(page=${page} + 1)}"><button class="btn" th:disabled="${nextDisabled}">Next</button></a>
+        <form method="get">
+            <button class="btn" th:disabled="${prevDisabled}" th:formaction="@{/employee/documentHistory/{page}(page=${page} - 1)}" type="submit">Previous</button>
+            <span class="pgnum" th:if="${page != 0}" th:text="${page}"></span>
+            <button class="btn" th:disabled="${nextDisabled}" th:formaction="@{/employee/documentHistory/{page}(page=${page} + 1)}" type="submit">Next</button>
+        </form>
     </div>
 </main>
 <footer class="lowered-footer">

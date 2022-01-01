@@ -1,14 +1,12 @@
 package zelenaLipa.api.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 import zelenaLipa.api.conditionCheckers.ConditionChecker;
-import zelenaLipa.api.conditionCheckers.DatabaseSQL;
 import zelenaLipa.api.rows.Document;
-import zelenaLipa.api.rows.DocumentLink;
+import zelenaLipa.api.service.DatabaseQueries;
 
 import java.util.List;
 import java.util.Random;
@@ -18,7 +16,7 @@ import java.util.Random;
 public class AccountantController {
 
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    DatabaseQueries databaseQueries;
 
     @GetMapping("")
     public ModelAndView accountant() {
@@ -36,7 +34,7 @@ public class AccountantController {
         ModelAndView mv = new ModelAndView("accountant/accountantInbox.html");
         ConditionChecker.checkVariables(mv);
 
-        List<DocumentLink> documentLinks = DatabaseSQL.getDocumentLinks(DatabaseSQL.Roles.ROLE_ACCOUNTANT_CHECK_IF_READ, true, jdbcTemplate);
+        List<Document> documentLinks = databaseQueries.getDocumentLinks(DatabaseQueries.Roles.ROLE_ACCOUNTANT_CHECK_IF_READ, true);
 
         addLinksToPage(mv, documentLinks, page);
 
@@ -52,7 +50,12 @@ public class AccountantController {
 
     }
 
-    public void addLinksToPage(ModelAndView mv, List<DocumentLink> documentLinks, int page) {
+    @PostMapping("/inbox/{page}")
+    public RedirectView redirectToOtherResult(@PathVariable(value = "page") int page) {
+        return new RedirectView("/accountant/inbox/" + page + "?message=false");
+    }
+
+    public void addLinksToPage(ModelAndView mv, List<Document> documentLinks, int page) {
 
         int pages = documentLinks.size() / 10;
         int extra = documentLinks.size() % 10;
@@ -79,7 +82,7 @@ public class AccountantController {
         ModelAndView mv = new ModelAndView("accountant/accountantDocument.html");
         ConditionChecker.checkVariables(mv);
 
-        List<Document> documents = DatabaseSQL.getDocument(docuId, null, jdbcTemplate);
+        List<Document> documents = databaseQueries.getDocument(docuId, null);
 
         addDocumentToPage(mv, documents, docuId);
 
@@ -125,7 +128,7 @@ public class AccountantController {
     @PostMapping("/inbox/{page}/{docuId}")
     public RedirectView accountantSendDocuToAccountant(@PathVariable(value = "page") int page, @PathVariable(value = "docuId") int docuId) {
 
-        int result = DatabaseSQL.updateColumn(docuId, DatabaseSQL.Roles.ROLE_ACCOUNTANT_UPDATE_SENT, false, jdbcTemplate);
+        int result = databaseQueries.updateColumn(docuId, DatabaseQueries.Roles.ROLE_ACCOUNTANT_UPDATE_SENT, false);
         return new RedirectView("/accountant/inbox/" + page + "?message=true");
 
     }
@@ -136,7 +139,7 @@ public class AccountantController {
         ModelAndView mv = new ModelAndView("accountant/accountantInbox.html");
         ConditionChecker.checkVariables(mv);
 
-        List<DocumentLink> documentLinks = DatabaseSQL.getDocumentLinks(DatabaseSQL.Roles.ROLE_ACCOUNTANT_CHECK_IF_SIGNED, true, jdbcTemplate);
+        List<Document> documentLinks = databaseQueries.getDocumentLinks(DatabaseQueries.Roles.ROLE_ACCOUNTANT_CHECK_IF_SIGNED, true);
 
         addLinksToPage(mv, documentLinks, page);
 
@@ -152,13 +155,18 @@ public class AccountantController {
 
     }
 
+    @PostMapping("/archivedSubmit/{page}")
+    public RedirectView redirectToGetDocumentsForArchiving(@PathVariable(value = "page") int page) {
+        return new RedirectView("/accountant/archivedSubmit/" + page + "?message=false");
+    }
+
     @GetMapping("/archivedSubmit/{page}/{docuId}")
     public ModelAndView getDocumentForArchiving(@PathVariable(value = "page") int page, @PathVariable(value = "docuId") int docuId) {
 
         ModelAndView mv = new ModelAndView("accountant/accountantDocument.html");
         ConditionChecker.checkVariables(mv);
 
-        List<Document> documents = DatabaseSQL.getDocument(docuId, null, jdbcTemplate);
+        List<Document> documents = databaseQueries.getDocument(docuId, null);
 
         addDocumentToPage(mv, documents, docuId);
 
@@ -174,29 +182,29 @@ public class AccountantController {
     @PostMapping("/archivedSubmit/{page}/{docuId}")
     public RedirectView accountantArchiveDocument(@PathVariable(value = "page") int page, @PathVariable(value = "docuId") int docuId) {
 
-        int result = DatabaseSQL.updateColumn(docuId, DatabaseSQL.Roles.ROLE_ACCOUNTANT_UPDATE_ARCHIVED, false, jdbcTemplate);
+        int result = databaseQueries.updateColumn(docuId, DatabaseQueries.Roles.ROLE_ACCOUNTANT_UPDATE_ARCHIVED, false);
 
         Random rand = new Random(System.currentTimeMillis());
         boolean exists = false;
         int archiveId;
         do {
             archiveId = rand.nextInt(900000) + 100000;
-            exists = DatabaseSQL.existsByArchiveId(archiveId, jdbcTemplate);
+            exists = databaseQueries.existsByArchiveId(archiveId);
         } while (exists);
 
-        result = DatabaseSQL.updateArchiveId(docuId, archiveId, jdbcTemplate);
+        result = databaseQueries.updateArchiveId(docuId, archiveId);
 
         return new RedirectView("/accountant/archivedSubmit/" + page + "?message=true");
 
     }
 
     @GetMapping("/archived/{page}")
-    public ModelAndView getArchivedDocuments(@PathVariable(value = "page") int page, @RequestParam(value = "message") boolean messageBoolean) {
+    public ModelAndView getArchivedDocuments(@PathVariable(value = "page") int page) {
 
         ModelAndView mv = new ModelAndView("accountant/accountantInbox.html");
         ConditionChecker.checkVariables(mv);
 
-        List<DocumentLink> documentLinks = DatabaseSQL.getDocumentLinks(DatabaseSQL.Roles.ROLE_ACCOUNTANT_GET_ARCHIVED, true, jdbcTemplate);
+        List<Document> documentLinks = databaseQueries.getDocumentLinks(DatabaseQueries.Roles.ROLE_ACCOUNTANT_GET_ARCHIVED, true);
 
         addLinksToPage(mv, documentLinks, page);
 
@@ -213,7 +221,7 @@ public class AccountantController {
         ModelAndView mv = new ModelAndView("accountant/accountantDocument.html");
         ConditionChecker.checkVariables(mv);
 
-        List<Document> documents = DatabaseSQL.getDocument(docuId, null, jdbcTemplate);
+        List<Document> documents = databaseQueries.getDocument(docuId, null);
 
         addDocumentToPage(mv, documents, docuId);
 

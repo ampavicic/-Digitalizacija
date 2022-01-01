@@ -6,7 +6,15 @@ import javax.validation.constraints.Size;
 public class Document {
 
     @NotNull
+    private int groupId;
+
+    @NotNull
+    private int docuId;
+
     private String content;
+
+    @NotNull
+    private String username;
 
     @NotNull
     @Size(max = 255)
@@ -33,12 +41,36 @@ public class Document {
 
     private int archiveId = -1;
 
+    public int getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(int groupId) {
+        this.groupId = groupId;
+    }
+
+    public int getDocuId() {
+        return docuId;
+    }
+
+    public void setDocuId(int docuId) {
+        this.docuId = docuId;
+    }
+
     public String getContent() {
         return content;
     }
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getTitle() {
@@ -116,7 +148,10 @@ public class Document {
     @Override
     public String toString() {
         return "Document{" +
-                "content='" + content + '\'' +
+                "groupId=" + groupId +
+                ", docuId=" + docuId +
+                ", content='" + content + '\'' +
+                ", username='" + username + '\'' +
                 ", title='" + title + '\'' +
                 ", type='" + type + '\'' +
                 ", readByReviser='" + readByReviser + '\'' +

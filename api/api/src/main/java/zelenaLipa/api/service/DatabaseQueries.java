@@ -1,6 +1,8 @@
-package zelenaLipa.api.conditionCheckers;
+package zelenaLipa.api.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Service;
 import zelenaLipa.api.rowMappers.*;
 import zelenaLipa.api.rows.*;
 
@@ -8,26 +10,31 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Random;
 
-/*Sve funkcije koje pristupaju BP*/
-public class DatabaseSQL {
+@Service
+public class DatabaseQueries {
 
-    private static String[] columns = {"submittedbyemployee", "readbyreviser", "signedbydirector", "archivedbyaccountant", "senttodirector"};
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
-    public static List<DocumentLink> getDocumentLinks(Roles role, boolean roleBoolean, JdbcTemplate jdbcTemplate) {
-        String sqlGetDocumentLinks = "SELECT groupid, documentid, title, type, dateofsubmission, archiveid FROM document WHERE " + columns[role.getValue()] + " = true ORDER BY dateofsubmission DESC;";
-        List<DocumentLink> documentLinks = jdbcTemplate.query(sqlGetDocumentLinks, new DocumentLinkRowMapper());
+    private String sqlDocumentLink = "groupid, documentid, username, title, type, readbyreviser, senttodirector, archivedbyaccountant, signedbydirector, submittedbyemployee, dateofsubmission, archiveid";
+
+    private String[] columns = {"submittedbyemployee", "readbyreviser", "signedbydirector", "archivedbyaccountant", "senttodirector"};
+
+    public List<Document> getDocumentLinks(DatabaseQueries.Roles role, boolean roleBoolean) {
+        String sqlGetDocumentLinks = "SELECT " + sqlDocumentLink + " FROM document WHERE " + columns[role.getValue()] + " = true ORDER BY dateofsubmission DESC;";
+        List<Document> documentLinks = jdbcTemplate.query(sqlGetDocumentLinks, new DocumentLinkRowMapper());
         return documentLinks;
     }
 
-    public static List<Document> getDocument(int docuId, String username, JdbcTemplate jdbcTemplate) {
+    public List<Document> getDocument(int docuId, String username) {
         String sqlGetDocument;
-        if(username == null) sqlGetDocument = "SELECT content, title, type, archivedbyaccountant, signedbydirector, readbyreviser, submittedbyemployee, dateofsubmission, senttodirector, archiveid FROM document WHERE documentid = " + docuId + " ORDER BY dateofsubmission DESC;";
-        else sqlGetDocument = "SELECT content, title, type, archivedbyaccountant, signedbydirector, readbyreviser, submittedbyemployee, dateofsubmission, senttodirector, archiveid FROM document WHERE username = '" + username + "' AND documentid = " + docuId + " ORDER BY dateofsubmission DESC;";
+        if(username == null) sqlGetDocument = "SELECT * FROM document WHERE documentid = " + docuId + " ORDER BY dateofsubmission DESC;";
+        else sqlGetDocument = "SELECT * FROM document WHERE username = '" + username + "' AND documentid = " + docuId + " ORDER BY dateofsubmission DESC;";
         List<Document> documents = jdbcTemplate.query(sqlGetDocument, new DocumentRowMapper());
         return documents;
     }
 
-    public static int updateColumn(int docuId, Roles role, boolean timestampBoolean, JdbcTemplate jdbcTemplate) {
+    public int updateColumn(int docuId, DatabaseQueries.Roles role, boolean timestampBoolean) {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         String sqlUpdateColumn;
         if(!timestampBoolean) sqlUpdateColumn = "UPDATE document SET " + columns[role.getValue()] + " = true WHERE documentid = " + docuId + ";";
@@ -36,19 +43,19 @@ public class DatabaseSQL {
         return result;
     }
 
-    public static List<DocumentLink> getDocumentLinksByUsernameAndGroupId(int groupId, String username, JdbcTemplate jdbcTemplate) {
-        String sqlGetDocumentLinksByUsernameAndGroupId = "SELECT groupid, documentid, title, type, dateofsubmission, archiveid FROM document WHERE username = '" + username + "' AND groupid = " + groupId + " ORDER BY dateofsubmission DESC;";
-        List<DocumentLink> documentLinks = jdbcTemplate.query(sqlGetDocumentLinksByUsernameAndGroupId, new DocumentLinkRowMapper());
+    public List<Document> getDocumentLinksByUsernameAndGroupId(int groupId, String username) {
+        String sqlGetDocumentLinksByUsernameAndGroupId = "SELECT " + sqlDocumentLink + " FROM document WHERE username = '" + username + "' AND groupid = " + groupId + " ORDER BY dateofsubmission DESC;";
+        List<Document> documentLinks = jdbcTemplate.query(sqlGetDocumentLinksByUsernameAndGroupId, new DocumentLinkRowMapper());
         return documentLinks;
     }
 
-    public static List<DocumentLink> getDocumentLinksByUsername(String username, JdbcTemplate jdbcTemplate) {
-        String sqlGetDocumentLinksByUsername = "SELECT groupid, documentid, title, type, dateofsubmission, archiveid FROM document WHERE username = '" + username + "' ORDER BY dateofsubmission DESC;";
-        List<DocumentLink> documentLinks = jdbcTemplate.query(sqlGetDocumentLinksByUsername, new DocumentLinkRowMapper());
+    public List<Document> getDocumentLinksByUsername(String username) {
+        String sqlGetDocumentLinksByUsername = "SELECT " + sqlDocumentLink + " FROM document WHERE username = '" + username + "' ORDER BY dateofsubmission DESC;";
+        List<Document> documentLinks = jdbcTemplate.query(sqlGetDocumentLinksByUsername, new DocumentLinkRowMapper());
         return documentLinks;
     }
 
-    public static int addDocumentByUsername(int docuId, String username, String resultOCR, int groupId, String title, String designation, JdbcTemplate jdbcTemplate) {
+    public int addDocumentByUsername(int docuId, String username, String resultOCR, int groupId, String title, String designation) {
         String sqlAddDocumentByUsername = "INSERT INTO document (documentid, submittedbyemployee, archivedbyaccountant, signedbydirector, readbyreviser, senttodirector, username, content, groupid, title, type, dateofsubmission, archiveid) VALUES("
                 + docuId + ", "
                 + "false" + ", "
@@ -67,7 +74,7 @@ public class DatabaseSQL {
         return result;
     }
 
-    public static boolean existsByDocumentId(int docuId, JdbcTemplate jdbcTemplate) {
+    public boolean existsByDocumentId(int docuId) {
         String sqlExists = "SELECT EXISTS(SELECT documentid FROM document WHERE documentid = " + docuId + ") AS exists;";
         boolean exists;
         List<String> result = jdbcTemplate.query(sqlExists, (rs, rowNum) -> { return rs.getString("exists"); });
@@ -76,7 +83,7 @@ public class DatabaseSQL {
         return exists;
     }
 
-    public static boolean existsByGroupId(int groupId, JdbcTemplate jdbcTemplate) {
+    public boolean existsByGroupId(int groupId) {
         String sqlExists = "SELECT EXISTS(SELECT documentid FROM document WHERE groupid = " + groupId + ") AS exists;";
         boolean exists;
         List<String> result = jdbcTemplate.query(sqlExists, (rs, rowNum) -> { return rs.getString("exists"); });
@@ -86,7 +93,7 @@ public class DatabaseSQL {
     }
 
     /*SPECIFIČNO ZA DIREKTORA*/
-    public static int removeEmployee(String[] checkBoxes, JdbcTemplate jdbcTemplate) {
+    public int removeEmployee(String[] checkBoxes) {
         String sqlRemoveEmployee = "DELETE FROM employee WHERE ";
         for(int i = 0; i < checkBoxes.length - 1; i++) { sqlRemoveEmployee += "pid = '" + checkBoxes[i] + "' OR "; }
         sqlRemoveEmployee += "pid = '" + checkBoxes[checkBoxes.length - 1] + "';";
@@ -95,7 +102,7 @@ public class DatabaseSQL {
     }
 
     /*SPECIFIČNO ZA DIREKTORA*/
-    public static ResultPair addEmployee(String pid, String name, String surname, String residence, String salary, String roleId, JdbcTemplate jdbcTemplate) {
+    public DatabaseQueries.ResultPair addEmployee(String pid, String name, String surname, String residence, String salary, String roleId) {
         String genIdString;
         boolean exists = false;
         Random rand = new Random(System.currentTimeMillis());
@@ -118,39 +125,39 @@ public class DatabaseSQL {
                 + roleId + ");";
 
         int result = jdbcTemplate.update(sqlAddEmployee);
-        return new DatabaseSQL.ResultPair(result, genIdString);
+        return new ResultPair(result, genIdString);
     }
 
     /*SPECIFIČNO ZA DIREKTORA*/
-    public static List<Role> getRoles(JdbcTemplate jdbcTemplate) {
+    public List<Role> getRoles() {
         String sqlGetRoles = "SELECT * FROM role;";
         List<Role> roles = jdbcTemplate.query(sqlGetRoles, new RoleRowMapper());
         return roles;
     }
 
     /*SPECIFIČNO ZA DIREKTORA*/
-    public static List<Employee> filterEmployees(String filter, JdbcTemplate jdbcTemplate) {
+    public List<Employee> filterEmployees(String filter) {
         String sqlFilterEmployees = "SELECT * FROM employee WHERE name = '" + filter + "' OR surname = '" + filter + "' OR genid = '" + filter + "' OR pid = '" + filter + "';";
         List<Employee> employees = jdbcTemplate.query(sqlFilterEmployees, new EmployeeRowMapper());
         return employees;
     }
 
     /*SPECIFIČNO ZA NEULOGIRANOG KORISNIKA*/
-    public static List<Employee> getEmployee(String genId, JdbcTemplate jdbcTemplate) {
+    public List<Employee> getEmployee(String genId) {
         String sqlGetEmployee = "SELECT * FROM employee WHERE genid = '" + genId + "';";             //Provjeri jeli korisnik zaposlen u tvrtci
         List<Employee> employees = jdbcTemplate.query(sqlGetEmployee, new EmployeeRowMapper());
         return employees;
     }
 
     /*SPECIFIČNO ZA NEULOGIRANOG KORISNIKA*/
-    public static List<UserAccount> getUserAccount(String genId, JdbcTemplate jdbcTemplate) {
+    public List<UserAccount> getUserAccount(String genId) {
         String sqlGetUserAccount = "SELECT * FROM useraccount WHERE genid = '" + genId + "';";    //Ispitaj jeli zaposlenik vec ima otvoren racun
         List<UserAccount> userAccounts = jdbcTemplate.query(sqlGetUserAccount, new UserAccountRowMapper());
         return userAccounts;
     }
 
     /*SPECIFIČNO ZA NEULOGIRANOG KORISNIKA*/
-    public static int addNewUserAccount(String username, String encodedPassword, String email, String genId, JdbcTemplate jdbcTemplate) {
+    public int addNewUserAccount(String username, String encodedPassword, String email, String genId) {
         String sqlAddNewUserAccount = "INSERT INTO useraccount (username, password, email, genid, enabled) VALUES " +
                 "( '"
                 + username + "', '"
@@ -163,7 +170,7 @@ public class DatabaseSQL {
     }
 
     /*SPECIFIČNO ZA RAČUNOVOĐU*/
-    public static boolean existsByArchiveId(int archiveId, JdbcTemplate jdbcTemplate) {
+    public boolean existsByArchiveId(int archiveId) {
         String sqlExists = "SELECT EXISTS(SELECT documentid FROM document WHERE documentid = " + archiveId + ") AS exists;";
         boolean exists;
         List<String> result = jdbcTemplate.query(sqlExists, (rs, rowNum) -> { return rs.getString("exists"); });
@@ -173,7 +180,7 @@ public class DatabaseSQL {
     }
 
     /*SPECIFIČNO ZA RACČUNOVOĐU*/
-    public static int updateArchiveId(int docuId, int archiveId, JdbcTemplate jdbcTemplate) {
+    public int updateArchiveId(int docuId, int archiveId) {
         String sqlArchiveId = "UPDATE document SET archiveid = " + archiveId + " WHERE documentid = " + docuId + ";";
         int result = jdbcTemplate.update(sqlArchiveId);
         return result;
@@ -201,5 +208,7 @@ public class DatabaseSQL {
         public String variable;
         public ResultPair(int result, String variable) { this.result = result; this.variable = variable; }
     }
+
+
 
 }

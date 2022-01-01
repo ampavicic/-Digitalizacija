@@ -1,15 +1,14 @@
 package zelenaLipa.api.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 import zelenaLipa.api.conditionCheckers.ConditionChecker;
-import zelenaLipa.api.conditionCheckers.DatabaseSQL;
 import zelenaLipa.api.rows.Employee;
 import zelenaLipa.api.rows.UserAccount;
+import zelenaLipa.api.service.DatabaseQueries;
 
 import java.util.List;
 
@@ -17,7 +16,7 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private DatabaseQueries databaseQueries;
 
     @GetMapping("/")
     public ModelAndView welcomePage() {
@@ -76,13 +75,13 @@ public class UserController {
                                     @RequestParam("password") String password) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(); //Default je 10 rundi sifriranja
         String encodedPassword = passwordEncoder.encode(password);           //Enkriptiraj BCrypt-om zaporku u formu
-        List<Employee> employees = DatabaseSQL.getEmployee(genId, jdbcTemplate);
+        List<Employee> employees = databaseQueries.getEmployee(genId);
         if(employees.size() < 1) return new RedirectView("/register/0"); //Ako nije vrati pogresku (0 -> nije zaposlen u tvrtci)
         else {
-            List<UserAccount> userAccounts = DatabaseSQL.getUserAccount(genId, jdbcTemplate);
+            List<UserAccount> userAccounts = databaseQueries.getUserAccount(genId);
             if(userAccounts.size() > 0) return new RedirectView("/register/1");             //Ako da, onemoguci mu registraciju
             else {                                                                                       //Ako ne, ubaci novi korisnicki racun u bazu podataka
-                int result = DatabaseSQL.addNewUserAccount(username, encodedPassword, email, genId, jdbcTemplate);
+                int result = databaseQueries.addNewUserAccount(username, encodedPassword, email, genId);
                 return new RedirectView("/login");
             }
         }

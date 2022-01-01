@@ -32,14 +32,16 @@
     <div class="docs-container">
         <th:block th:each="documentLink, iter : ${documentLinks}">
             <div th:if="${iter.index >= startIndex && iter.index < startIndex + 10}" class="document-link">
-                <a th:if="${redirect == 'inbox'}" th:href="@{/director/inbox/{page}/{docuid}(page=${page}, docuid=${documentLink.docuId})}" style="color: darkslategrey"><span th:text="${documentLink.title}"></span></a>
+                <a th:if="${redirect == 'inbox'}" th:href="@{/director/inbox/{page}/{docuid}(page=${page}, docuid=${documentLink.docuId})}" style="color: darkslategrey"><span th:text="${documentLink.title}" th:style="${documentLink.signedByDirector == 'f' ? 'font-weight: bold; color: black;' : ''}"></span></a>
             </div>
         </th:block>
     </div>
     <div class="button-container">
-        <a th:href="@{/director/inbox/{page}(page=${page} - 1)}"><button class="btn" th:disabled="${prevDisabled}">Previous</button></a>
-        <span class="pgnum" th:if="${page != 0}" th:text="${page}"></span>
-        <a th:href="@{/director/inbox/{page}(page=${page} + 1)}"><button class="btn" th:disabled="${nextDisabled}">Next</button></a>
+        <form method="post">
+            <button class="btn" th:disabled="${prevDisabled}" th:formaction="@{/director/inbox/{page}(page=${page} - 1)}" type="submit">Previous</button>
+            <span class="pgnum" th:if="${page != 0}" th:text="${page}"></span>
+            <button class="btn" th:disabled="${nextDisabled}" th:formaction="@{/director/inbox/{page}(page=${page} + 1)}" type="submit">Next</button>
+        </form>
     </div>
     <div class="message-container">
         <span th:text="${message}" th:style="${color}"></span>

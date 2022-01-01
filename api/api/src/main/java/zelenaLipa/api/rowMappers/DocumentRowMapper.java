@@ -13,6 +13,8 @@ public class DocumentRowMapper implements RowMapper<Document> {
 
         Document document = new Document();
 
+        document.setGroupId(Integer.parseInt(rs.getString("groupid")));
+        document.setDocuId(Integer.parseInt(rs.getString("documentid")));
         document.setContent(rs.getString("content"));
         document.setTitle(rs.getString("title"));
         document.setSubmittedByEmployee(rs.getString("submittedbyemployee"));
@@ -22,6 +24,7 @@ public class DocumentRowMapper implements RowMapper<Document> {
         document.setSentToDirector(rs.getString("senttodirector"));
         document.setType(rs.getString("type"));
         document.setArchiveId(Integer.parseInt(rs.getString("archiveid")));
+        document.setUsername(rs.getString("username"));
 
         String dateOfSubmission = rs.getString("dateofsubmission");
         if(rs.wasNull()) document.setDateOfSubmission("None");
