@@ -32,7 +32,7 @@
     <div class="docs-container">
         <th:block th:each="documentLink, iter : ${documentLinks}">
             <div th:if="${iter.index >= startIndex && iter.index < startIndex + 10}" class="document-link">
-                <a th:href="@{/reviser/inbox/{page}/{docuid}(page=${page}, docuid=${documentLink.docuId})}" style="color: darkslategrey"><span th:text="${documentLink.title}" th:style="${documentLink.readByReviser == 'f' ? 'font-weight: bold; color: black;' : ''}"></span></a>
+                <a th:href="@{/reviser/inbox/{page}/{docuid}(page=${page}, docuid=${documentLink.docuId})}" style="color: darkslategrey"><span th:text="${documentLink.title}" th:style="${!documentLink.readByReviser ? 'font-weight: bold; color: black;' : ''}"></span></a>
             </div>
         </th:block>
     </div>

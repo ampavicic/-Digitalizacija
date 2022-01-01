@@ -6,17 +6,18 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 import zelenaLipa.api.conditionCheckers.ConditionChecker;
-import zelenaLipa.api.rows.Employee;
-import zelenaLipa.api.rows.UserAccount;
-import zelenaLipa.api.service.DatabaseQueries;
-
-import java.util.List;
+import zelenaLipa.api.domain.UserAccount;
+import zelenaLipa.api.service.EmployeeService;
+import zelenaLipa.api.service.UserAccountService;
 
 @RestController
 public class UserController {
 
     @Autowired
-    private DatabaseQueries databaseQueries;
+    private UserAccountService userAccountService;
+
+    @Autowired
+    private EmployeeService employeeService;
 
     @GetMapping("/")
     public ModelAndView welcomePage() {
@@ -73,15 +74,23 @@ public class UserController {
                                     @RequestParam("email") String email,
                                     @RequestParam("username") String username,
                                     @RequestParam("password") String password) {
+
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(); //Default je 10 rundi sifriranja
         String encodedPassword = passwordEncoder.encode(password);           //Enkriptiraj BCrypt-om zaporku u formu
-        List<Employee> employees = databaseQueries.getEmployee(genId);
-        if(employees.size() < 1) return new RedirectView("/register/0"); //Ako nije vrati pogresku (0 -> nije zaposlen u tvrtci)
+
+        UserAccount userAccount = new UserAccount();
+        userAccount.setGenId(genId);
+        userAccount.setEmail(email);
+        userAccount.setUsername(username);
+        userAccount.setPassword(encodedPassword);
+
+        if(!employeeService.isWorkingInCompany(genId)) return new RedirectView("/register/0"); //Ako nije vrati pogresku (0 -> nije zaposlen u tvrtci)
         else {
-            List<UserAccount> userAccounts = databaseQueries.getUserAccount(genId);
-            if(userAccounts.size() > 0) return new RedirectView("/register/1");             //Ako da, onemoguci mu registraciju
+            if(userAccountService.hasAnAccountAlready(genId)) return new RedirectView("/register/1");             //Ako da, onemoguci mu registraciju
             else {                                                                                       //Ako ne, ubaci novi korisnicki racun u bazu podataka
-                int result = databaseQueries.addNewUserAccount(username, encodedPassword, email, genId);
+
+                //int result = databaseQueries.addNewUserAccount(username, encodedPassword, email, genId);
+                int result = userAccountService.insertNewUserAccount(userAccount);
                 return new RedirectView("/login");
             }
         }

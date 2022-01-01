@@ -1,7 +1,7 @@
 package zelenaLipa.api.rowMappers;
 
 import org.springframework.jdbc.core.RowMapper;
-import zelenaLipa.api.rows.Document;
+import zelenaLipa.api.domain.Document;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,18 +17,18 @@ public class DocumentRowMapper implements RowMapper<Document> {
         document.setDocuId(Integer.parseInt(rs.getString("documentid")));
         document.setContent(rs.getString("content"));
         document.setTitle(rs.getString("title"));
-        document.setSubmittedByEmployee(rs.getString("submittedbyemployee"));
-        document.setReadByReviser(rs.getString("readbyreviser"));
-        document.setArchivedByAccountant(rs.getString("archivedbyaccountant"));
-        document.setSignedByDirector(rs.getString("signedbydirector"));
-        document.setSentToDirector(rs.getString("senttodirector"));
+        document.setSubmittedByEmployee(rs.getBoolean("submittedbyemployee"));
+        document.setReadByReviser(rs.getBoolean("readbyreviser"));
+        document.setArchivedByAccountant(rs.getBoolean("archivedbyaccountant"));
+        document.setSignedByDirector(rs.getBoolean("signedbydirector"));
+        document.setSentToDirector(rs.getBoolean("senttodirector"));
         document.setType(rs.getString("type"));
         document.setArchiveId(Integer.parseInt(rs.getString("archiveid")));
         document.setUsername(rs.getString("username"));
 
         String dateOfSubmission = rs.getString("dateofsubmission");
-        if(rs.wasNull()) document.setDateOfSubmission("None");
-        else document.setDateOfSubmission(dateOfSubmission);
+        if(rs.wasNull()) document.setDateOfSubmission(null);
+        else document.setDateOfSubmission(null);
 
         return document;
 

@@ -1,21 +1,30 @@
-package zelenaLipa.api.rows;
+package zelenaLipa.api.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+@Entity
+@Table(name = "role")
 public class Role {
 
-    private long roleId;
+    @Id
+    @Column(name = "roleid")
+    private Integer roleId;
 
     @NotNull
-    @Size(max = 20)             //Max vel 20
+    @Size(max = 20)
+    @Column(name = "name")
     private String name;
 
     public long getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(long roleId) {
+    public void setRoleId(Integer roleId) {
         this.roleId = roleId;
     }
 

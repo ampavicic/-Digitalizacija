@@ -22,6 +22,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
+        //auth.jdbcAuthentication().dataSource(dataSource).passwordEncoder(new BCryptPasswordEncoder).
+
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
                 .passwordEncoder(new BCryptPasswordEncoder())

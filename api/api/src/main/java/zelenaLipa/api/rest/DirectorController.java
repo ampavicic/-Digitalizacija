@@ -5,19 +5,31 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 import zelenaLipa.api.conditionCheckers.ConditionChecker;
-import zelenaLipa.api.rows.Document;
-import zelenaLipa.api.rows.Employee;
-import zelenaLipa.api.rows.Role;
-import zelenaLipa.api.service.DatabaseQueries;
+import zelenaLipa.api.domain.Document;
+import zelenaLipa.api.domain.DocumentLink;
+import zelenaLipa.api.domain.Employee;
+import zelenaLipa.api.domain.Role;
+import zelenaLipa.api.service.*;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 @RestController
 @RequestMapping("/director")
 public class DirectorController {
 
     @Autowired
-    private DatabaseQueries databaseQueries;
+    private RoleService roleService;
+
+    @Autowired
+    private EmployeeService employeeService;
+
+    @Autowired
+    private DocumentLinkService documentLinkService;
+
+    @Autowired
+    private DocumentService documentService;
 
     @GetMapping("")
     public ModelAndView director() {
@@ -42,7 +54,9 @@ public class DirectorController {
     public ModelAndView employeeRemoveBySelected(@RequestParam(value="filter") String filter, @RequestParam(value="pids[]", required = false) String[] checkBoxes) {
         ModelAndView mv = new ModelAndView("director/directorEmployees.html");
         if(checkBoxes != null) {
-            int result = databaseQueries.removeEmployee(checkBoxes);
+            List<String> pidList = Arrays.asList(checkBoxes);
+            int result = employeeService.fireEmployee(pidList);
+            //int result = databaseQueries.removeEmployee(checkBoxes);
             mv.addObject("message", "Number of employees removed: " + result);
             mv.addObject("color", "color: red");
         }
@@ -61,7 +75,8 @@ public class DirectorController {
 
     public void filterList(ModelAndView mv, String filter, int page) {
         ConditionChecker.checkVariables(mv);
-        List<Employee> employees = databaseQueries.filterEmployees(filter);
+        List<Employee> employees = employeeService.filterEmployee(filter);
+        //List<Employee> employees = databaseQueries.filterEmployees(filter);
         addEmployeesToPage(mv, employees, page);
         mv.addObject("filter", filter);
     }
@@ -86,7 +101,7 @@ public class DirectorController {
     public ModelAndView employeesResult(@PathVariable(value="result") int result) {
         ModelAndView mv = new ModelAndView("director/directorEmployees.html");
         ConditionChecker.checkVariables(mv);
-        List<Role> roleList = databaseQueries.getRoles();
+        List<Role> roleList = roleService.getAll();
         mv.addObject("roles", roleList);
         mv.addObject("result", result);
         return mv;
@@ -102,9 +117,26 @@ public class DirectorController {
                                      @RequestParam("filter") String filter) {
         ModelAndView mv = new ModelAndView("director/directorEmployees.html");
         ConditionChecker.checkVariables(mv);
-        if(pid != null && name != null && surname != null && residence != null && salary != null && roleId != null) {
-            DatabaseQueries.ResultPair resultPair = databaseQueries.addEmployee(pid, name, surname, residence, salary, roleId);
-            mv.addObject("message", "Number of employees added: " + resultPair.result + " [genid = " + resultPair.variable + "]");
+        if(pid != null && name != null && surname != null && residence != null) {
+            Employee employee = new Employee();
+            employee.setPid(pid);
+            employee.setName(name);
+            employee.setSurname(surname);
+            employee.setResidence(residence);
+            employee.setSalary(Integer.parseInt(salary));
+            employee.setRoleId(Integer.parseInt(roleId));
+            String genIdString;
+            boolean exists = false;
+            Random rand = new Random(System.currentTimeMillis());
+            do {
+                genIdString = String.valueOf(rand.nextInt(900000000) + 100000000);
+            } while (!employeeService.genIdFreeToUse(genIdString));
+            employee.setGenId(genIdString);
+            System.out.println(genIdString);
+
+            employeeService.hireEmployee(employee);
+
+            mv.addObject("message", "Number of employees added: 1 [genid = " + genIdString + "]");
             mv.addObject("color", "color: green");
         } else {
             mv.addObject("message", "All add employee inputs must have a value!");
@@ -116,7 +148,7 @@ public class DirectorController {
     }
 
     public void fillWithRoles(ModelAndView mv) {
-        List<Role> roleList = databaseQueries.getRoles();
+        List<Role> roleList = roleService.getAll();
         mv.addObject("roles", roleList);
     }
 
@@ -124,7 +156,7 @@ public class DirectorController {
     public ModelAndView getDocuments(@PathVariable(value = "page") int page, @RequestParam(value = "message") boolean messageBoolean) {
         ModelAndView mv = new ModelAndView("director/directorInbox.html");
         ConditionChecker.checkVariables(mv);
-        List<Document> documentLinks = databaseQueries.getDocumentLinks(DatabaseQueries.Roles.ROLE_DIRECTOR_CHECK_IF_SENT, true);
+        List<DocumentLink> documentLinks = documentLinkService.getLinksForDirector();
         addLinksToPage(mv, documentLinks, page);
         mv.addObject("title", "Inbox");
         mv.addObject("redirect", "inbox");
@@ -140,7 +172,7 @@ public class DirectorController {
         return new RedirectView("/director/inbox/" + page + "?message=false");
     }
 
-    public void addLinksToPage(ModelAndView mv, List<Document> documentLinks, int page) {
+    public void addLinksToPage(ModelAndView mv, List<DocumentLink> documentLinks, int page) {
         int pages = documentLinks.size() / 10;
         int extra = documentLinks.size() % 10;
         boolean prevDisabled = false, nextDisabled = false;
@@ -160,27 +192,27 @@ public class DirectorController {
     public ModelAndView getDocument(@PathVariable(value = "page") int page, @PathVariable(value = "docuId") int docuId) {
         ModelAndView mv = new ModelAndView("director/directorDocument.html");
         ConditionChecker.checkVariables(mv);
-        List<Document> documents = databaseQueries.getDocument(docuId, null);
-        addDocumentToPage(mv, documents, docuId);
+        Document document = documentService.getDocumentById(docuId);
+        //List<Document> documents = databaseQueries.getDocument(docuId, null);
+        addDocumentToPage(mv, document, docuId);
         mv.addObject("page", page);
         mv.addObject("docuId", docuId);
         mv.addObject("redirect", "inbox");
         return mv;
     }
 
-    public void addDocumentToPage(ModelAndView mv, List<Document> documents, int docuId) {
-        Document document = documents.get(0);
+    public void addDocumentToPage(ModelAndView mv, Document document, int docuId) {
         mv.addObject("title", document.getTitle());
         mv.addObject("content", document.getContent());
         mv.addObject("docuId", docuId);
         mv.addObject("type", document.getType());
-        if(document.getArchivedByAccountant().equals("t")) mv.addObject("archived", "Yes");
+        if(document.getArchivedByAccountant()) mv.addObject("archived", "Yes");
         else mv.addObject("archived", "No");
-        if(document.getSignedByDirector().equals("t")) mv.addObject("signed", "Yes");
+        if(document.getSignedByDirector()) mv.addObject("signed", "Yes");
         else mv.addObject("signed", "No");
-        if(document.getReadByReviser().equals("t")) mv.addObject("read", "Yes");
+        if(document.getReadByReviser()) mv.addObject("read", "Yes");
         else mv.addObject("read", "No");
-        if(document.getSubmittedByEmployee().equals("t")) mv.addObject("submitted", "Yes");
+        if(document.getSubmittedByEmployee()) mv.addObject("submitted", "Yes");
         else mv.addObject("submitted", "No");
         mv.addObject("dateOfSubmission", document.getDateOfSubmission());
         if(document.getArchiveId() == -1) mv.addObject("archiveId", "");
@@ -189,7 +221,7 @@ public class DirectorController {
 
     @PostMapping("/inbox/{page}/{docuId}")
     public RedirectView accountantSendDocuToAccountant(@PathVariable(value = "page") int page, @PathVariable(value = "docuId") int docuId) {
-        int result = databaseQueries.updateColumn(docuId, DatabaseQueries.Roles.ROLE_DIRECTOR_UPDATE_SIGNED, false);
+        int result = documentService.updateSignedByDirector(docuId);
         return new RedirectView("/director/inbox/" + page + "?message=true");
     }
 

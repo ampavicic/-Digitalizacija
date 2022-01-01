@@ -5,8 +5,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 import zelenaLipa.api.conditionCheckers.ConditionChecker;
-import zelenaLipa.api.rows.Document;
-import zelenaLipa.api.service.DatabaseQueries;
+import zelenaLipa.api.domain.Document;
+import zelenaLipa.api.domain.DocumentLink;
+import zelenaLipa.api.service.DocumentLinkService;
+import zelenaLipa.api.service.DocumentService;
 
 import java.util.List;
 
@@ -15,7 +17,10 @@ import java.util.List;
 public class ReviserController {
 
     @Autowired
-    private DatabaseQueries databaseQueries;
+    private DocumentLinkService documentLinkService;
+
+    @Autowired
+    private DocumentService documentService;
 
     @GetMapping("")
     public ModelAndView reviser() {
@@ -24,12 +29,11 @@ public class ReviserController {
         return mv;
     }
 
-    /*TEMPLATE*/
     @GetMapping("/inbox/{page}")
     public ModelAndView getDocuments(@PathVariable(value = "page") int page, @RequestParam(value = "message") boolean messageBoolean) {
         ModelAndView mv = new ModelAndView("reviser/reviserInbox.html");
         ConditionChecker.checkVariables(mv);
-        List<Document> documentLinks = databaseQueries.getDocumentLinks(DatabaseQueries.Roles.ROLE_REVISER_CHECK_IF_SUBMITTED, true);
+        List<DocumentLink> documentLinks = documentLinkService.getLinksForReviser();
         addLinksToPage(mv, documentLinks, page);
         if(messageBoolean) {
             mv.addObject("message", "Submitted to accountant");
@@ -43,7 +47,7 @@ public class ReviserController {
         return new RedirectView("/reviser/inbox/" + page + "?message=false");
     }
 
-    public void addLinksToPage(ModelAndView mv, List<Document> documentLinks, int page) {
+    public void addLinksToPage(ModelAndView mv, List<DocumentLink> documentLinks, int page) {
         int pages = documentLinks.size() / 10;
         int extra = documentLinks.size() % 10;
         boolean prevDisabled = false, nextDisabled = false;
@@ -64,26 +68,25 @@ public class ReviserController {
     public ModelAndView getDocument(@PathVariable(value = "page") int page, @PathVariable(value = "docuId") int docuId) {
         ModelAndView mv = new ModelAndView("reviser/reviserDocument.html");
         ConditionChecker.checkVariables(mv);
-        List<Document> documents = databaseQueries.getDocument(docuId, null);
+        Document documents = documentService.getDocumentById(docuId);
         addDocumentToPage(mv, documents, docuId);
         mv.addObject("page", page);
         mv.addObject("docuId", docuId);
         return mv;
     }
 
-    public void addDocumentToPage(ModelAndView mv, List<Document> documents, int docuId) {
-        Document document = documents.get(0);
+    public void addDocumentToPage(ModelAndView mv, Document document, int docuId) {
         mv.addObject("title", document.getTitle());
         mv.addObject("content", document.getContent());
         mv.addObject("docuId", docuId);
         mv.addObject("type", document.getType());
-        if(document.getArchivedByAccountant().equals("t")) mv.addObject("archived", "Yes");
+        if(document.getArchivedByAccountant()) mv.addObject("archived", "Yes");
         else mv.addObject("archived", "No");
-        if(document.getSignedByDirector().equals("t")) mv.addObject("signed", "Yes");
+        if(document.getSignedByDirector()) mv.addObject("signed", "Yes");
         else mv.addObject("signed", "No");
-        if(document.getReadByReviser().equals("t")) mv.addObject("read", "Yes");
+        if(document.getReadByReviser()) mv.addObject("read", "Yes");
         else mv.addObject("read", "No");
-        if(document.getSubmittedByEmployee().equals("t")) mv.addObject("submitted", "Yes");
+        if(document.getSubmittedByEmployee()) mv.addObject("submitted", "Yes");
         else mv.addObject("submitted", "No");
         mv.addObject("dateOfSubmission", document.getDateOfSubmission());
         if(document.getArchiveId() == -1) mv.addObject("archiveId", "");
@@ -92,7 +95,7 @@ public class ReviserController {
 
     @PostMapping("/inbox/{page}/{docuId}")
     public RedirectView reviserSendDocuToAccountant(@PathVariable(value = "page") int page, @PathVariable(value = "docuId") int docuId) {
-        int result = databaseQueries.updateColumn(docuId, DatabaseQueries.Roles.ROLE_REVISER_UPDATE_READ, false);
+        int result = documentService.updateReadByReviser(docuId);
         return new RedirectView("/reviser/inbox/" + page + "?message=true");
 
     }

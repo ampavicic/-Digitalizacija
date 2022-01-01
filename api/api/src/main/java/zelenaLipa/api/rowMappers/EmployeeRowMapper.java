@@ -1,7 +1,7 @@
 package zelenaLipa.api.rowMappers;
 
 import org.springframework.jdbc.core.RowMapper;
-import zelenaLipa.api.rows.Employee;
+import zelenaLipa.api.domain.Employee;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,8 +18,8 @@ public class EmployeeRowMapper implements RowMapper<Employee> {
         employee.setName(rs.getString("name"));
         employee.setSurname(rs.getString("surname"));
         employee.setResidence(rs.getString("residence"));
-        employee.setSalary(rs.getLong("salary"));
-        employee.setRoleId(rs.getLong("roleId"));
+        employee.setSalary(rs.getInt("salary"));
+        employee.setRoleId(rs.getInt("roleId"));
 
         return employee;
 

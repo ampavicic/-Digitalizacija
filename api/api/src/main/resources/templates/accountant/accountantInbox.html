@@ -32,8 +32,8 @@
     <div class="docs-container">
         <th:block th:each="documentLink, iter : ${documentLinks}">
             <div th:if="${iter.index >= startIndex && iter.index < startIndex + 10}" class="document-link">
-                <a th:if="${redirect == 'inbox'}" th:href="@{/accountant/inbox/{page}/{docuid}(page=${page}, docuid=${documentLink.docuId})}" style="color: darkslategrey"><span th:text="${documentLink.title}" th:style="${documentLink.sentToDirector == 'f' ? 'font-weight: bold; color: black;' : ''}"></span></a>
-                <a th:if="${redirect == 'archivedSubmit'}" th:href="@{/accountant/archivedSubmit/{page}/{docuid}(page=${page}, docuid=${documentLink.docuId})}" style="color: darkslategrey"><span th:text="${documentLink.title}" th:style="${documentLink.archivedByAccountant == 'f' ? 'font-weight: bold; color: black;' : ''}"></span></a>
+                <a th:if="${redirect == 'inbox'}" th:href="@{/accountant/inbox/{page}/{docuid}(page=${page}, docuid=${documentLink.docuId})}" style="color: darkslategrey"><span th:text="${documentLink.title}" th:style="${!documentLink.sentToDirector ? 'font-weight: bold; color: black;' : ''}"></span></a>
+                <a th:if="${redirect == 'archivedSubmit'}" th:href="@{/accountant/archivedSubmit/{page}/{docuid}(page=${page}, docuid=${documentLink.docuId})}" style="color: darkslategrey"><span th:text="${documentLink.title}" th:style="${!documentLink.archivedByAccountant ? 'font-weight: bold; color: black;' : ''}"></span></a>
                 <a th:if="${redirect == 'archived'}" th:href="@{/accountant/archived/{page}/{docuid}(page=${page}, docuid=${documentLink.docuId})}" style="color: darkslategrey"><span th:text="${documentLink.title}"></span></a>
             </div>
         </th:block>

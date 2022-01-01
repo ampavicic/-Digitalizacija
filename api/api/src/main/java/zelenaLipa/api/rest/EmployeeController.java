@@ -8,8 +8,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 import zelenaLipa.api.conditionCheckers.ConditionChecker;
-import zelenaLipa.api.rows.Document;
-import zelenaLipa.api.service.DatabaseQueries;
+import zelenaLipa.api.domain.Document;
+import zelenaLipa.api.domain.DocumentLink;
+import zelenaLipa.api.service.DocumentLinkService;
+import zelenaLipa.api.service.DocumentService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
@@ -25,7 +27,10 @@ import java.util.regex.Pattern;
 public class EmployeeController {
 
     @Autowired
-    private DatabaseQueries databaseQueries;
+    private DocumentService documentService;
+
+    @Autowired
+    private DocumentLinkService documentLinkService;
 
     @GetMapping("")
     public ModelAndView employee() {
@@ -46,8 +51,8 @@ public class EmployeeController {
         ModelAndView mv = new ModelAndView("employee/employeeResultDocument.html");
         ConditionChecker.checkVariables(mv);
         String username = ConditionChecker.checkUsername();
-        List<Document> documents = databaseQueries.getDocument(docuId, username);
-        addDocumentToPage(mv, documents, docuId);
+        Document document = documentService.getDocumentByIdAndUsername(docuId, username);
+        addDocumentToPage(mv, document, docuId);
         mv.addObject("groupId", groupId);
         mv.addObject("page", page);
         mv.addObject("docuId", docuId);
@@ -56,23 +61,22 @@ public class EmployeeController {
 
     @PostMapping("/upload/submit/result/{groupId}/{page}/{docuId}")
     public RedirectView employeeSendDocuToReviser(@PathVariable(value="groupId") int groupId, @PathVariable(value = "page") int page, @PathVariable(value = "docuId") int docuId) {
-        int result = databaseQueries.updateColumn(docuId, DatabaseQueries.Roles.ROLE_EMPLOYEE_UPDATE_SUBMIT, true);
+        int result = documentService.updateSubmittedByEmployee(docuId);
         return new RedirectView("/employee/upload/submit/result/" + groupId + "/" + page + "?message=true");
     }
 
-    public void addDocumentToPage(ModelAndView mv, List<Document> documents, int docuId) {
-        Document document = documents.get(0);
+    public void addDocumentToPage(ModelAndView mv, Document document, int docuId) {
         mv.addObject("title", document.getTitle());
         mv.addObject("content", document.getContent());
         mv.addObject("docuId", docuId);
         mv.addObject("type", document.getType());
-        if(document.getArchivedByAccountant().equals("t")) mv.addObject("archived", "Yes");
+        if(document.getArchivedByAccountant()) mv.addObject("archived", "Yes");
         else mv.addObject("archived", "No");
-        if(document.getSignedByDirector().equals("t")) mv.addObject("signed", "Yes");
+        if(document.getSignedByDirector()) mv.addObject("signed", "Yes");
         else mv.addObject("signed", "No");
-        if(document.getReadByReviser().equals("t")) mv.addObject("read", "Yes");
+        if(document.getReadByReviser()) mv.addObject("read", "Yes");
         else mv.addObject("read", "No");
-        if(document.getSubmittedByEmployee().equals("t")) mv.addObject("submitted", "Yes");
+        if(document.getSubmittedByEmployee()) mv.addObject("submitted", "Yes");
         else mv.addObject("submitted", "No");
         mv.addObject("dateOfSubmission", document.getDateOfSubmission());
         if(document.getArchiveId() == -1) mv.addObject("archiveId", "");
@@ -84,7 +88,7 @@ public class EmployeeController {
         ModelAndView mv = new ModelAndView("employee/employeeUploadResult.html");
         ConditionChecker.checkVariables(mv);
         String username = ConditionChecker.checkUsername();
-        List<Document> documentLinks = databaseQueries.getDocumentLinksByUsernameAndGroupId(groupId, username);
+        List<DocumentLink> documentLinks = documentLinkService.getLinksForEmployeeSubmit(groupId, username);
         addLinksToPage(mv, documentLinks, groupId, page);
         if(messageBoolean) {
             mv.addObject("message", "Submitted to reviser");
@@ -103,7 +107,7 @@ public class EmployeeController {
         ModelAndView mv = new ModelAndView("employee/employeeHistoryResult.html");
         ConditionChecker.checkVariables(mv);
         String username = ConditionChecker.checkUsername();
-        List<Document> documentLinks = databaseQueries.getDocumentLinksByUsername(username);
+        List<DocumentLink> documentLinks = documentLinkService.getLinksForEmployeeHistory(username);
         addLinksToPage(mv, documentLinks, -1, page);
         return mv;
     }
@@ -113,12 +117,12 @@ public class EmployeeController {
         ModelAndView mv = new ModelAndView("employee/employeeResultDocument.html");
         ConditionChecker.checkVariables(mv);
         String username = ConditionChecker.checkUsername();
-        List<Document> documents = databaseQueries.getDocument(docuId, username);
-        addDocumentToPage(mv, documents, docuId);
+        Document document = documentService.getDocumentByIdAndUsername(docuId, username);
+        addDocumentToPage(mv, document, docuId);
         return mv;
     }
 
-    public void addLinksToPage(ModelAndView mv, List<Document> documentLinks, int groupId, int page) {
+    public void addLinksToPage(ModelAndView mv, List<DocumentLink> documentLinks, int groupId, int page) {
         int pages = documentLinks.size() / 10;
         int extra = documentLinks.size() % 10;
         boolean prevDisabled = false, nextDisabled = false;
@@ -140,12 +144,10 @@ public class EmployeeController {
         String realServletPath = request.getSession().getServletContext().getRealPath("");
         String ext = "";
         Random rand = new Random(System.currentTimeMillis());
-        boolean exists = false;
         int groupId = 0;
         do {
             groupId = rand.nextInt(900000) + 100000;
-            exists = databaseQueries.existsByGroupId(groupId);
-        } while(exists);
+        } while(documentService.existByGroupId(groupId));
         for (MultipartFile mpf : files) {
             int docuId = 0;
             String type = mpf.getContentType();
@@ -176,12 +178,10 @@ public class EmployeeController {
 
     public int storeDocuInDB(String resultOCR, int groupId, String title) {
         Random rand = new Random(System.currentTimeMillis());
-        boolean exists = false;
         int docuId;
         do {
             docuId = rand.nextInt(900000) + 100000;
-            exists = databaseQueries.existsByDocumentId(docuId);
-        } while(exists);
+        } while(documentService.existByDocuId(docuId));
         String designation = "";
         Pattern patternINT = Pattern.compile("INT[0-9][0-9][0-9][0-9]");
         Matcher matcher = patternINT.matcher(resultOCR);
@@ -197,7 +197,15 @@ public class EmployeeController {
             }
         }
         String username = ConditionChecker.checkUsername();
-        int result = databaseQueries.addDocumentByUsername(docuId, username, resultOCR, groupId, title, designation);
+        Document document = new Document();
+        document.setDocuId(docuId);
+        document.setUsername(username);
+        document.setContent(resultOCR);
+        document.setGroupId(groupId);
+        document.setTitle(title);
+        document.setType(designation);
+        documentService.storeDocument(document);
+        int result = 1;
         return result;
     }
 }

@@ -1,7 +1,7 @@
 package zelenaLipa.api.rowMappers;
 
 import org.springframework.jdbc.core.RowMapper;
-import zelenaLipa.api.rows.UserAccount;
+import zelenaLipa.api.domain.UserAccount;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

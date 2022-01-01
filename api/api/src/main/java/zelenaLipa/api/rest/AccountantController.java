@@ -5,8 +5,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 import zelenaLipa.api.conditionCheckers.ConditionChecker;
-import zelenaLipa.api.rows.Document;
-import zelenaLipa.api.service.DatabaseQueries;
+import zelenaLipa.api.domain.Document;
+import zelenaLipa.api.domain.DocumentLink;
+import zelenaLipa.api.service.DocumentLinkService;
+import zelenaLipa.api.service.DocumentService;
 
 import java.util.List;
 import java.util.Random;
@@ -16,7 +18,10 @@ import java.util.Random;
 public class AccountantController {
 
     @Autowired
-    DatabaseQueries databaseQueries;
+    DocumentLinkService documentLinkService;
+
+    @Autowired
+    DocumentService documentService;
 
     @GetMapping("")
     public ModelAndView accountant() {
@@ -34,7 +39,7 @@ public class AccountantController {
         ModelAndView mv = new ModelAndView("accountant/accountantInbox.html");
         ConditionChecker.checkVariables(mv);
 
-        List<Document> documentLinks = databaseQueries.getDocumentLinks(DatabaseQueries.Roles.ROLE_ACCOUNTANT_CHECK_IF_READ, true);
+        List<DocumentLink> documentLinks = documentLinkService.getLinksForAccountant();
 
         addLinksToPage(mv, documentLinks, page);
 
@@ -55,7 +60,7 @@ public class AccountantController {
         return new RedirectView("/accountant/inbox/" + page + "?message=false");
     }
 
-    public void addLinksToPage(ModelAndView mv, List<Document> documentLinks, int page) {
+    public void addLinksToPage(ModelAndView mv, List<DocumentLink> documentLinks, int page) {
 
         int pages = documentLinks.size() / 10;
         int extra = documentLinks.size() % 10;
@@ -82,9 +87,10 @@ public class AccountantController {
         ModelAndView mv = new ModelAndView("accountant/accountantDocument.html");
         ConditionChecker.checkVariables(mv);
 
-        List<Document> documents = databaseQueries.getDocument(docuId, null);
+        Document document = documentService.getDocumentById(docuId);
+        //List<Document> documents = databaseQueries.getDocument(docuId, null);
 
-        addDocumentToPage(mv, documents, docuId);
+        addDocumentToPage(mv, document, docuId);
 
         mv.addObject("page", page);
         mv.addObject("docuId", docuId);
@@ -95,9 +101,7 @@ public class AccountantController {
 
     }
 
-    public void addDocumentToPage(ModelAndView mv, List<Document> documents, int docuId) {
-
-        Document document = documents.get(0);
+    public void addDocumentToPage(ModelAndView mv, Document document, int docuId) {
 
         mv.addObject("title", document.getTitle());
 
@@ -106,16 +110,16 @@ public class AccountantController {
         mv.addObject("docuId", docuId);
         mv.addObject("type", document.getType());
 
-        if (document.getArchivedByAccountant().equals("t")) mv.addObject("archived", "Yes");
+        if (document.getArchivedByAccountant()) mv.addObject("archived", "Yes");
         else mv.addObject("archived", "No");
 
-        if (document.getSignedByDirector().equals("t")) mv.addObject("signed", "Yes");
+        if (document.getSignedByDirector()) mv.addObject("signed", "Yes");
         else mv.addObject("signed", "No");
 
-        if (document.getReadByReviser().equals("t")) mv.addObject("read", "Yes");
+        if (document.getReadByReviser()) mv.addObject("read", "Yes");
         else mv.addObject("read", "No");
 
-        if (document.getSubmittedByEmployee().equals("t")) mv.addObject("submitted", "Yes");
+        if (document.getSubmittedByEmployee()) mv.addObject("submitted", "Yes");
         else mv.addObject("submitted", "No");
 
         mv.addObject("dateOfSubmission", document.getDateOfSubmission());
@@ -128,7 +132,7 @@ public class AccountantController {
     @PostMapping("/inbox/{page}/{docuId}")
     public RedirectView accountantSendDocuToAccountant(@PathVariable(value = "page") int page, @PathVariable(value = "docuId") int docuId) {
 
-        int result = databaseQueries.updateColumn(docuId, DatabaseQueries.Roles.ROLE_ACCOUNTANT_UPDATE_SENT, false);
+        int result = documentService.updateSentToDirector(docuId);
         return new RedirectView("/accountant/inbox/" + page + "?message=true");
 
     }
@@ -139,7 +143,7 @@ public class AccountantController {
         ModelAndView mv = new ModelAndView("accountant/accountantInbox.html");
         ConditionChecker.checkVariables(mv);
 
-        List<Document> documentLinks = databaseQueries.getDocumentLinks(DatabaseQueries.Roles.ROLE_ACCOUNTANT_CHECK_IF_SIGNED, true);
+        List<DocumentLink> documentLinks = documentLinkService.getLinksForAccountantToBeArchived();
 
         addLinksToPage(mv, documentLinks, page);
 
@@ -166,9 +170,9 @@ public class AccountantController {
         ModelAndView mv = new ModelAndView("accountant/accountantDocument.html");
         ConditionChecker.checkVariables(mv);
 
-        List<Document> documents = databaseQueries.getDocument(docuId, null);
+        Document document = documentService.getDocumentById(docuId);
 
-        addDocumentToPage(mv, documents, docuId);
+        addDocumentToPage(mv, document, docuId);
 
         mv.addObject("page", page);
         mv.addObject("docuId", docuId);
@@ -182,17 +186,18 @@ public class AccountantController {
     @PostMapping("/archivedSubmit/{page}/{docuId}")
     public RedirectView accountantArchiveDocument(@PathVariable(value = "page") int page, @PathVariable(value = "docuId") int docuId) {
 
-        int result = databaseQueries.updateColumn(docuId, DatabaseQueries.Roles.ROLE_ACCOUNTANT_UPDATE_ARCHIVED, false);
+        int result = documentService.updateArchivedByAccountant(docuId);
 
         Random rand = new Random(System.currentTimeMillis());
         boolean exists = false;
         int archiveId;
         do {
             archiveId = rand.nextInt(900000) + 100000;
-            exists = databaseQueries.existsByArchiveId(archiveId);
+            exists = documentService.existByArchiveId(archiveId);
         } while (exists);
 
-        result = databaseQueries.updateArchiveId(docuId, archiveId);
+        result = documentService.giveArchiveId(docuId, archiveId);
+        //result = databaseQueries.updateArchiveId(docuId, archiveId);
 
         return new RedirectView("/accountant/archivedSubmit/" + page + "?message=true");
 
@@ -204,7 +209,7 @@ public class AccountantController {
         ModelAndView mv = new ModelAndView("accountant/accountantInbox.html");
         ConditionChecker.checkVariables(mv);
 
-        List<Document> documentLinks = databaseQueries.getDocumentLinks(DatabaseQueries.Roles.ROLE_ACCOUNTANT_GET_ARCHIVED, true);
+        List<DocumentLink> documentLinks = documentLinkService.getArchivedLinksForAccountant();
 
         addLinksToPage(mv, documentLinks, page);
 
@@ -221,9 +226,10 @@ public class AccountantController {
         ModelAndView mv = new ModelAndView("accountant/accountantDocument.html");
         ConditionChecker.checkVariables(mv);
 
-        List<Document> documents = databaseQueries.getDocument(docuId, null);
+        Document document = documentService.getDocumentById(docuId);
+        //List<Document> documents = databaseQueries.getDocument(docuId, null);
 
-        addDocumentToPage(mv, documents, docuId);
+        addDocumentToPage(mv, document, docuId);
 
         mv.addObject("page", page);
         mv.addObject("docuId", docuId);

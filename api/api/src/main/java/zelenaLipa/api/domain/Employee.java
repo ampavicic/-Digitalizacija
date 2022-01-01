@@ -1,33 +1,48 @@
-package zelenaLipa.api.rows;
+package zelenaLipa.api.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+@Entity
+@Table(name = "employee")
 public class Employee {
 
+    @Id
     @Size(min = 9, max = 9)
+    @Column(name = "genid")
     private String genId;
 
+    @Column(unique = true, name = "pid")
     @NotNull
     @Size(min = 11, max = 11)
     private String pid; //OIB
 
     @NotNull
     @Size(max = 20)
+    @Column(name = "name")
     private String name;
 
     @NotNull
     @Size(max = 20)
+    @Column(name = "surname")
     private String surname;
 
     @NotNull
     @Size(max = 70)
+    @Column(name = "residence")
     private String residence;
 
     @NotNull
-    private long salary;
+    @Column(name = "salary")
+    private Integer salary;
 
-    private long roleId;
+    @NotNull
+    @Column(name = "roleid")
+    private Integer roleId;
 
     public String getGenId() {
         return genId;
@@ -69,19 +84,19 @@ public class Employee {
         this.residence = residence;
     }
 
-    public long getSalary() {
+    public Integer getSalary() {
         return salary;
     }
 
-    public void setSalary(long salary) {
+    public void setSalary(Integer salary) {
         this.salary = salary;
     }
 
-    public long getRoleId() {
+    public Integer getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(long roleId) {
+    public void setRoleId(Integer roleId) {
         this.roleId = roleId;
     }
 

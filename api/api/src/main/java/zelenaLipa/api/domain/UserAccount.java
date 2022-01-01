@@ -1,24 +1,35 @@
-package zelenaLipa.api.rows;
+package zelenaLipa.api.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+@Entity()
+@Table(name="useraccount")
 public class UserAccount {
 
-    @Size(min = 2, max = 30)
+    @Id
+    @Size(min = 2, max = 50)
+    @Column(name = "username")
     private String username;
 
     @NotNull
-    @Size(min = 8, max = 50)
+    @Size(min = 4, max = 255)
+    @Column(name = "password")
     private String password;
 
     @NotNull
     @Size(min = 5, max = 50)
     @Email
+    @Column(name = "email")
     private String email;
 
     @NotNull
+    @Column(unique = true, name = "genid")
     @Size(min = 9, max = 9)
     private String genId;
 
