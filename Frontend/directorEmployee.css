@@ -153,8 +153,7 @@ main {
 
 .btn-add-employee{
     margin: 2px 5px;
-    grid-column: 1/3;
-    width: 30%;
+    width: 50%;
     height: 70%;
 }
 

@@ -8,8 +8,8 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <title>Director Employees</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link rel="stylesheet" th:href="@{/css/director/directorEmployee.css}">
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./directorEmployee.css">
 </head>
 
 <body>
@@ -66,6 +66,13 @@
                 <tr th:each="role : ${roles}">
                     <td>
                         <option th:value="${role.getRoleId()}" th:text="${role.getName()}"></option>
+                    </td>
+                </tr>
+            </select>
+            <select class="select-role" name="roleid" id="roleid">
+                <tr th:each="role : ${}">
+                    <td>
+                        <option th:value="${}" th:text="${}"></option>
                     </td>
                 </tr>
             </select>
