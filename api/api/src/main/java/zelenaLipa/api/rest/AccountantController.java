@@ -1,6 +1,8 @@
 package zelenaLipa.api.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
@@ -12,6 +14,7 @@ import zelenaLipa.api.service.DocumentService;
 
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/accountant")
@@ -39,7 +42,9 @@ public class AccountantController {
         ModelAndView mv = new ModelAndView("accountant/accountantInbox.html");
         ConditionChecker.checkVariables(mv);
 
-        List<DocumentLink> documentLinks = documentLinkService.getLinksForAccountant();
+        String type = accountantGetType();
+
+        List<DocumentLink> documentLinks = documentLinkService.getLinksForAccountant(type);
 
         addLinksToPage(mv, documentLinks, page);
 
@@ -88,7 +93,6 @@ public class AccountantController {
         ConditionChecker.checkVariables(mv);
 
         Document document = documentService.getDocumentById(docuId);
-        //List<Document> documents = databaseQueries.getDocument(docuId, null);
 
         addDocumentToPage(mv, document, docuId);
 
@@ -143,7 +147,9 @@ public class AccountantController {
         ModelAndView mv = new ModelAndView("accountant/accountantInbox.html");
         ConditionChecker.checkVariables(mv);
 
-        List<DocumentLink> documentLinks = documentLinkService.getLinksForAccountantToBeArchived();
+        String type = accountantGetType();
+
+        List<DocumentLink> documentLinks = documentLinkService.getLinksForAccountantToBeArchived(type);
 
         addLinksToPage(mv, documentLinks, page);
 
@@ -197,8 +203,6 @@ public class AccountantController {
         } while (exists);
 
         result = documentService.giveArchiveId(docuId, archiveId);
-        //result = databaseQueries.updateArchiveId(docuId, archiveId);
-
         return new RedirectView("/accountant/archivedSubmit/" + page + "?message=true");
 
     }
@@ -209,7 +213,9 @@ public class AccountantController {
         ModelAndView mv = new ModelAndView("accountant/accountantInbox.html");
         ConditionChecker.checkVariables(mv);
 
-        List<DocumentLink> documentLinks = documentLinkService.getArchivedLinksForAccountant();
+        String type = accountantGetType();
+
+        List<DocumentLink> documentLinks = documentLinkService.getArchivedLinksForAccountant(type);
 
         addLinksToPage(mv, documentLinks, page);
 
@@ -235,6 +241,23 @@ public class AccountantController {
         mv.addObject("docuId", docuId);
 
         return mv;
+
+    }
+
+    public String accountantGetType() {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        List<String> roles = authentication.getAuthorities().stream().map(r -> r.getAuthority()).collect(Collectors.toList());
+
+        String role = roles.get(0);
+
+        String type;
+
+        if(role.contains("INT4")) type = "INT";
+        else if(role.contains("R6")) type = "R";
+        else if(role.contains("P9")) type = "P";
+        else type = "NO TYPE";
+        return type;
 
     }
 

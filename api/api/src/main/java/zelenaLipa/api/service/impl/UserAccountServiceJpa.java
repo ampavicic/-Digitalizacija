@@ -24,4 +24,16 @@ public class UserAccountServiceJpa implements UserAccountService {
     public boolean hasAnAccountAlready(String genId) {
         return userAccountRepo.existsByGenId(genId);
     }
+
+    @Override
+    public int activateAccount(String username) {
+        int result = userAccountRepo.deactivatedFalse(username);
+        return result;
+    }
+
+    @Override
+    public int deactivateAccount(String username) {
+        int result = userAccountRepo.deactivatedTrue(username);
+        return result;
+    }
 }

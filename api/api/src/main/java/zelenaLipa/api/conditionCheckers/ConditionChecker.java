@@ -19,7 +19,10 @@ public class ConditionChecker {
                     mv.addObject("roleDirector", true);
                 } else if (authentication.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("ROLE_EMPLOYEE"))) {
                     mv.addObject("roleEmployee", true);
-                } else if (authentication.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("ROLE_ACCOUNTANT"))) {
+                } else if (authentication.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("ROLE_ACCOUNTANT")
+                                                                                || role.getAuthority().equals("ROLE_ACCOUNTANT_INT4")
+                                                                                || role.getAuthority().equals("ROLE_ACCOUNTANT_R6")
+                                                                                || role.getAuthority().equals("ROLE_ACCOUNTANT_P9"))) {
                     mv.addObject("roleAccountant", true);
                 } else if (authentication.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("ROLE_REVISER"))) {
                     mv.addObject("roleReviser", true);

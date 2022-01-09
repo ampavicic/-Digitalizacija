@@ -15,6 +15,7 @@ import zelenaLipa.api.service.DocumentService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Random;
@@ -163,17 +164,34 @@ public class EmployeeController {
     }
 
     public int startOCR(MultipartFile mpf, String path, String ext, int groupId) throws IOException, TesseractException {
-        File img = new File(path + "/images");
-        img.mkdir(); //Kreiraj direktorij
-        File file = new File(path + "/images/" + mpf.getOriginalFilename());
+
+        //OCR
+        File file = convertFileIntoBytes(mpf, path);
+
         mpf.transferTo(file);
         Tesseract tesseract = new Tesseract();
         tesseract.setDatapath("./tessdata");
+        //tesseract.setLanguage("eng");
         tesseract.setLanguage("hrv"); //Set Croatian
         String resultOCR = tesseract.doOCR(file);
+        //OCR
+
         int docuId = storeDocuInDB(resultOCR, groupId, mpf.getOriginalFilename());
         file.delete();
         return docuId;
+    }
+
+    public File convertFileIntoBytes(MultipartFile file, String path) throws IOException {
+
+        File img = new File(path + "/images");
+        img.mkdir(); //Kreiraj direktorij
+        File newFile = new File(path + "/images/" + file.getOriginalFilename());
+        newFile.createNewFile();
+        FileOutputStream fos = new FileOutputStream(newFile);
+        fos.write(file.getBytes());
+        fos.close();
+        return newFile;
+
     }
 
     public int storeDocuInDB(String resultOCR, int groupId, String title) {
@@ -182,7 +200,7 @@ public class EmployeeController {
         do {
             docuId = rand.nextInt(900000) + 100000;
         } while(documentService.existByDocuId(docuId));
-        String designation = "";
+        String designation = "NO TYPE";
         Pattern patternINT = Pattern.compile("INT[0-9][0-9][0-9][0-9]");
         Matcher matcher = patternINT.matcher(resultOCR);
         if(matcher.find()) { designation = matcher.group(); }

@@ -24,15 +24,15 @@ public class DocumentLinkServiceJpa implements DocumentLinkService {
     public List<DocumentLink> getLinksForReviser() { return documentRepo.findBySubmittedByEmployeeTrueOrderByDateOfSubmissionDesc(); }
 
     @Override
-    public List<DocumentLink> getLinksForAccountant() { return documentRepo.findByReadByReviserTrueOrderByDateOfSubmissionDesc(); }
+    public List<DocumentLink> getLinksForAccountant(String type) { return documentRepo.findByReadByReviserTrueAndTypeContainsOrderByDateOfSubmissionDesc(type); }
 
     @Override
     public List<DocumentLink> getLinksForDirector() { return documentRepo.findBySentToDirectorTrueOrderByDateOfSubmissionDesc(); }
 
     @Override
-    public List<DocumentLink> getLinksForAccountantToBeArchived() { return documentRepo.findBySignedByDirectorTrueOrderByDateOfSubmissionDesc(); }
+    public List<DocumentLink> getLinksForAccountantToBeArchived(String type) { return documentRepo.findBySignedByDirectorTrueAndArchivedByAccountantFalseAndTypeContainsOrderByDateOfSubmissionDesc(type); }
 
     @Override
-    public List<DocumentLink> getArchivedLinksForAccountant() { return documentRepo.findByArchivedByAccountantTrueOrderByDateOfSubmissionDesc(); }
+    public List<DocumentLink> getArchivedLinksForAccountant(String type) { return documentRepo.findByArchivedByAccountantTrueAndTypeContainsOrderByDateOfSubmissionDesc(type); }
 
 }

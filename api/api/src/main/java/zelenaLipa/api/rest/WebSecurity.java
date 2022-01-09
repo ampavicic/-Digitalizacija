@@ -18,7 +18,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     @Autowired
     DataSource dataSource;
 
-    //Konfigutiramo koje podatke vuci iz baze kad trebamo korisnika autentificirat
+    //Konfigutiramo koje podatke vučemo iz baze kad trebamo korisnika autentificirat
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
@@ -42,6 +42,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 //.antMatchers("/director").hasRole("DIRECTOR") /*Samo korisnik s ulogom director može pristupiti tom zahtjevu*/
                 .antMatchers("/director/**").hasRole("DIRECTOR")
                 .antMatchers("/employee/**").hasRole("EMPLOYEE")
+                .antMatchers("/reviser/**").hasRole("REVISER")
+                .antMatchers("/accountant/**").hasAnyRole("ACCOUNTANT", "ACCOUNTANT_INT4", "ACCOUNTANT_R6", "ACCOUNTANT_P9")
                 .antMatchers("/").permitAll()
                 .antMatchers("/register").permitAll()
                 .antMatchers("/login").permitAll().and()

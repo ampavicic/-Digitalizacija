@@ -18,15 +18,15 @@ public interface DocumentRepository extends JpaRepository<Document, Integer> {
 
     List<DocumentLink> findByUsernameOrderByDateOfSubmissionDesc(String username);
 
-    List<DocumentLink> findBySubmittedByEmployeeTrueOrderByDateOfSubmissionDesc();
+    List<DocumentLink> findBySubmittedByEmployeeTrueOrderByDateOfSubmissionDesc(); //REVISER
 
-    List<DocumentLink> findByReadByReviserTrueOrderByDateOfSubmissionDesc();
+    List<DocumentLink> findByReadByReviserTrueAndTypeContainsOrderByDateOfSubmissionDesc(String type); //ACCOUNTANT
 
-    List<DocumentLink> findBySentToDirectorTrueOrderByDateOfSubmissionDesc();
+    List<DocumentLink> findBySentToDirectorTrueOrderByDateOfSubmissionDesc(); //DIRECTOR
 
-    List<DocumentLink> findBySignedByDirectorTrueOrderByDateOfSubmissionDesc();
+    List<DocumentLink> findBySignedByDirectorTrueAndArchivedByAccountantFalseAndTypeContainsOrderByDateOfSubmissionDesc(String type); //ACCOUNTANT
 
-    List<DocumentLink> findByArchivedByAccountantTrueOrderByDateOfSubmissionDesc();
+    List<DocumentLink> findByArchivedByAccountantTrueAndTypeContainsOrderByDateOfSubmissionDesc(String type); //ACCOUNTANT
 
     Optional<Document> findByDocuIdAndUsername(Integer docuId, String username);
 

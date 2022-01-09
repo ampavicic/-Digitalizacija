@@ -1,6 +1,7 @@
 package zelenaLipa.api.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -31,7 +32,18 @@ public class UserController {
         ModelAndView mv = new ModelAndView("user/user.html");
         ConditionChecker.checkVariables(mv);
         String username = ConditionChecker.checkUsername();
+        int result = userAccountService.activateAccount(username);
         mv.addObject("username", username);
+        return mv;
+    }
+
+    @PostMapping("/deactivation")
+    public ModelAndView deactivation() {
+        String username = ConditionChecker.checkUsername();
+        int result = userAccountService.deactivateAccount(username);            //Disable account
+        SecurityContextHolder.getContext().setAuthentication(null);             //Logout
+        ModelAndView mv = new ModelAndView("user/deactivation");
+        ConditionChecker.checkVariables(mv);
         return mv;
     }
 
@@ -83,6 +95,8 @@ public class UserController {
         userAccount.setEmail(email);
         userAccount.setUsername(username);
         userAccount.setPassword(encodedPassword);
+        userAccount.setEnabled(true);
+        userAccount.setDeactivated(false);
 
         if(!employeeService.isWorkingInCompany(genId)) return new RedirectView("/register/0"); //Ako nije vrati pogresku (0 -> nije zaposlen u tvrtci)
         else {

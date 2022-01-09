@@ -12,12 +12,12 @@ public interface DocumentLinkService {
 
     List<DocumentLink> getLinksForReviser();
 
-    List<DocumentLink> getLinksForAccountant();
+    List<DocumentLink> getLinksForAccountant(String type);
 
-    List<DocumentLink> getLinksForAccountantToBeArchived();
+    List<DocumentLink> getLinksForAccountantToBeArchived(String type);
 
     List<DocumentLink> getLinksForDirector();
 
-    List<DocumentLink> getArchivedLinksForAccountant();
+    List<DocumentLink> getArchivedLinksForAccountant(String type);
 
 }

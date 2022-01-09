@@ -8,4 +8,8 @@ public interface UserAccountService {
 
     boolean hasAnAccountAlready(String genId);
 
+    int activateAccount(String username);
+
+    int deactivateAccount(String username);
+
 }
