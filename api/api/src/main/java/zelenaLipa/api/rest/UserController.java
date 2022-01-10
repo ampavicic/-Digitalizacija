@@ -1,15 +1,31 @@
 package zelenaLipa.api.rest;
 
+import net.sourceforge.tess4j.Tesseract;
+import net.sourceforge.tess4j.TesseractException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 import zelenaLipa.api.conditionCheckers.ConditionChecker;
+import zelenaLipa.api.domain.Document;
+import zelenaLipa.api.domain.DocumentLink;
 import zelenaLipa.api.domain.UserAccount;
+import zelenaLipa.api.service.DocumentLinkService;
+import zelenaLipa.api.service.DocumentService;
 import zelenaLipa.api.service.EmployeeService;
 import zelenaLipa.api.service.UserAccountService;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.List;
+import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @RestController
 public class UserController {

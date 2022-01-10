@@ -3,6 +3,8 @@ package zelenaLipa.api.rest;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -195,6 +197,7 @@ public class EmployeeController {
     }
 
     public int storeDocuInDB(String resultOCR, int groupId, String title) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Random rand = new Random(System.currentTimeMillis());
         int docuId;
         do {
@@ -222,6 +225,19 @@ public class EmployeeController {
         document.setGroupId(groupId);
         document.setTitle(title);
         document.setType(designation);
+        if (authentication.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("ROLE_DIRECTOR"))) {
+            document.setReadByReviser(true);
+            document.setSentToDirector(true);
+            document.setSignedByDirector(true);
+        } else if (authentication.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("ROLE_ACCOUNTANT")
+                || role.getAuthority().equals("ROLE_ACCOUNTANT_INT4")
+                || role.getAuthority().equals("ROLE_ACCOUNTANT_R6")
+                || role.getAuthority().equals("ROLE_ACCOUNTANT_P9"))) {
+            document.setReadByReviser(true);
+            document.setSentToDirector(true);
+        } else if (authentication.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("ROLE_REVISER"))) {
+            document.setReadByReviser(true);
+        }
         documentService.storeDocument(document);
         int result = 1;
         return result;

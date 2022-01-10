@@ -28,7 +28,7 @@
             <a th:if="${loggedIn == false}" href="/register"> Register </a>
             <a th:if="${loggedIn == true}" href="/user"> Userpage </a>
             <a th:if="${roleDirector == true}" href="/director"> Director </a>
-            <a th:if="${roleEmployee == true}" href="/employee"> Employee </a>
+            <a th:if="${loggedIn == true}" href="/employee"> Employee </a>
             <a th:if="${roleReviser == true}" href="/reviser"> Reviser </a>
             <a th:if="${roleAccountant == true}" href="/accountant"> Accountant </a>
             <a th:if="${loggedIn == true}" href="/logout"> Logout </a>
