@@ -3,7 +3,6 @@ package zelenaLipa.api.rest;
 import net.sourceforge.tess4j.TesseractException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @RestController
 public class UserController {
@@ -41,6 +41,9 @@ public class UserController {
     @Autowired
     private ModelAndViewBuilderService modelAndViewBuilderService;
 
+    @Autowired
+    private UserInfoService userInfoService;
+
     @GetMapping("/")
     public ModelAndView welcomePage() {
         ModelAndView mv = new ModelAndView("user/home.html");
@@ -52,7 +55,7 @@ public class UserController {
     public ModelAndView userPage() {
         ModelAndView mv = new ModelAndView("user/user.html");
         modelAndViewBuilderService.fillNavigation(mv);
-        String username = checkUsername();
+        String username = userInfoService.getUsername();
         int result = userAccountService.activateAccount(username);
         mv.addObject("username", username);
         return mv;
@@ -60,7 +63,7 @@ public class UserController {
 
     @PostMapping("/user/deactivation")
     public ModelAndView deactivation() {
-        String username = checkUsername();
+        String username = userInfoService.getUsername();
         int result = userAccountService.deactivateAccount(username);            //Disable account
         SecurityContextHolder.getContext().setAuthentication(null);             //Logout
         ModelAndView mv = new ModelAndView("user/deactivation");
@@ -79,7 +82,7 @@ public class UserController {
     public ModelAndView employeeShowDocu(@PathVariable(value="groupId") int groupId, @PathVariable(value = "page") int page, @PathVariable(value = "docuId") int docuId) {
         ModelAndView mv = new ModelAndView("user/resultDocument.html");
         modelAndViewBuilderService.fillNavigation(mv);
-        String username = checkUsername();
+        String username = userInfoService.getUsername();
         Document document = documentService.getDocumentByIdAndUsername(docuId, username);
         modelAndViewBuilderService.addDocumentToPage(mv, document, docuId);
         mv.addObject("groupId", groupId);
@@ -90,7 +93,19 @@ public class UserController {
 
     @PostMapping("/user/upload/submit/result/{groupId}/{page}/{docuId}")
     public RedirectView employeeSendDocuToReviser(@PathVariable(value="groupId") int groupId, @PathVariable(value = "page") int page, @PathVariable(value = "docuId") int docuId) {
-        int result = documentService.updateSubmittedByEmployee(docuId);
+        String role = userInfoService.getUserRole();
+        int result;
+        if(role.contains("EMPLOYEE")) result = documentService.updateSubmittedByEmployee(docuId);
+        else if(role.contains("DIRECTOR")) {
+            result = documentService.updateSubmittedByEmployee(docuId);
+            result = documentService.updateReadByReviser(docuId);
+            result = documentService.updateSentToDirector(docuId);
+            result = documentService.updateSignedByDirector(docuId);
+        }
+        else if(role.contains("REVISER") || role.contains("ACCOUNTANT")) {
+            result = documentService.updateSubmittedByEmployee(docuId);
+            result = documentService.updateReadByReviser(docuId);
+        }
         return new RedirectView("/user/upload/submit/result/" + groupId + "/" + page + "?message=true");
     }
 
@@ -98,11 +113,11 @@ public class UserController {
     public ModelAndView employeeShowResult(@PathVariable(value="groupId") int groupId, @PathVariable(value = "page") int page, @RequestParam(value="message") boolean messageBoolean) {
         ModelAndView mv = new ModelAndView("user/uploadResult.html");
         modelAndViewBuilderService.fillNavigation(mv);
-        String username = checkUsername();
+        String username = userInfoService.getUsername();
         List<DocumentLink> documentLinks = documentLinkService.getLinksForEmployeeSubmit(groupId, username);
         modelAndViewBuilderService.addLinksToPage(mv, documentLinks, groupId, page);
         if(messageBoolean) {
-            mv.addObject("message", "Submitted to reviser");
+            mv.addObject("message", "Document submitted");
             mv.addObject("color", "color: green");
         }
         return mv;
@@ -117,7 +132,7 @@ public class UserController {
     public ModelAndView getDocumentHistory (@PathVariable(value = "page") int page) {
         ModelAndView mv = new ModelAndView("user/historyResult.html");
         modelAndViewBuilderService.fillNavigation(mv);
-        String username = checkUsername();
+        String username = userInfoService.getUsername();
         List<DocumentLink> documentLinks = documentLinkService.getLinksForEmployeeHistory(username);
         modelAndViewBuilderService.addLinksToPage(mv, documentLinks, -1, page);
         return mv;
@@ -127,13 +142,11 @@ public class UserController {
     public ModelAndView employeeShowHistoryDocu(@PathVariable(value = "page") int page, @PathVariable(value = "docuId") int docuId) {
         ModelAndView mv = new ModelAndView("user/resultDocument.html");
         modelAndViewBuilderService.fillNavigation(mv);
-        String username = checkUsername();
+        String username = userInfoService.getUsername();
         Document document = documentService.getDocumentByIdAndUsername(docuId, username);
         modelAndViewBuilderService.addDocumentToPage(mv, document, docuId);
         return mv;
     }
-
-
 
     @PostMapping("/user/upload/submit")
     public RedirectView employeeUploadSubmit(HttpServletRequest request, @RequestParam("files") MultipartFile[] files) {
@@ -218,17 +231,6 @@ public class UserController {
             }
         }
 
-    }
-
-    private String checkUsername() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username;
-        if(principal instanceof UserDetails) {
-            username = ((UserDetails)principal).getUsername();
-        } else {
-            username = "anonymous";
-        }
-        return username;
     }
 
 }

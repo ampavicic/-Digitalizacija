@@ -43,7 +43,7 @@
     </div>
     <div th:if="${#strings.contains(#httpServletRequest.requestURI, '/user/upload/submit/result/')}">
         <form method="post" th:action="@{/user/upload/submit/result/{groupId}/{page}/{docuId}(page=${page}, docuId=${docuId}, groupId=${groupId})}">
-            <button class="btn" type="submit"> Send to reviser </button>
+            <button class="btn" type="submit"> Submit document </button>
         </form>
     </div>
 </main>
