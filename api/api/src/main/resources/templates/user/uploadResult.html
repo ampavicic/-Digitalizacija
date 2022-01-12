@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Employee History Result</title>
+    <title>Upload result</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link rel="stylesheet" th:href="@{/css/employee/employeeHistoryResult.css}">
+    <link rel="stylesheet" th:href="@{/css/user/uploadResult.css}">
 </head>
 <body>
 <header>
@@ -20,7 +20,6 @@
             <a th:if="${loggedIn == false}" href="/register"> Register </a>
             <a th:if="${loggedIn == true}" href="/user"> Userpage </a>
             <a th:if="${roleDirector == true}" href="/director"> Director </a>
-            <a th:if="${roleEmployee == true}" href="/employee"> Employee </a>
             <a th:if="${roleReviser == true}" href="/reviser"> Reviser </a>
             <a th:if="${roleAccountant == true}" href="/accountant"> Accountant </a>
             <a th:if="${loggedIn == true}" href="/logout"> Logout </a>
@@ -32,16 +31,19 @@
     <div class="docs-container">
         <th:block th:each="documentLink, iter : ${documentLinks}">
             <div th:if="${iter.index >= startIndex && iter.index < startIndex + 10}" class="document-link">
-                <a th:href="@{/employee/documentHistory/{page}/{docuid}(page=${page}, docuid=${documentLink.docuId})}" style="color: darkslategrey"><span th:text="${documentLink.title}"></span></a>
+                <a th:href="@{/user/upload/submit/result/{groupid}/{page}/{docuid}(groupid=${groupId}, page=${page}, docuid=${documentLink.docuId})}" style="color: darkslategrey"><span th:text="${documentLink.title}" th:style="${!documentLink.submittedByEmployee ? 'font-weight: bold; color: black;' : ''}"></span></a>
             </div>
         </th:block>
     </div>
     <div class="button-container">
-        <form method="get">
-            <button class="btn" th:disabled="${prevDisabled}" th:formaction="@{/employee/documentHistory/{page}(page=${page} - 1)}" type="submit">Previous</button>
+        <form method="post">
+            <button class="btn" th:disabled="${prevDisabled}" th:formaction="@{/user/upload/submit/result/{groupid}/{page}(groupid=${groupId}, page=${page} - 1)}" type="submit">Previous</button>
             <span class="pgnum" th:if="${page != 0}" th:text="${page}"></span>
-            <button class="btn" th:disabled="${nextDisabled}" th:formaction="@{/employee/documentHistory/{page}(page=${page} + 1)}" type="submit">Next</button>
+            <button class="btn" th:disabled="${nextDisabled}" th:formaction="@{/user/upload/submit/result/{groupid}/{page}(groupid=${groupId}, page=${page} + 1)}" type="submit">Next</button>
         </form>
+    </div>
+    <div class="message-container">
+        <span th:text="${message}" th:style="${color}"></span>
     </div>
 </main>
 <footer class="lowered-footer">

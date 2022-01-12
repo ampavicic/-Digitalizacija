@@ -4,7 +4,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.sql.Timestamp;
-import java.util.Date;
 
 @Entity
 public class Document {
@@ -39,7 +38,6 @@ public class Document {
     private Boolean submittedByEmployee = false;
 
     @Column(name = "dateofsubmission")
-    //@Temporal(TemporalType.TIMESTAMP)
     private Timestamp dateOfSubmission;
 
     @NotNull

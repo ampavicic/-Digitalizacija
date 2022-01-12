@@ -40,6 +40,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
                 //.antMatchers("/director").hasRole("DIRECTOR") /*Samo korisnik s ulogom director može pristupiti tom zahtjevu*/
+                .antMatchers("/user/**").hasAnyRole("EMPLOYEE", "DIRECTOR", "REVISER", "ACCOUNTANT", "ACCOUNTANT_INT4", "ACCOUNTANT_R6", "ACCOUNTANT_P9")
                 .antMatchers("/director/**").hasRole("DIRECTOR")
                 .antMatchers("/employee/**").hasRole("EMPLOYEE")
                 .antMatchers("/reviser/**").hasRole("REVISER")

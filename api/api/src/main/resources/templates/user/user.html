@@ -33,9 +33,13 @@
     <div class="userpage-container">
         <h2> Welcome user <span th:text="${username}"></span>!</h2>
     </div>
-    <form class="form-basic" method="post" action="/deactivation">
-        <button type="submit" class="deactivate-button">Deactivate account</button>
+    <div class="user-button-container">
+    <a href="/user/upload" class="user-button-element"><button class="centered-button" type="submit">Upload Documents</button></a>
+    <a href="/user/documentHistory/1" class="user-button-element"><button class="centered-button" type="submit">View Document History</button></a>
+    <form class="form-basic user-button-element" method="post" action="/user/deactivation">
+        <button type="submit" class="centered-button">Deactivate account</button>
     </form>
+    </div>
 </main>
 <footer>
     <div class="creator-name"> <h2> @zelenaLipa </h2> </div>

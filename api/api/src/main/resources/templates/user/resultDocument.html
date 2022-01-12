@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Employee Result Document</title>
+    <title>Result document</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link rel="stylesheet" th:href="@{/css/employee/employeeResultDocument.css}">
+    <link rel="stylesheet" th:href="@{/css/user/resultDocument.css}">
 </head>
 <body>
 <header>
@@ -20,7 +20,6 @@
             <a th:if="${loggedIn == false}" href="/register"> Register </a>
             <a th:if="${loggedIn == true}" href="/user"> Userpage </a>
             <a th:if="${roleDirector == true}" href="/director"> Director </a>
-            <a th:if="${roleEmployee == true}" href="/employee"> Employee </a>
             <a th:if="${roleReviser == true}" href="/reviser"> Reviser </a>
             <a th:if="${roleAccountant == true}" href="/accountant"> Accountant </a>
             <a th:if="${loggedIn == true}" href="/logout"> Logout </a>
@@ -42,8 +41,8 @@
         <div class="label">ID: <span th:text="${docuId}"></span></div>
         <div class="label">Type: <span th:text="${type}"></span></div>
     </div>
-    <div th:if="${#strings.contains(#httpServletRequest.requestURI, '/employee/upload/submit/result/')}">
-        <form method="post" th:action="@{/employee/upload/submit/result/{groupId}/{page}/{docuId}(page=${page}, docuId=${docuId}, groupId=${groupId})}">
+    <div th:if="${#strings.contains(#httpServletRequest.requestURI, '/user/upload/submit/result/')}">
+        <form method="post" th:action="@{/user/upload/submit/result/{groupId}/{page}/{docuId}(page=${page}, docuId=${docuId}, groupId=${groupId})}">
             <button class="btn" type="submit"> Send to reviser </button>
         </form>
     </div>

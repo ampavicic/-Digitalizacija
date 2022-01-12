@@ -3,15 +3,23 @@
     text-align: center;
 }
 
-.deactivate-button{
-    position: absolute;
-    bottom: -30vh;
+.user-button-container{
+    display: grid;
+    grid-template-columns: 100%;
+    justify-items: center;
+}
+
+.user-button-element{
+    width: 12vw;
+}
+
+.centered-button{
     font-size: 18px;
     font-weight: bold;
-    margin: 0px 5.5vw;
-    padding: 10px;
-    width: 50%;
+    margin: 20px 0;
+    padding: 10px 15px;
     border-radius: 5px;
     border: 1px solid darkslategray;
     outline: darkslategray;
+    width: 100%;
 }

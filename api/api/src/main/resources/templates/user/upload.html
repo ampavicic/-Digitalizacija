@@ -7,9 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Employee Upload</title>
+    <title>Upload files</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link rel="stylesheet" th:href="@{/css/employee/employeeUpload.css}">
+    <link rel="stylesheet" th:href="@{/css/user/upload.css}">
 </head>
 
 <body>
@@ -22,7 +22,6 @@
             <a th:if="${loggedIn == false}" href="/register"> Register </a>
             <a th:if="${loggedIn == true}" href="/user"> Userpage </a>
             <a th:if="${roleDirector == true}" href="/director"> Director </a>
-            <a th:if="${roleEmployee == true}" href="/employee"> Employee </a>
             <a th:if="${roleReviser == true}" href="/reviser"> Reviser </a>
             <a th:if="${roleAccountant == true}" href="/accountant"> Accountant </a>
             <a th:if="${loggedIn == true}" href="/logout"> Logout </a>
@@ -37,7 +36,7 @@
     <div id="employee-buttons">
 
         <div class="container">
-            <form class="form-basic" method="post" action="/employee/upload/submit" enctype="multipart/form-data">
+            <form class="form-basic" method="post" action="/user/upload/submit" enctype="multipart/form-data">
                 <h2 class="form-basic-heading">Upload photos</h2>
                 <label for="files" class="sr-only">Select files:</label>
                 <input type="file" id="files" name="files" multiple required><br><br>
