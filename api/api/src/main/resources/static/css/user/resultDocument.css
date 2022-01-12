@@ -28,7 +28,11 @@
     border-radius : 10px;
     width: 70vw;
     height: 58vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    text-align:justify;
 }
+
 
 .content-inner-container {
     width: 98%;

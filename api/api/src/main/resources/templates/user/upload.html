@@ -30,14 +30,13 @@
 </header>
 <main>
     <div class="employeepage-container container">
-        <h2> Welcome employee! </h2>
+        <h2 class="form-basic-heading">Upload photos</h2>
     </div>
     <br>
     <div id="employee-buttons">
 
         <div class="container">
             <form class="form-basic" method="post" action="/user/upload/submit" enctype="multipart/form-data">
-                <h2 class="form-basic-heading">Upload photos</h2>
                 <label for="files" class="sr-only">Select files:</label>
                 <input type="file" id="files" name="files" multiple required><br><br>
                 <input name="_csrf" type="hidden" value="c8c67b2c-e4fc-4c74-b145-f223782c8a17">
