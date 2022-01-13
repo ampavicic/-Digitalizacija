@@ -51,12 +51,134 @@
 		
 		\section{Upute za puštanje u pogon}
 		
-			\textbf{\textit{dio 2. revizije}}\\
-		
-			 \textit{U ovom poglavlju potrebno je dati upute za puštanje u pogon (engl. deployment) ostvarene aplikacije. Na primjer, za web aplikacije, opisati postupak kojim se od izvornog kôda dolazi do potpuno postavljene baze podataka i poslužitelja koji odgovara na upite korisnika. Za mobilnu aplikaciju, postupak kojim se aplikacija izgradi, te postavi na neku od trgovina. Za stolnu (engl. desktop) aplikaciju, postupak kojim se aplikacija instalira na računalo. Ukoliko mobilne i stolne aplikacije komuniciraju s poslužiteljem i/ili bazom podataka, opisati i postupak njihovog postavljanja. Pri izradi uputa preporučuje se \textbf{naglasiti korake instalacije uporabom natuknica} te koristiti što je više moguće \textbf{slike ekrana} (engl. screenshots) kako bi upute bile jasne i jednostavne za slijediti.}
+				
+			 \text Kada je gotov izvorni kod, može se prijeći na puštanje aplikacije u pogon. Aplikaciju smo pustili u pogon preko besplatne platforme za implementaciju aplikacije \textbf{Heroku}. Prvo je potrebno napraviti korisnički račun na web stranici : https://www.heroku.com/. Nakon uspješnog kreiranja računa ulazi se u svoj račun, klikom odaberemo u gornjem desnom kutu tipku "New" iz koje će nam se ponuditi u izborniku "New app" i "New pipeline", mi odabiremo "New app".
+			 
+			 \begin{figure}[H]
+			 	\includegraphics[scale=0.5]{slike/odabir aplikacije.png} 
+			 	\centering
+			 	\caption{Početna stranica/ Odabir aplikacije}
+			 	\label{DS}
+			 \end{figure}
+			 
+			 Nakon toga se na novom prozoru upisuje ime aplikacije i odabire se regija (preporučujemo Europa.)
+			 
+			 \begin{figure}[H]
+			 	\includegraphics[scale=0.4]{slike/opis aplikacije.png} 
+			 	\centering
+			 	\caption{Opis aplikacije}
+			 	\label{DS}
+			 \end{figure} 
+			 
+			 Nakon upisivanja potrebnih informacija, dolazi se na početni prozor.
+			 \begin{figure}[H]
+			 	\includegraphics[scale=0.3]{slike/Overview.png} 
+			 	\centering
+			 	\caption{ Overview.}
+			 	\label{DS}
+			 \end{figure}
+			 
+			 Ovdje se pruža puno mogućnosti, a trenutno ćemo se fokusirati na Add-ons i dodat ćemo novi (besplatni) add-on Heroku Postgre. Sada imamo bazu podataka za našu aplikaciju.
+			 
+			 Sljedeće, na izborniku odabiremo Resources te pristupamo pojedinostima naše baze podataka klikom na Heroku Postgres.
+			 
+			 \begin{figure}[H]
+			 	\includegraphics[scale=0.4]{slike/Resources.png} 
+			 	\centering
+			 	\caption{ Resources.}
+			 	\label{DS}
+			 \end{figure}
+		 
+		 Zatim dolazimo do sljedećeg prozora:
+			 
+			 \begin{figure}[H]
+			 	\includegraphics[scale=0.4]{slike/Datastores.png} 
+			 	\centering
+			 	\caption{ Database overview.}
+			 	\label{DS}
+			 \end{figure}
+		 
+		 	Odavde idemo na Settings.
+		 	
+		 	
+		 	\begin{figure}[H]
+		 		\includegraphics[scale=0.3]{slike/Datacredentials.png} 
+		 		\centering
+		 		\caption{ Database credentials.}
+		 		\label{DS}
+		 	\end{figure}
+			 
+			 U Database Creentials nam je prikazan user, pass, port, itd. Sve to će nam biti potrebno da bismo tu bazu mogli urediti i pripremiti za našu aplikaciju.
+			 
+			 Sada nam je potreban \textbf{PGadmin}, koji ćemo koristiti za pristupanje bazi podataka te unošenje. Instalacijski program se može preuzeti na ovom linku: \textit{https://www.postgresql.org/download/} Potrebno je odabrati odgovarajuću verziju za OS vlastitog računala. Nakon što se preuzme instalacijski program, potrebno ga je pokrenuti. Sada treba slijediti korake instalacije, odabir instalacijskog direktorija, odabrati komponente (preporučujemo da se označe sve 4), direktorij za podatke, lozinku (po želji), port (ostavite predložena 5432) i jezik. Možete pokrenuti instalaciju. Pri prvom pokretanju će se tražiti lozinka, koju je korisnik upisao pri instalaciji. Nakon verifikacije i ulaska u aplikaciju se već nalazi jedan napravljen server koji je lokalan te korisnik može graditi svoje baze podataka na njemu. Sada ćemo pažnju posvetiti tome kako se pristupa serveru koji drži našu bazu podataka za aplikaciju.
+			 
+			 Desnim klikom na padajući izbornik "Servers" se prikaže:
+			 
+			 \begin{figure}[H]
+			 	\includegraphics[scale=1]{slike/novi server.png} 
+			 	\centering
+			 	\caption{ Kreiranje novog servera.}
+			 	\label{DS}
+			 \end{figure}
+		 	
+		 	 Odabiremo Server i prelazimo na sljedeći prozor.
+			 
+			 Dolazimo do novog prozora "General" u kojem je potrebno proizvoljno nazvati server (u našem primjeru Server-alfa)
+			 \begin{figure}[H]
+			 	\includegraphics[scale=1]{slike/server general.png} 
+			 	\centering
+			 	\caption{ Server-General.}
+			 	\label{DS}
+			 \end{figure}
+			 
+			 Nakon toga prelazimo na "Connection". 
+			 
+			 \begin{figure}[H]
+			 	\includegraphics[scale=1]{slike/server connection.png} 
+			 	\centering
+			 	\caption{ Server-Connection.}
+			 	\label{DS}
+			 \end{figure}
+			 
+			 U novom prozoru je potrebno upisati sve što nam je ponuđeno na slici  "Database credentials". Pritiskom na gumb "Save" stvorili smo server na našem PGadminu te sada imamo pristup bazi podataka za našu heroku aplikaciju.
+			 \begin{figure}[H]
+			 	\includegraphics[scale=0.5]{slike/Server-alfa.png} 
+			 	\centering
+			 	\caption{ Izbornik bazi podataka.}
+			 	\label{DS}
+			 \end{figure}
+			 
+			 Ponuđeno je puno bazi podataka, ali pristup je dozvoljen samo bazi za našu aplikaciju.
+			  \begin{figure}[H]
+			 	\includegraphics[scale=0.7]{slike/baza.png} 
+			 	\centering
+			 	\caption{ Izbornik naše baze podataka.}
+			 	\label{DS}
+			 \end{figure}
+			 
+			 Odaberemo sad Query tool kao što je prikazano na Slici. Otvorit će se prostor za uređivanje teksta u kojem se upisuje kod za stvaranje tablica, umetanje podataka u te tablice i sve drugo što je potrebno za uređivanje baze. Pokretanjem koda se gradi baza i spremna je za korištenje. 
+			 
+			 Sada kada smo pripremili bazu potrebno je završni kod staviti na git od naše heroku aplikacije, vraćamo se ponovno na naš račun.
+			 
+			 Odabiremo Deploy.
+			 \begin{figure}[H]
+			 	\includegraphics[scale=0.7]{slike/Deploy.png} 
+			 	\centering
+			 	\caption{ Deploy.}
+			 	\label{DS}
+			 \end{figure}
+			 
+			 Ovdje se nalazi uputa od preuzimanju Heroku CLI i opis kako klonirati git repozitorij te kako staviti završni kod na repozitorij. Naredbom git push heroku master vaš kod se stavlja na repozitorij i automatski pokreće te će vam u terminalu pisati link na kojem je vaša web aplikacija, kojoj možete pristupiti sa svog browsera i početi koristiti.
+			 \eject
+			 
+			 \textbf{Dodatak:}
+			 
+			 U našoj aplikaciji, heroku nije mogao podržati funkcionalnost OCR (Tesseract) dokumenata. Pokušali smo s build-packageom za Tesseract koji je ponuđen u Heroku, što nije pomoglo. Iako bi sve funkcioniralo lokalno, nikako nismo mogli namjestiti da heroku pronađe knjižnice (engl. library) za Tesseract OCR. Da bi ipak omogućili našoj aplikaciji da izvodi OCR morali smo dodati docker container (https://devcenter.heroku.com/articles/build-docker-images-heroku-yml) koji je osigurao da su potrebne knjižnice za OCR instalirane te da im naša aplikacija može pristupiti.
+			 
+			 
 			
 			
-			 \textit{Dovršenu aplikaciju potrebno je pokrenuti na javno dostupnom poslužitelju. Studentima se preporuča korištenje neke od sljedećih besplatnih usluga: \href{https://aws.amazon.com/}{Amazon AWS}, \href{https://azure.microsoft.com/en-us/}{Microsoft Azure} ili \href{https://www.heroku.com/}{Heroku}. Mobilne aplikacije trebaju biti objavljene na F-Droid, Google Play ili Amazon App trgovini.}
+			 
 			
 			
 			\eject 
