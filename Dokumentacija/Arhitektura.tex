@@ -12,7 +12,8 @@
 	 
 	 
 	 \textit{Web poslužitelj} ima zadaću omogućiti komunikaciju klijenta s aplikacijom. Komunikacija se odvija preko HTTP (engl. Hyper Text Transfer Protocol) protokola. 
-	 Poslužitelj je onaj koji pokreće web aplikaciju te joj prosljeđuje zahtjeve.
+	 Poslužitelj je onaj koji pokreće web aplikaciju te joj prosljeđuje zahtjeve.
+
 	 
 	 \textit{Web aplikacija} obrađuje zahtjeve koje korisnik pošalje te je u komunikaciji s bazom podataka s kojom preko poslužitelja vraća korisniku odgvor u obliku HTML dokumenta vidljibog web pregledniku.
 	 
@@ -20,9 +21,12 @@
 	 Arhitektura sustava temeljit će se na MVC (Model-View-Controller) konceptu. MVC koncept smo koristili jer je podržan u JavaSpringBoot-u kojeg koristimo te je pogodan za moguće kohezije.
 	 MVC model odvaja korisničko sučelje od ostatka sustava.
 	\begin{packed_item}
-		\item Model sadrži razrede čiji objekti se obrađuju
-		\item Pogled sadrži razrede čiji objekti služe za prikaz podataka
-		\item Nadglednik (Controller) sadrži razrede koji upravljaju i rukuju korisničkom interakcijom s pogledom i modelom
+		\item Model sadrži razrede čiji objekti se obrađuju
+
+		\item Pogled sadrži razrede čiji objekti služe za prikaz podataka
+
+		\item Nadglednik (Controller) sadrži razrede koji upravljaju i rukuju korisničkom interakcijom s pogledom i modelom
+
 	\end{packed_item}
 	
 		\newpage		
@@ -208,23 +212,39 @@
 		
 		\section{Dijagram stanja}
 			
+			Dijagram stanja prikazuje prijelaze iz jednog stanja u drugo na temelju različitih događaja. U prvom planu je zaposlenik koji ima mogućnost odjaviti se sa profila, deaktivirati profil, vidjeti popis svih dokumenata koje je skenirao te upload dokumenata. Ukoliko uploada dokumente, mora ih skenirati pomoću OCR-a. Nakon toga dobiva listu skenova te gleda kako su skenovi ispali. Dokumenti kod kojih je OCR uspješno izveden šalju se revizoru na daljnju obradu, a ukoliko OCR nije uspješan dokument se ne šalje nego se preskoči.
 			
-			\textbf{\textit{dio 2. revizije}}\\
-			
-			\textit{Potrebno je priložiti dijagram stanja i opisati ga. Dovoljan je jedan dijagram stanja koji prikazuje \textbf{značajan dio funkcionalnosti} sustava. Na primjer, stanja korisničkog sučelja i tijek korištenja neke ključne funkcionalnosti jesu značajan dio sustava, a registracija i prijava nisu. }
-			
+			\begin{figure}[H]
+				\includegraphics[scale=0.5]{slike/Dijagram stanja.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+				\centering
+				\caption{Dijagram stanja}
+				\label{DS}
+			\end{figure}
 			
 			\eject 
 		
 		\section{Dijagram aktivnosti}
 			
-			\textbf{\textit{dio 2. revizije}}\\
-			
-			 \textit{Potrebno je priložiti dijagram aktivnosti s pripadajućim opisom. Dijagram aktivnosti treba prikazivati značajan dio sustava.}
+			 Dijagram aktivnosti odnosi se na korisnika, njegovo uploadanje dokumenata, skeniranje dokumenata i slanje dalje drugim zaposlenicima. Dakle, korisnik se prvo mora prijaviti u sustav. U bazi se provjeravaju podaci i ako je sve točno, prijava je uspješna. Ukoliko korisnik nije u bazi podataka, ima priliku opet se prijaviti. Nakon što se korisnik prijavio ima mogućnost da skenira dokument. Web aplikacija provede OCR, skenirani dokument se spremi u bazu podataka. Korisnik vidi kako izgledaju skenirani dokumenti te bira one koji su dobri. Ukoliko se radi o zaposleniku, on šalje skenirane dokumente revizoru. Revizor dokument prosljeđuje računovođi koji prosljeđuje direktoru na potpis. Korisnik ima obavijest kada mu netko pošalje dokument. Na kraju se dokument arhivira čime je proces završen.
+			 
+			 \begin{figure}[H]
+			 	\includegraphics[scale=0.5]{slike/Dijagram aktivnosti.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+			 	\centering
+			 	\caption{Dijagram aktivnosti}
+			 	\label{DA}
+			 \end{figure}
+			 
 			
 			\eject
 		\section{Dijagram komponenti}
 		
-			\textbf{\textit{dio 2. revizije}}\\
-		
-			 \textit{Potrebno je priložiti dijagram komponenti s pripadajućim opisom. Dijagram komponenti treba prikazivati strukturu cijele aplikacije.}
+			 Dijagram komponenti prikazuje organizaciju i međuovisnost komponenti te internu strukturu aplikacije. Frontend je pisan u HTML-u i CSS-u te je on povezan s aplikacijom. Baza podataka također komunicira sa aplikacijom te se iz nje uzimaju potrebni podaci pomoću SQL upita. ConditionChecker za svaku ulogu provjerava o kome se radi. Rest poslužuje aplikaciju te povezuje frontend s backendom. Uz to, komunicira s Controllers koji je dio MVC strukture. Potrebni podaci se šalju u bazu podataka, a za to je zaslužan "dao". Baza podataka se tako cijelo vrijeme ažurira prilikom ukoliko se nešto mijenja za vrijeme rada aplikacije.
+			 
+			 
+			  \begin{figure}[H]
+			 	\includegraphics[scale=0.5]{slike/Dijagram komponenti.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+			 	\centering
+			 	\caption{Dijagram komponenti}
+			 	\label{DK}
+			 \end{figure}
+			 
