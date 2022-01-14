@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Inbox</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/reviser/reviserInbox.css}">
+</head>
+<body>
+<header>
+    <div class="company-name"> <h2> COMPANY.co </h2> </div>
+    <div class="navigation">
+        <a href="/"> Homepage </a>
+        <td>
+            <a th:if="${loggedIn == false}" href="/login"> Login </a>
+            <a th:if="${loggedIn == false}" href="/register"> Register </a>
+            <a th:if="${loggedIn == true}" href="/user"> Userpage </a>
+            <a th:if="${roleDirector == true}" href="/director"> Director </a>
+            <a th:if="${roleReviser == true}" href="/reviser"> Reviser </a>
+            <a th:if="${roleAccountant == true}" href="/accountant"> Accountant </a>
+            <a th:if="${loggedIn == true}" href="/logout"> Logout </a>
+        </td>
+    </div>
+</header>
+<main class="docs-container-container">
+    <h2> Inbox </h2>
+    <div class="docs-container">
+        <th:block th:each="documentLink, iter : ${documentLinks}">
+            <div th:if="${iter.index >= startIndex && iter.index < startIndex + 10}" class="document-link">
+                <a th:href="@{/reviser/inbox/{page}/{docuid}(page=${page}, docuid=${documentLink.docuId})}" style="color: darkslategrey"><span th:text="${documentLink.title}" th:style="${!documentLink.readByReviser ? 'font-weight: bold; color: black;' : ''}"></span></a>
+            </div>
+        </th:block>
+    </div>
+    <div class="button-container">
+        <form method="post">
+            <button class="btn" th:disabled="${prevDisabled}" th:formaction="@{/reviser/inbox/{page}(page=${page} - 1)}" type="submit">Previous</button>
+            <span class="pgnum" th:if="${page != 0}" th:text="${page}"></span>
+            <button class="btn" th:disabled="${nextDisabled}" th:formaction="@{/reviser/inbox/{page}(page=${page} + 1)}" type="submit">Next</button>
+        </form>
+    </div>
+    <div class="message-container">
+        <span th:text="${message}" th:style="${color}"></span>
+    </div>
+</main>
+<footer class="lowered-footer">
+    <div class="creator-name"> <h2> @zelenaLipa </h2> </div>
+</footer>
+</body>
+</html>

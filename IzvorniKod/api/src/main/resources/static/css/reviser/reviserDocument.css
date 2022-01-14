@@ -1,0 +1,50 @@
+.docs-container-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.label-container {
+    margin: 10px 0;
+    display: flex;
+    justify-content: center;
+}
+
+.label {
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 5px;
+    border: 1px solid;
+    margin: 0 5px;
+    padding: 0 10px;
+}
+
+.content-outer-container {
+    display: grid;
+    grid-template-rows: 10% 10% 10% 10% 10% 10% 10% 10% 10% 10%;
+    justify-items: center;
+    align-items: center;
+    border: 5px solid darkslategray;
+    border-radius : 10px;
+    width: 70vw;
+    height: 58vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    text-align:justify;
+}
+
+.content-inner-container {
+    width: 98%;
+    height: 90%;
+    margin: auto;
+    white-space: pre-wrap;
+}
+
+.btn {
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 5px;
+    border: 1px solid;
+    margin: 10px 5px;
+    padding: 0px 10px;
+}

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Director Employees</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/director/directorEmployees.css}">
+</head>
+
+<body>
+<header>
+    <div class="company-name"> <h2> COMPANY.co </h2> </div>
+    <div class="navigation">
+        <a href="/"> Homepage </a>
+        <td>
+            <a th:if="${loggedIn == false}" href="/login"> Login </a>
+            <a th:if="${loggedIn == false}" href="/register"> Register </a>
+            <a th:if="${loggedIn == true}" href="/user"> Userpage </a>
+            <a th:if="${roleDirector == true}" href="/director"> Director </a>
+            <a th:if="${roleReviser == true}" href="/reviser"> Reviser </a>
+            <a th:if="${roleAccountant == true}" href="/accountant"> Accountant </a>
+            <a th:if="${loggedIn == true}" href="/logout"> Logout </a>
+        </td>
+    </div>
+</header>
+<main>
+    <form class="form-container" method="post">
+        <div class="list-employee-container">
+            <h2>Employees</h2>
+            <div class="employee-grid">
+                <th:block th:each="employee, iter : ${employees}">
+                    <div th:if="${iter.index >= startIndex && iter.index < startIndex + 10}" class="employee">
+                        <span style="color: darkslategrey" th:text="${employee.pid + ' ' + employee.genId + ' ' + employee.name + ' ' + employee.surname}"></span><input type="checkbox" id="pids[]" name="pids[]" class="employee-checkbox" th:value="${employee.pid}"></a>
+                    </div>
+                </th:block>
+            </div>
+            <div class="button-container">
+                <button type="submit" class="btn" th:formaction="@{/director/employees/filter/{page}(page=${page} - 1)}" th:disabled="${prevDisabled}">Previous</button>
+                <span class="pgnum" th:if="${page != 0}" th:text="${page}"></span>
+                <button type="submit" class="btn" th:formaction="@{/director/employees/filter/{page}(page=${page} + 1)}" th:disabled="${nextDisabled}">Next</button>
+            </div>
+        </div>
+        <div class="add-employee-container">
+            <p>
+                <input type="text" id="pid" name="pid" class="input" placeholder="Personal ID" autofocus="">
+            </p>
+            <p>
+                <input type="text" id="name" name="name" class="input" placeholder="Name" autofocus="">
+            </p>
+            <p>
+                <input type="text" id="surname" name="surname" class="input" placeholder="Surname" autofocus="">
+            </p>
+            <p>
+                <input type="text" id="residence" name="residence" class="input" placeholder="Residence" autofocus="">
+            </p>
+            <p>
+                <input type="text" id="salary" name="salary" class="input" placeholder="Salary" autofocus="">
+            </p>
+            <select class="select-role" name="roleid" id="roleid">
+                <tr th:each="role : ${roles}">
+                    <td>
+                        <option th:value="${role.getRoleId()}" th:text="${role.getName()}"></option>
+                    </td>
+                </tr>
+            </select>
+            <button class="btn btn-add-employee" type="submit" formaction="/director/employees/add">Add employee</button>
+        </div>
+        <div class="filter-employee-container">
+            <div class="filter-input-container">
+                <input type="text" id="filter" name="filter" class="filter-input" placeholder="Filter" autofocus="" th:value="${filter}">
+                <button class="btn btn-filter" type="submit" formaction="/director/employees/filter/1">Filter</button>
+                <button class="btn btn-filter" type="submit" formaction="/director/employees/filter/remove">Remove selected</button>
+            </div>
+        </div>
+    </form>
+    <div class="message-container">
+        <span th:text="${message}" th:style="${color}"></span>
+    </div>
+</main>
+<footer class="lowered-footer">
+    <div class="creator-name"> <h2> @zelenaLipa </h2> </div>
+</footer>
+</body></html>

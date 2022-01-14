@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Accountant Document</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/director/directorDocument.css}">
+</head>
+<body>
+<header>
+    <div class="company-name"> <h2> COMPANY.co </h2> </div>
+    <div class="navigation">
+        <a href="/"> Homepage </a>
+        <td>
+            <a th:if="${loggedIn == false}" href="/login"> Login </a>
+            <a th:if="${loggedIn == false}" href="/register"> Register </a>
+            <a th:if="${loggedIn == true}" href="/user"> Userpage </a>
+            <a th:if="${roleDirector == true}" href="/director"> Director </a>
+            <a th:if="${roleReviser == true}" href="/reviser"> Reviser </a>
+            <a th:if="${roleAccountant == true}" href="/accountant"> Accountant </a>
+            <a th:if="${loggedIn == true}" href="/logout"> Logout </a>
+        </td>
+    </div>
+</header>
+<main class="docs-container-container">
+    <h2><span th:text="${title}"></span></h2>
+    <div class="content-outer-container">
+        <div class="content-inner-container" th:text="${content}"></div>
+    </div>
+    <div class="label-container">
+        <div class="label">Submitted: <span th:text="${submitted}"></span></div>
+        <div class="label">Time of submission: <span th:text="${dateOfSubmission}"></span></div>
+        <div class="label">Read: <span th:text="${read}"></span></div>
+        <div class="label">Signed: <span th:text="${signed}"></span></div>
+        <div class="label">Archived: <span th:text="${archived}"></span></div>
+        <div class="label">ArchiveId: <span th:text="${archiveId}"></span></div>
+        <div class="label">ID: <span th:text="${docuId}"></span></div>
+        <div class="label">Type: <span th:text="${type}"></span></div>
+    </div>
+    <div th:if="${redirect == 'inbox'}">
+        <form method="post" th:action="@{/director/inbox/{page}/{docuId}(page=${page}, docuId=${docuId})}">
+            <button class="btn" type="submit"> Sign document </button>
+        </form>
+    </div>
+</main>
+<footer class="lowered-footer">
+    <div class="creator-name"> <h2> @zelenaLipa </h2> </div>
+</footer>
+</body>
+</html>

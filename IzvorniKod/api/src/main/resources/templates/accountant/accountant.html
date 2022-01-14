@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Accountant</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/accountant/accountant.css}">
+</head>
+
+<body>
+<header>
+    <div class="company-name"> <h2> COMPANY.co </h2> </div>
+    <div class="navigation">
+        <a href="/"> Homepage </a>
+        <td>
+            <a th:if="${loggedIn == false}" href="/login"> Login </a>
+            <a th:if="${loggedIn == false}" href="/register"> Register </a>
+            <a th:if="${loggedIn == true}" href="/user"> Userpage </a>
+            <a th:if="${roleDirector == true}" href="/director"> Director </a>
+            <a th:if="${roleReviser == true}" href="/reviser"> Reviser </a>
+            <a th:if="${roleAccountant == true}" href="/accountant"> Accountant </a>
+            <a th:if="${loggedIn == true}" href="/logout"> Logout </a>
+        </td>
+    </div>
+</header>
+<main>
+    <div class="accountantpage-container">
+        <div>
+            <h2> Welcome accountant! </h2>
+        </div>
+        <br>
+        <a href="/accountant/inbox/1?message=false"><button class="basic-button" type="submit">Documents</button></a>
+        <a href="/accountant/archivedSubmit/1?message=false"><button class="basic-button" type="submit">Archive Documents</button></a>
+        <a href="/accountant/archived/1"><button class="basic-button" type="submit">Archived Documents</button></a>
+    </div>
+</main>
+<footer>
+    <div class="creator-name"> <h2> @zelenaLipa </h2> </div>
+</footer>
+</body></html>

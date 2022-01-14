@@ -1,0 +1,101 @@
+* { /*OSTAJE*/
+    padding: 0;
+    margin: 0;
+    font-family: sans-serif;
+}
+
+body { /*OSTAJE*/
+    background-color: white;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}
+
+main { /*OSTAJE*/
+    width: 350px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -45%); /*DODANO PRIJE (-50%, -50%)*/
+    position: absolute;
+    color: darkslategray;
+}
+
+header, footer { /*OSTAJE*/
+    position: absolute;
+    background-color: darkslategray;
+    width: 100%;
+    color: white;
+}
+
+header { /*OSTAJE*/
+    height: 10vh;
+}
+
+.company-name { /*OSTAJE*/
+    margin: auto;
+    position: absolute;
+    width: 50%;
+    text-align: center;
+}
+
+header h2 { /*OSTAJE*/
+    margin-top: 20px;
+}
+
+footer { /*OSTAJE*/
+    min-height: 15vh;
+    bottom: 0;
+}
+
+.lowered-footer { /*OSTAJE*/
+    top: 100vh; /*nadodano*/
+}
+
+.navigation { /*OSTAJE*/
+    margin: auto;
+    position: absolute;
+    width: 50%;
+    text-align: center;
+}
+
+.navigation a { /*OSTAJE*/
+    position: relative;
+    left: 50%;
+    top: 50px;
+    color: white;
+    text-decoration: none;
+    margin-right: 20px;
+}
+
+.creator-name { /*OSTAJE*/
+    margin: auto;
+    position: absolute;
+    width: 50%;
+    text-align: center;
+}
+
+footer h2 { /*OSTAJE*/
+    position: relative;
+    left: 50%;
+    top: 50px;
+    color: white;
+    text-decoration: none;
+    margin-right: 20px;
+}
+
+.basic-button { /*OSTAJE*/
+    font-size: 18px;
+    font-weight: bold;
+    margin: 20px 0;
+    padding: 10px 15px;
+    width: 50%;
+    border-radius: 5px;
+    border: 1px solid darkslategray;
+    outline: darkslategray;
+}
+
+.basic-button-inline {
+    display: inline-block;
+}
+
