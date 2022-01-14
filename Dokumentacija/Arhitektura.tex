@@ -8,6 +8,13 @@
 		\item Baza podataka
 	\end{packed_item}
 
+    \begin{figure}[H]
+    	\includegraphics[scale=0.58]{slike/Arhitektura sustava.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+    	\centering
+    	\caption{Arhitektura sustava}
+    	\label{ARH}
+    \end{figure}
+
 	 \textit{Web preglednik} je program (Google Chrome) koji korisniku omogućuje pregled web-stranice, a ujedno je i prevoditelj. Dakle, stranica je pisana u kodu kojeg preglednik razumije te ga nakon toga interpretira kao nešto razumljivo korisniku.
 	 
 	 
@@ -36,13 +43,10 @@
 		\newline
 		\text{Entiteti baze podataka su sljedeći:}
 		\begin{packed_item}
-			\item {Dokument}
-			\item {Zaposlenik}
-			\item {Korisnički račun}
-			\item {Uloga}
-			\item {Racun}
-			\item {Ponuda}
-			\item {Interni}
+			\item {Document}
+			\item {Employee}
+			\item {UserAccount}
+			\item {Role}
 		\end{packed_item}
 	
 		
@@ -129,8 +133,7 @@
 				password	& VARCHAR &  šifra	\\ \hline 
 				email & VARCHAR & mail adresa \\ \hline
 				enabled & BOOLEAN & jel li account u funkciji	\\ \hline
-				deactivated & BOOLEAN & je li account deaktiviran  \\ \hline
-				
+				deactivated & BOOLEAN & je li account deaktiviran  \\ \hline	
 				\SetCell{LightBlue} genID & VARCHAR & oib zaposlenika \\ \hline
 			\end{longtblr}
 			\newpage
