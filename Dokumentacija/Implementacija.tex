@@ -3,10 +3,6 @@
 		
 		\section{Korištene tehnologije i alati}
 		
-			\textbf{\textit{dio 2. revizije}}
-			
-			 \textit{Detaljno navesti sve tehnologije i alate koji su primijenjeni pri izradi dokumentacije i aplikacije. Ukratko ih opisati, te navesti njihovo značenje i mjesto primjene. Za svaki navedeni alat i tehnologiju je potrebno \textbf{navesti internet poveznicu} gdje se mogu preuzeti ili više saznati o njima}.
-			 
 			 Komunikacija u timu realizirana je korištenjem aplikacija \underline{Whatsapp}\footnote{\url{https://www.whatsapp.com/}} i \underline{Discord}\footnote{\url{https://discord.com/}}. Pri izradu raznih dijagrama kao što su dijagram razreda, dijagram komponenti, dijagram razmještaja, sekvenvijski dijagram itd. korišten je alat \underline{Astah-UML}\footnote{\url{https://astah.net/products/astah-uml/}}.
 			 Za upravljanje izvornim kodom korišten je \underline{Git}\footnote{\url{https://git-scm.com/}}, a udaljeni repozitorij projekta nalazi se na platformi \underline{GitLab}\footnote{\url{https://about.gitlab.com/}}.
 			 Kao razvojno okruženje korišten je \underline{Visual Studio Code} \footnote{\url{https://code.visualstudio.com/}} koji je napravio Microsoft. VSC se koristi pri izradi web-aplikacija, web-stranica, ali i mobilnih aplikacija.
@@ -42,11 +38,15 @@
 		
 		
 		\section{Dijagram razmještaja}
-			
-			\textbf{\textit{dio 2. revizije}}
-			
-			 \textit{Potrebno je umetnuti \textbf{specifikacijski} dijagram razmještaja i opisati ga. Moguće je umjesto specifikacijskog dijagrama razmještaja umetnuti dijagram razmještaja instanci, pod uvjetom da taj dijagram bolje opisuje neki važniji dio sustava.}
-			
+		
+			 Dijagram razmještaja opisuje topologiju sklopovlja i programsku potporu koja se koristila u našoj aplikaciji. Postoji poslužiteljsko računalo na kojem se nalazi web poslužitelj i baza podataka koji su međusobno povezani. Korisnik sa HTTP protokolom preko svojeg računala sa nekim web preglednikom pristupa aplikaciji.
+			 
+			\begin{figure}[H]
+				\includegraphics[scale=0.50]{slike/Dijagram razmještaja.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+				\centering
+				\caption{Dijagram razmještaja}
+				\label{DRAZ}
+			\end{figure}
 			\eject 
 		
 		\section{Upute za puštanje u pogon}
