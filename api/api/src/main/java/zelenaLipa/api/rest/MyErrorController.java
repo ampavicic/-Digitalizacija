@@ -2,7 +2,6 @@ package zelenaLipa.api.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.error.ErrorController;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -18,36 +17,21 @@ public class MyErrorController implements ErrorController {
     ModelAndViewBuilderService modelAndViewBuilderService;
 
     @RequestMapping("/error")
-    public Object handleError(HttpServletRequest request) {
+    public ModelAndView handleError(HttpServletRequest request) {
 
         Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
+        String message = "Unfortunately, there has been an error :( ";
 
         Integer statusCode = Integer.valueOf(status.toString());
 
-        if(status != null) {
-
-            if(statusCode == HttpStatus.FORBIDDEN.value()) {
-
-                ModelAndView mv = new ModelAndView("error/error.html");
-                modelAndViewBuilderService.fillNavigation(mv);
-                setErrorCode(mv, statusCode);
-                return mv;
-
-            }
-
-        }
-
         ModelAndView mv = new ModelAndView("error/error.html");
         modelAndViewBuilderService.fillNavigation(mv);
-        setErrorCode(mv, statusCode);
+
+        if(message == null) message = "";
+        mv.addObject("message", message);
+        mv.addObject("errorCode", statusCode);
         return mv;
 
-        //return new RedirectView("/"); //Vrati homepage ako nije ništa
-
-    }
-
-    private void setErrorCode(ModelAndView mv, int errorCode) {
-        mv.addObject("errorCode", errorCode);
     }
 
 }

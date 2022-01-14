@@ -10,6 +10,7 @@ import zelenaLipa.api.domain.Employee;
 import zelenaLipa.api.domain.Role;
 import zelenaLipa.api.service.*;
 
+import javax.validation.ConstraintViolationException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -85,36 +86,39 @@ public class DirectorController {
     }
 
     @PostMapping("/employees/add")
-    public ModelAndView addEmployees(@RequestParam("pid") String pid,
-                                     @RequestParam("name") String name,
-                                     @RequestParam("surname") String surname,
-                                     @RequestParam("residence") String residence,
-                                     @RequestParam("salary") String salary,
-                                     @RequestParam("roleid") String roleId,
-                                     @RequestParam("filter") String filter) {
+    public ModelAndView addEmployees(@RequestParam(required = false, value = "pid") String pid,
+                                     @RequestParam(required = false, value = "name") String name,
+                                     @RequestParam(required = false, value = "surname") String surname,
+                                     @RequestParam(required = false, value = "residence") String residence,
+                                     @RequestParam(required = false, value = "salary") String salary,
+                                     @RequestParam(required = false, value = "roleid") String roleId,
+                                     @RequestParam(required = false, value = "filter") String filter) {
         ModelAndView mv = new ModelAndView("director/directorEmployees.html");
         modelAndViewBuilderService.fillNavigation(mv);
-        if(pid != null && name != null && surname != null && residence != null) {
-            Employee employee = new Employee();
-            employee.setPid(pid);
-            employee.setName(name);
-            employee.setSurname(surname);
-            employee.setResidence(residence);
-            employee.setSalary(Integer.parseInt(salary));
-            employee.setRoleId(Integer.parseInt(roleId));
-            String genIdString;
-            boolean exists = false;
-            Random rand = new Random(System.currentTimeMillis());
-            do {
-                genIdString = String.valueOf(rand.nextInt(900000000) + 100000000);
-            } while (!employeeService.genIdFreeToUse(genIdString));
-            employee.setGenId(genIdString);
-            System.out.println(genIdString);
-            employeeService.hireEmployee(employee);
-            mv.addObject("message", "Number of employees added: 1 [genid = " + genIdString + "]");
-            mv.addObject("color", "color: green");
-        } else {
-            mv.addObject("message", "All add employee inputs must have a value!");
+        try {
+            if (pid != null && name != null && surname != null && residence != null && salary != null && roleId != null) {
+                Employee employee = new Employee();
+                employee.setPid(pid);
+                employee.setName(name);
+                employee.setSurname(surname);
+                employee.setResidence(residence);
+                employee.setSalary(Integer.parseInt(salary));
+                employee.setRoleId(Integer.parseInt(roleId));
+                String genIdString;
+                Random rand = new Random(System.currentTimeMillis());
+                do {
+                    genIdString = String.valueOf(rand.nextInt(900000000) + 100000000);
+                } while (!employeeService.genIdFreeToUse(genIdString));
+                employee.setGenId(genIdString);
+                employeeService.hireEmployee(employee);
+                mv.addObject("message", "Number of employees added: 1 [genid = " + genIdString + "]");
+                mv.addObject("color", "color: green");
+            } else {
+                mv.addObject("message", "Invalid values!");
+                mv.addObject("color", "color: red");
+            }
+        } catch (NumberFormatException | ConstraintViolationException e) {
+            mv.addObject("message", "Some inputs aren't valid!");
             mv.addObject("color", "color: red");
         }
         modelAndViewBuilderService.filterList(mv, filter, 1);

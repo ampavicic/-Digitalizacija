@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 @RestController
 public class UserController {
@@ -110,15 +109,26 @@ public class UserController {
     }
 
     @GetMapping("/user/upload/submit/result/{groupId}/{page}")
-    public ModelAndView employeeShowResult(@PathVariable(value="groupId") int groupId, @PathVariable(value = "page") int page, @RequestParam(value="message") boolean messageBoolean) {
+    public ModelAndView employeeShowResult(@PathVariable(value="groupId") int groupId, @PathVariable(value = "page") int page, @RequestParam(value="message", required = false) String submit, @RequestParam(value="error", required = false) String error) {
         ModelAndView mv = new ModelAndView("user/uploadResult.html");
         modelAndViewBuilderService.fillNavigation(mv);
         String username = userInfoService.getUsername();
         List<DocumentLink> documentLinks = documentLinkService.getLinksForEmployeeSubmit(groupId, username);
         modelAndViewBuilderService.addLinksToPage(mv, documentLinks, groupId, page);
-        if(messageBoolean) {
-            mv.addObject("message", "Document submitted");
-            mv.addObject("color", "color: green");
+        if(submit != null) {
+            boolean displayMessage = Boolean.parseBoolean(submit);
+            if(displayMessage) {
+                mv.addObject("message", "Document submitted");
+                mv.addObject("color", "color: green");
+            }
+        }
+        if(error != null) {
+            boolean displayMessage = Boolean.parseBoolean(error);
+            if(displayMessage) {
+                mv.addObject("message", "Error processing some documents");
+                mv.addObject("color", "color: red");
+
+            }
         }
         return mv;
     }
@@ -129,7 +139,7 @@ public class UserController {
     }
 
     @GetMapping("/user/documentHistory/{page}")
-    public ModelAndView getDocumentHistory (@PathVariable(value = "page") int page) {
+    public ModelAndView getDocumentHistory(@PathVariable(value = "page") int page) {
         ModelAndView mv = new ModelAndView("user/historyResult.html");
         modelAndViewBuilderService.fillNavigation(mv);
         String username = userInfoService.getUsername();
@@ -165,7 +175,7 @@ public class UserController {
             try {
                 docuId = ocrService.doOCR(mpf, realServletPath, groupId);
             } catch (IOException | TesseractException e) {
-                e.printStackTrace();
+                return new RedirectView("/user/upload/submit/result/" + groupId + "/1?error=true");
             }
         }
         return new RedirectView("/user/upload/submit/result/" + groupId + "/1?message=false");
